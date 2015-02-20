@@ -1,0 +1,142 @@
+; ---------------------------------------------------------------------
+;  minkBall.scm
+; ---------------------------------------------------------------------
+
+;(define homedir (getenv "HOME"))
+;(define background_image_name (string-append homedir "/local/Texturen/MilkyWay/eso0932a2.png"))
+(define normalmap_name "examples/normal.png")
+
+(init-metric '(type "Minkowski")
+             '(id "metric")
+)
+
+(init-solver '(type "GSL_RK_Cash-Karp")
+             '(geodType "lightlike")
+             '(eps_abs  1.0e-7)
+             '(step_ctrl #f)
+             '(step_size 2.0)
+             '(id "raytracing")
+)
+
+(init-camera '(type "PinHoleCam")
+             `(dir #( 1.0 0.0 0.0) )
+             '(vup #( 0.0 0.0 1.0) )
+             '(fov #( 15.0 15.0 ))
+             '(res #( 200 200 ))
+             '(filter "FilterRGB")
+             '(id "cam2")
+)
+
+(init-raygen '(type "RayGenSimple")
+             `(boundBoxLL  ,(vector (- gpDBLMAX) -30.0 -30.0 -30.0) )
+             `(boundBoxUR  ,(vector   gpDBLMAX    30.0  30.0  30.0) )
+             '(solver "raytracing")
+             '(maxNumPoints 3000)
+)
+
+(local-tetrad '(pos #(10.0 -10.0 0.0 0.0))
+              '(e0  #(1.0  0  0  0) )
+              '(e1  #(0.0  1  0  0) )
+              '(e2  #(0.0  0  1  0) )
+              '(e3  #(0.0  0  0  1) )
+              '(incoords #f) 
+              '(id  "locTedObs")
+)
+
+(init-projector '(localTetrad "locTedObs")
+                '(color #(0.1 0.1 0.1))
+                '(id "proj")
+)
+
+(init-light-mgr '(ambient #(1.0 1.0 1.0)))
+
+
+(init-texture '(type "UniTex")
+              '(color #(0.8 0.16 0.16))
+              '(id "utex1")
+)
+
+(init-texture '(type "UniTex")
+              '(color #(0.9 0.63 0.63))
+              '(id "utex2")
+)
+
+(init-texture '(type "CheckerT2D")
+              '(texture "utex1")
+              '(texture "utex2")
+              `(transform ,(scale-obj #(20.0 10.0)))
+              '(id "chtex")
+)				
+
+(init-texture '(type "Image")
+              `(file ,normalmap_name)
+              `(transform ,(scale-obj #(0.1 0.1)))
+              '(id "ntex")
+)
+
+
+(init-shader  '(type "SurfShader")
+              '(objcolor "chtex")
+              '(normalmap "ntex")
+              '(ambient 0.2)
+              '(diffuse 1.0)
+              '(id "ballShader")
+)
+
+(solid-ellipsoid `(objtype ,gpObjTypeLocal)
+                 '(center #(0.0 0.0 0.0))
+                 '(axlen  #(1.0 1.0 1.0))
+                 '(shader "ballShader")
+                 `(transform ,(rotate-obj "y" 90.0))
+                 '(id "ball")
+)
+
+(solid-box `(objtype ,gpObjTypeLocal)
+           '(cornerLL #(-0.5 -0.5 -0.5))
+           '(cornerUR #( 0.5  0.5  0.5))
+           '(shader "ballShader")
+           `(transform ,(rotate-obj "y" 90.0))
+           '(id "box")
+)
+
+
+(init-solver '(type "GSL_RK_Fehlberg")
+             '(geodType "timelike")
+             '(eps_abs  0.01)
+             '(step_ctrl #f)
+             '(id "gsolver")
+)
+
+(init-motion '(type "Geodesic")
+             '(solver "gsolver")
+             `(pos ,(vector 0.0 0.0 0.0 0.0 ))
+             `(localvel ,(vector 0.0 -0.5 0.0))
+             '(e0 #(1.0 0.0 0.0 0.0))
+             '(e1 #(0.0 1.0 0.0 0.0))
+             '(e2 #(0.0 0.0 1.0 0.0))
+             '(e3 #(0.0 0.0 0.0 1.0))
+             '(stepsize 0.1)
+             '(maxnumpoints 3000)
+             '(forward 200.0)
+             '(backward 200.0)
+             '(id "motion")
+)
+
+(local-tetrad '(pos #(0.0 0.0 0.0 0.0))
+              '(localvel #(0.0 -0.7 0.0))
+              '(incoords #f) 
+              '(id  "locTed")
+)
+
+(local-comp-object '(obj "box")
+                   '(localtetrad "locTed")
+                   ;'(motion "motion")
+                   '(id "locObj")
+)
+
+(init-device '(type "standard")
+         '(obj "locObj")
+         '(camera "cam2")
+         '(setparam ("locTedObs" "time" 10.0))
+)
+

@@ -1,0 +1,36 @@
+
+# directories
+.svn
+build
+config
+doc
+lib
+test
+.deps
+
+# files
+config.h
+config.h.in
+configure
+configure.in
+aclocal.m4
+
+ChangeLog
+INSTALL
+Makefile.am
+Makefile
+
+AntTweakBar
+glm
+gl3w
+
+gvsRender*
+
+*_debug
+.project
+.cproject
+
+*.dat
+*.png
+*.user
+*.tif

@@ -1,0 +1,40 @@
+
+body {
+    background-color: #eeeeee;  
+    font-family: monospace;
+    font-size: 10pt;
+    margin-left: 5%;
+    margin-right: 30%;
+}
+
+code { 
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 10pt;
+    color: green;
+}
+
+pre {
+    margin-left: 1em;
+}
+
+img {
+    max-width: 200px;
+}
+
+h1 {
+    color: #0000aa;
+}
+
+h2 {
+   margin-top: 2em;
+}
+
+h3 {
+    margin-top: 2em;
+    color: #0000aa;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
