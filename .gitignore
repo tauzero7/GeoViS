@@ -25,6 +25,7 @@ glm
 gl3w
 
 gvsRender*
+gvsViewer*
 
 *_debug
 .project

@@ -96,6 +96,8 @@ std::string              shaderPath = "Viewer/Shader";
 
 int        buttonPressed = -1;
 glm::ivec2 lastMousePos;
+bool       play = false;
+
 int resX = 0;
 int resY = 0;
 int numChannels = 0;
@@ -114,7 +116,7 @@ float dirMin[4], dirMax[4];
 float sMin[4], sMax[4];
 
 float timeParam = 0.0f;
-float timeStep  = 0.01f;
+float timeStep  = 0.001f;
 
 struct sockaddr_in  clientAddr;
 int socketID = -1;
@@ -611,6 +613,10 @@ void display() {
 /**
  */
 void idle(void) {
+    if (play) {
+        timeParam += timeStep;
+        glutPostRedisplay();
+    }
 }
 
 /** keyboard callback function
@@ -633,6 +639,10 @@ void keyboard( unsigned char key, int x, int y ) {
             shader.RemoveAllShaders();
             shader.CreateProgramFromFile(vertShaderName.c_str(),fragShaderName.c_str());
             glutPostRedisplay();
+            break;
+        }
+        case 'p': {
+            play = !play;
             break;
         }
     }    
