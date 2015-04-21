@@ -407,7 +407,7 @@ void GvsLocalTetrad::setLocalVel( const m4d::vec3 &v, const m4d::enum_nat_tetrad
     for(int i=0; i<4; i++) {
         en[i] = m4d::vec4();
         for(int j=0; j<4; j++) {
-            en[i] += LT.getCoeff(i,j)*e[j];
+            en[i] += LT.getElem(i,j)*e[j];
         }
     }
 

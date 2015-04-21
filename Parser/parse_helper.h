@@ -161,7 +161,7 @@ template <class mType, int n, int m> void get_matrix(pointer s_vec, m4d::Matrix<
     for (int i = 0; i < n; i++) {
         get_double_vec( ((*sc.vptr->vector_elem)(s_vec, i)) , m, tempV, "get_matrix: read matrix");
         for (int j = 0; j < m; j++) {
-            mat->setCoeff(i, j, tempV[j]);
+            mat->setElem(i, j, tempV[j]);
         }
     }
     delete [] tempV;
@@ -180,8 +180,8 @@ template <class mType, int n, int m> void mk_matrix(pointer *retMat, m4d::Matrix
     for (int i = 0; i < n; i++) {
         vecRowPointer = ((*sc.vptr->mk_vector)(&sc, m));
         for (int j = 0; j < m; j++) {
-            //fprintf(stderr,"%12.6f ",inMat->getCoeff(i,j));
-            tempPointer = ((*sc.vptr->set_vector_elem)(vecRowPointer, j, ((*sc.vptr->mk_real)( &sc, inMat->getCoeff(i, j) ))));
+            //fprintf(stderr,"%12.6f ",inMat->getElem(i,j));
+            tempPointer = ((*sc.vptr->set_vector_elem)(vecRowPointer, j, ((*sc.vptr->mk_real)( &sc, inMat->getElem(i, j) ))));
         }
         //fprintf(stderr,"\n");
         tempPointer = ((*sc.vptr->set_vector_elem)(*retMat, i, vecRowPointer));

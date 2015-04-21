@@ -134,11 +134,11 @@ m4d::mat4 GvsStMotionConstVelocity :: getRotMatrix ( const int nr, const double 
                 {
                     // sum+=gvsEpsSymb(i-1,j-1,k-1)*axis[k-1];  //TODO
                 }
-                rotMatrix.setCoeff(i,j,
+                rotMatrix.setElem(i,j,
                                    axis[i-1]*axis[j-1]
-                        + (delta.getCoeff(i,j)-axis[i-1]*axis[j-1]) * cos(angle)
+                        + (delta.getElem(i,j)-axis[i-1]*axis[j-1]) * cos(angle)
                         + sin(angle)*sum );
-                // std::cerr << i << " " << j << " " << rotMatrix.getCoeff(i,j) << std::endl;
+                // std::cerr << i << " " << j << " " << rotMatrix.getElem(i,j) << std::endl;
             }
         }
     }

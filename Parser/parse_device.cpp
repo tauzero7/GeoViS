@@ -221,7 +221,7 @@ pointer gvsP_init_device (scheme *sc, pointer args)
                         m4d::Matrix<double,2,3> matrix;
                         for (int i=0; i<2; i++)
                             for (int j=0; j<3; j++)
-                                matrix.setCoeff(i,j,mptr->getCoeff(i,j));
+                                matrix.setElem(i,j,mptr->getElem(i,j));
                         paramValue = new m4d::Matrix<double,2,3>(matrix);
                         break;
                     }
@@ -230,7 +230,7 @@ pointer gvsP_init_device (scheme *sc, pointer args)
                         m4d::Matrix<double,3,4> matrix;
                         for (int i=0; i<3; i++)
                             for (int j=0; j<4; j++)
-                                matrix.setCoeff(i,j,mptr->getCoeff(i,j));
+                                matrix.setElem(i,j,mptr->getElem(i,j));
                         paramValue = new m4d::Matrix<double,3,4>(matrix);
                         break;
                     }
@@ -408,7 +408,7 @@ pointer gvsP_set_changeObj (scheme *sc, pointer args) {
                             m4d::Matrix<double,2,3> matrix;
                             for (int i=0; i<2; i++)
                                 for (int j=0; j<3; j++)
-                                    matrix.setCoeff(i,j,mptr->getCoeff(i,j));
+                                    matrix.setElem(i,j,mptr->getElem(i,j));
                             paramValue = new m4d::Matrix<double,2,3>(matrix);
                             break;
                         }
@@ -417,7 +417,7 @@ pointer gvsP_set_changeObj (scheme *sc, pointer args) {
                             m4d::Matrix<double,3,4> matrix;
                             for (int i=0; i<3; i++)
                                 for (int j=0; j<4; j++)
-                                    matrix.setCoeff(i,j,mptr->getCoeff(i,j));
+                                    matrix.setElem(i,j,mptr->getElem(i,j));
                             paramValue = new m4d::Matrix<double,3,4>(matrix);
                             break;
                         }

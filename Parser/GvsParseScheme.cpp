@@ -581,7 +581,7 @@ GvsParseScheme :: getParameter (const char* name, m4d::Matrix<double,2,3> *mat )
 
             for (int n=0; n<dimX; n++)
                 for (int m=0; m<dimY; m++)
-                    mat->setCoeff(n,m,arg_val->getCoeff(n,m));
+                    mat->setElem(n,m,arg_val->getElem(n,m));
 
             return true;
         }
@@ -613,7 +613,7 @@ GvsParseScheme :: getParameter ( const char* name, m4d::Matrix<double,3,4>* mat 
 
             for (int n=0; n<dimX; n++) {
                 for (int m=0; m<dimY; m++) {
-                    mat->setCoeff(n,m,arg_val->getCoeff(n,m));
+                    mat->setElem(n,m,arg_val->getElem(n,m));
                 }
             }
             return true;
