@@ -193,9 +193,8 @@ pointer gvsP_m4d_metriclist ( scheme *sc, pointer  ) {
 #ifdef GVS_VERBOSE
     std::cerr << "\n..........gvsP_m4d_metriclist..........\n";
 #endif
-    m4d::MetricDatabase* database = new m4d::MetricDatabase();
+    m4d::MetricDatabase* database = m4d::MetricDatabase::getInstance();
     database->printMetricList();
-    delete database;
     return sc->NIL;
 }
 
@@ -209,9 +208,8 @@ pointer gvsP_m4d_solverlist ( scheme *sc, pointer args ) {
 #ifdef GVS_VERBOSE
     std::cerr << "\n..........gvsP_m4d_solverlist..........\n";
 #endif
-    m4d::IntegratorDatabase* database = new m4d::IntegratorDatabase();
+    m4d::IntegratorDatabase* database = m4d::IntegratorDatabase::getInstance();
     database->printIntegratorList();
-    delete database;
     return sc->NIL;
 }
 

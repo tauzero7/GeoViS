@@ -24,9 +24,9 @@
 ;;    http://www.eso.org/public/germany/images/eso0932a/    
 ;; ---------------------------------------------------------------------
 
-;(define homedir (getenv "HOME"))
-;(define background_image_name (string-append homedir "/local/Texturen/MilkyWay/eso0932a2.png"))
-(define background_image_name "examples/eso0932a.tif")
+(define homedir (getenv "HOME"))
+(define background_image_name (string-append homedir "/local/Texturen/MilkyWay/eso0932a2.png"))
+;(define background_image_name "examples/eso0932a.tif")
 
 (define r_obs 30.0 )
 (define fov   60.0 )

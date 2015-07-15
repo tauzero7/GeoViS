@@ -83,11 +83,10 @@ bool GvsGeodSolver::setSolver( m4d::enum_integrator m4dGeodSolver ) {
     }
     m4dSolver=NULL;
 
-    m4d::IntegratorDatabase* IntDB = new m4d::IntegratorDatabase;
+    m4d::IntegratorDatabase* IntDB = m4d::IntegratorDatabase::getInstance();
     m4dGeodSolverType = m4dGeodSolver;
     m4dSolver = IntDB->getIntegrator(mMetric, m4dGeodSolver);
-    solverName = IntDB->getIntegratorName(m4dGeodSolver);
-    delete IntDB;
+    solverName = IntDB->getIntegratorName(m4dGeodSolver);    
     return true;
 }
 

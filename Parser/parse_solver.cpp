@@ -100,11 +100,10 @@ pointer gvsP_init_solver (scheme *sc, pointer args) {
         scheme_error("init-solver: type is missing!");
     }
 
-    m4d::IntegratorDatabase* IntDB = new m4d::IntegratorDatabase;
+    m4d::IntegratorDatabase* IntDB = m4d::IntegratorDatabase::getInstance();
     m4d::enum_integrator solverID = IntDB->getIntegratorNr(solverName);
     if (solverID==m4d::gsUnknown) scheme_error("Solver is not in the m4d database!");
-    delete IntDB;
-
+    
     // Initialize solver
 #ifdef GVS_VERBOSE
     printf("\n-->Initialize solver...\n");

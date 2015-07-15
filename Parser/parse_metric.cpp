@@ -37,7 +37,7 @@ extern std::map<std::string,GvsTypeID>  gpTypeID;
  */
 pointer gvsP_init_metric (scheme *sc, pointer args)
 {
-    m4d::MetricDatabase* database = new m4d::MetricDatabase();
+    m4d::MetricDatabase* database = m4d::MetricDatabase::getInstance();
 #ifdef GVS_VERBOSE
     std::cerr << "\n..........gvsP_init_metric..........\n";
 #endif
@@ -156,8 +156,7 @@ pointer gvsP_init_metric (scheme *sc, pointer args)
 
     GvsTypeID tid = {gtMetric,static_cast<int>(gpMetric.size())-1,gpMetric[gpMetric.size()-1]};
     gpTypeID.insert(std::pair<std::string,GvsTypeID>(idname,tid));
-
-    delete database;
+    
     delete gvsParser;
 
     pointer R = ((sc->vptr->mk_symbol)(sc, "gtMetric"));

@@ -62,58 +62,58 @@ GvsBoundBox4D :: GvsBoundBox4D ( double t,  double x,  double y,  double z,
   {
     if ( dt >= 0 )
     {
-      boxLowBounds.x(0) = t;
-      boxUppBounds.x(0) = t + dt;
+      boxLowBounds[0] = t;
+      boxUppBounds[0] = t + dt;
     }
     else
     {
-      boxLowBounds.x(0) = t + dt;
-      boxUppBounds.x(0) = t;
+      boxLowBounds[0] = t + dt;
+      boxUppBounds[0] = t;
     }
 
     if ( dx >= 0 )
     {
-      boxLowBounds.x(1) = x;
-      boxUppBounds.x(1) = x + dx;
+      boxLowBounds[1] = x;
+      boxUppBounds[1] = x + dx;
     }
     else
     {
-      boxLowBounds.x(1) = x + dx;
-      boxUppBounds.x(1) = x;
+      boxLowBounds[1] = x + dx;
+      boxUppBounds[1] = x;
     }
 
     if ( dy >= 0 )
     {
-      boxLowBounds.x(2) = y;
-      boxUppBounds.x(2) = y + dy;
+      boxLowBounds[2] = y;
+      boxUppBounds[2] = y + dy;
     }
     else
     {
-      boxLowBounds.x(2) = y + dy;
-      boxUppBounds.x(2) = y;
+      boxLowBounds[2] = y + dy;
+      boxUppBounds[2] = y;
     }
 
     if ( dz >= 0 )
     {
-      boxLowBounds.x(3) = z;
-      boxUppBounds.x(3) = z + dz;
+      boxLowBounds[3] = z;
+      boxUppBounds[3] = z + dz;
     }
     else
     {
-      boxLowBounds.x(3) = z + dz;
-      boxUppBounds.x(3) = z;
+      boxLowBounds[3] = z + dz;
+      boxUppBounds[3] = z;
     }
   }
   else
   {
-    boxLowBounds.x(0) = t;
-    boxLowBounds.x(1) = x;
-    boxLowBounds.x(2) = y;
-    boxLowBounds.x(3) = z;
-    boxUppBounds.x(0) = t + dt;
-    boxUppBounds.x(1) = x + dx;
-    boxUppBounds.x(2) = y + dy;
-    boxUppBounds.x(3) = z + dz;
+    boxLowBounds[0] = t;
+    boxLowBounds[1] = x;
+    boxLowBounds[2] = y;
+    boxLowBounds[3] = z;
+    boxUppBounds[0] = t + dt;
+    boxUppBounds[1] = x + dx;
+    boxUppBounds[2] = y + dy;
+    boxUppBounds[3] = z + dz;
   }
 }
 
@@ -163,8 +163,8 @@ GvsBoundBox4D :: surface() const
 //-------------------------------------------------------------------------
 void GvsBoundBox4D ::  Print ( FILE* fptr ) {
     fprintf(fptr,"BoundBox4D {\n");
-    fprintf(fptr,"\tlow  %7.4f %7.4f %7.4f %7.4f\n",boxLowBounds.x(0),boxLowBounds.x(1),boxLowBounds.x(2),boxLowBounds.x(3));
-    fprintf(fptr,"\tupp  %7.4f %7.4f %7.4f %7.4f\n",boxUppBounds.x(0),boxUppBounds.x(1),boxUppBounds.x(2),boxUppBounds.x(3));
+    fprintf(fptr,"\tlow  %7.4f %7.4f %7.4f %7.4f\n",boxLowBounds[0],boxLowBounds[1],boxLowBounds[2],boxLowBounds[3]);
+    fprintf(fptr,"\tupp  %7.4f %7.4f %7.4f %7.4f\n",boxUppBounds[0],boxUppBounds[1],boxUppBounds[2],boxUppBounds[3]);
     fprintf(fptr,"}\n");
 }
 

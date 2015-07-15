@@ -60,45 +60,45 @@ GvsBoundBox :: GvsBoundBox ( double x,  double y,  double z,
     {
         if ( dx >= 0 )
         {
-            boxLowBounds.x(0) = x;
-            boxUppBounds.x(0) = x + dx;
+            boxLowBounds[0] = x;
+            boxUppBounds[0] = x + dx;
         }
         else
         {
-            boxLowBounds.x(0) = x + dx;
-            boxUppBounds.x(0) = x;
+            boxLowBounds[0] = x + dx;
+            boxUppBounds[0] = x;
         }
 
         if ( dy >= 0 )
         {
-            boxLowBounds.x(1) = y;
-            boxUppBounds.x(1) = y + dy;
+            boxLowBounds[1] = y;
+            boxUppBounds[1] = y + dy;
         }
         else
         {
-            boxLowBounds.x(1) = y + dy;
-            boxUppBounds.x(1) = y;
+            boxLowBounds[1] = y + dy;
+            boxUppBounds[1] = y;
         }
 
         if ( dz >= 0 )
         {
-            boxLowBounds.x(2) = z;
-            boxUppBounds.x(2) = z + dz;
+            boxLowBounds[2] = z;
+            boxUppBounds[2] = z + dz;
         }
         else
         {
-            boxLowBounds.x(2) = z + dz;
-            boxUppBounds.x(2) = z;
+            boxLowBounds[2] = z + dz;
+            boxUppBounds[2] = z;
         }
     }
     else
     {
-        boxLowBounds.x(0) = x;
-        boxLowBounds.x(1) = y;
-        boxLowBounds.x(2) = z;
-        boxUppBounds.x(0) = x + dx;
-        boxUppBounds.x(1) = y + dy;
-        boxUppBounds.x(2) = z + dz;
+        boxLowBounds[0] = x;
+        boxLowBounds[1] = y;
+        boxLowBounds[2] = z;
+        boxUppBounds[0] = x + dx;
+        boxUppBounds[1] = y + dy;
+        boxUppBounds[2] = z + dz;
     }
 }
 
@@ -262,13 +262,13 @@ bool GvsBoundBox :: getTentryTexit ( const m4d::vec3 &p0, const m4d::vec3 &p1, d
     //cerr << "enter tentryexit  " << p0 << "  " << p1 << std::endl;
     double delta_tp = tp1-tp0;
 
-    double mx = (p1.x(0) - p0.x(0)) / delta_tp;
-    double my = (p1.x(1) - p0.x(1)) / delta_tp;
-    double mz = (p1.x(2) - p0.x(2)) / delta_tp;
+    double mx = (p1[0] - p0[0]) / delta_tp;
+    double my = (p1[1] - p0[1]) / delta_tp;
+    double mz = (p1[2] - p0[2]) / delta_tp;
 
-    double ax = p0.x(0) - mx*tp0;
-    double ay = p0.x(1) - my*tp0;
-    double az = p0.x(2) - mz*tp0;
+    double ax = p0[0] - mx*tp0;
+    double ay = p0[1] - my*tp0;
+    double az = p0[2] - mz*tp0;
 
     m4d::vec3 rayOrig(ax,ay,az);
     m4d::vec3 rayDir(mx,my,mz);

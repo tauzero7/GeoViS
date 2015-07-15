@@ -341,28 +341,28 @@ GvsTriangle :: calcProjEdges	( int          projPlane,
     switch ( projPlane )
     {
         case 0:
-            projEdge20.x(0) = trianVertex[0].x(1) - trianVertex[2].x(1);
-            projEdge20.x(1) = trianVertex[0].x(2) - trianVertex[2].x(2);
-            projEdge21.x(0) = trianVertex[1].x(1) - trianVertex[2].x(1);
-            projEdge21.x(1) = trianVertex[1].x(2) - trianVertex[2].x(2);
-            projEdge2p.x(0) = intersecPt.x(1) - trianVertex[2].x(1);
-            projEdge2p.x(1) = intersecPt.x(2) - trianVertex[2].x(2);
+            projEdge20[0] = trianVertex[0].x(1) - trianVertex[2].x(1);
+            projEdge20[1] = trianVertex[0].x(2) - trianVertex[2].x(2);
+            projEdge21[0] = trianVertex[1].x(1) - trianVertex[2].x(1);
+            projEdge21[1] = trianVertex[1].x(2) - trianVertex[2].x(2);
+            projEdge2p[0] = intersecPt.x(1) - trianVertex[2].x(1);
+            projEdge2p[1] = intersecPt.x(2) - trianVertex[2].x(2);
             break;
         case 1:
-            projEdge20.x(0) = trianVertex[0].x(0) - trianVertex[2].x(0);
-            projEdge20.x(1) = trianVertex[0].x(2) - trianVertex[2].x(2);
-            projEdge21.x(0) = trianVertex[1].x(0) - trianVertex[2].x(0);
-            projEdge21.x(1) = trianVertex[1].x(2) - trianVertex[2].x(2);
-            projEdge2p.x(0) = intersecPt.x(0) - trianVertex[2].x(0);
-            projEdge2p.x(1) = intersecPt.x(2) - trianVertex[2].x(2);
+            projEdge20[0] = trianVertex[0].x(0) - trianVertex[2].x(0);
+            projEdge20[1] = trianVertex[0].x(2) - trianVertex[2].x(2);
+            projEdge21[0] = trianVertex[1].x(0) - trianVertex[2].x(0);
+            projEdge21[1] = trianVertex[1].x(2) - trianVertex[2].x(2);
+            projEdge2p[0] = intersecPt.x(0) - trianVertex[2].x(0);
+            projEdge2p[1] = intersecPt.x(2) - trianVertex[2].x(2);
             break;
         case 2:
-            projEdge20.x(0) = trianVertex[0].x(0) - trianVertex[2].x(0);
-            projEdge20.x(1) = trianVertex[0].x(1) - trianVertex[2].x(1);
-            projEdge21.x(0) = trianVertex[1].x(0) - trianVertex[2].x(0);
-            projEdge21.x(1) = trianVertex[1].x(1) - trianVertex[2].x(1);
-            projEdge2p.x(0) = intersecPt.x(0) - trianVertex[2].x(0);
-            projEdge2p.x(1) = intersecPt.x(1) - trianVertex[2].x(1);
+            projEdge20[0] = trianVertex[0].x(0) - trianVertex[2].x(0);
+            projEdge20[1] = trianVertex[0].x(1) - trianVertex[2].x(1);
+            projEdge21[0] = trianVertex[1].x(0) - trianVertex[2].x(0);
+            projEdge21[1] = trianVertex[1].x(1) - trianVertex[2].x(1);
+            projEdge2p[0] = intersecPt.x(0) - trianVertex[2].x(0);
+            projEdge2p[1] = intersecPt.x(1) - trianVertex[2].x(1);
             break;
     }
 }

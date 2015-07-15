@@ -135,10 +135,10 @@ bool GvsSampleMgr::putFirstPixel() {
 
 
 bool GvsSampleMgr::putNextPixel() {
-    if ( ++samplePixCoord.x(0) > sampleRegionUR.x(0) ) {
-        if ( ++samplePixCoord.x(1) > sampleRegionUR.x(1) ) return false;
+    if ( ++samplePixCoord[0] > sampleRegionUR[0] ) {
+        if ( ++samplePixCoord[1] > sampleRegionUR[1] ) return false;
 
-        samplePixCoord.x(0) = sampleRegionLL.x(0);
+        samplePixCoord[0] = sampleRegionLL[0];
     }
 
     GvsColor pixcol = calcPixelColor( samplePixCoord.x(0), samplePixCoord.x(1) );
