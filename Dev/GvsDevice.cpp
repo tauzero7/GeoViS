@@ -232,7 +232,7 @@ void GvsDevice::Print( FILE* fptr ) {
         projector->Print(fptr);
     }
     if (metric!=NULL) {
-        metric->print(fptr);
+        metric->printF(fptr);
     }
     if (lightSrcMgr!=NULL) {
         lightSrcMgr->Print(fptr);

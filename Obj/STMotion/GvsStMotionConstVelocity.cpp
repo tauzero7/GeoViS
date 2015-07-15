@@ -109,7 +109,7 @@ m4d::mat4 GvsStMotionConstVelocity :: getRotMatrix ( const int nr, const double 
     std::cerr << "getRotMatrix\n";
     assert( nr < mNrRotations );
     m4d::vec3 axis = mRotations[nr].getAsV3D();
-    axis.print();
+    axis.printC();
 
     axis.normalize();
 
@@ -234,11 +234,11 @@ void GvsStMotionConstVelocity :: Print ( FILE* fptr ) {
     for (int i=0; i<mNrMotions; i++) {
         if (mMotions[i].type == gvsMotionCVboost) {
             fprintf(fptr,"\t\t Boost:    \n");
-            mBoosts[mMotions[i].nr].print();
+            mBoosts[mMotions[i].nr].printC();
         }
         else if (mMotions[i].type == gvsMotionCVrot) {
             fprintf(fptr,"\t\t Rotation: \n");
-            mRotations[mMotions[i].nr].print();
+            mRotations[mMotions[i].nr].printC();
         }
     }
     fprintf(fptr,"\n");

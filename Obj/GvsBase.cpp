@@ -552,7 +552,7 @@ bool Gvsm4dMetricDummy::GetParam( std::string pName, double &val ) {
 }
 
 void Gvsm4dMetricDummy::Print( FILE* fptr ) {
-    m4dMetric->print(fptr);
+    m4dMetric->printF(fptr);
     fprintf(fptr,"\n");
 }
 
