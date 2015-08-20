@@ -59,7 +59,7 @@ pointer gvsP_init_metric (scheme *sc, pointer args)
         scheme_error("init-metric: type is missing!");
     }
 
-    m4d::enum_metric i = database->getMetricNr(metricName);
+    m4d::enum_metric i = database->getMetricNr(metricName.c_str());
     bool metricFound = (i!=m4d::enum_metric_unknown);
     if (!metricFound) {
         fprintf(stderr,"metric not available!\n");
