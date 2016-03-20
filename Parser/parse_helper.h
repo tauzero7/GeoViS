@@ -154,7 +154,11 @@ template <class mType, int n, int m> void get_matrix(pointer s_vec, m4d::Matrix<
     char buf[1024];
     double *tempV = new double[m];
     if (!is_vector(s_vec)) {
+#ifdef _WIN32
+        sprintf_s(buf,"%s: get_matrix: wrong format of matrix",msg.c_str());
+#else
         sprintf(buf,"%s: get_matrix: wrong format of matrix",msg.c_str());
+#endif
         scheme_error(buf);
     }
 
@@ -174,7 +178,8 @@ template <class mType, int n, int m> void get_matrix(pointer s_vec, m4d::Matrix<
 template <class mType, int n, int m> void mk_matrix(pointer *retMat, m4d::Matrix<mType, n, m> *inMat, const std::string ) {
     // column vector of row vectors...
     pointer vecRowPointer;
-    UNUSED_ATTR pointer tempPointer;
+     UNUSED_ATTR pointer tempPointer;
+    //pointer tempPointer;
 
     *retMat = ((*sc.vptr->mk_vector)( &sc, n ));
     for (int i = 0; i < n; i++) {

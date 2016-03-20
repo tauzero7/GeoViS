@@ -3887,6 +3887,7 @@ static pointer opexe_4(scheme *sc, enum scheme_opcodes op) {
           s_return(sc,p);
      }
 
+#define off_t  int
 #if USE_STRING_PORTS
      case OP_OPEN_INSTRING: /* open-input-string */
      case OP_OPEN_INOUTSTRING: /* open-input-output-string */ {

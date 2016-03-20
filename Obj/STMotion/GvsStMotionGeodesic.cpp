@@ -59,7 +59,7 @@ void
 GvsStMotionGeodesic :: setStartLT ( GvsLocalTetrad *lt )
 {
     localTetrad.push_back(lt);
-    numPositions = localTetrad.size();
+    numPositions = (int)localTetrad.size();
 }
 
 
@@ -95,7 +95,7 @@ void GvsStMotionGeodesic :: setStartVal( const m4d::vec4 &pos, m4d::vec4 &vel, b
     GvsLocalTetrad* lt = new GvsLocalTetrad(metric,pos,coordVel);
     lt->adjustTetrad();
     localTetrad.push_back(lt);
-    numPositions = localTetrad.size();
+    numPositions = (int)localTetrad.size();
 
     //setStartTetrad();
 }
@@ -237,7 +237,7 @@ void GvsStMotionGeodesic::calculateGeodesicMotion(m4d::enum_time_direction geodD
             localTetrad.push_front(locT);
         }
     }
-    numPositions = localTetrad.size();
+    numPositions = (int)localTetrad.size();
 
     delete [] localT;
     delete [] base;

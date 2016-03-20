@@ -56,7 +56,7 @@ GvsStMotionConstVelocity::~GvsStMotionConstVelocity()
 
 void GvsStMotionConstVelocity::setBoost( m4d::vec3 boost ) {
     mBoosts.push_back(boost);
-    mNrBoosts = mBoosts.size();
+    mNrBoosts = (int)mBoosts.size();
     // mBoosts[mNrBoosts-1].print(cerr);
 
     GvsMotionCVTypeNum ct = {gvsMotionCVboost,mNrBoosts-1};
@@ -72,7 +72,7 @@ void GvsStMotionConstVelocity::setRotation( m4d::vec4 rot ) {
 
     m4d::vec4 r = m4d::vec4( rot.x(0), axis.x(0),axis.x(1),axis.x(2) );
     mRotations.push_back(rot);
-    mNrRotations = mRotations.size();
+    mNrRotations = (int)mRotations.size();
     //  mRotations[mNrRotations-1].print(cerr);
 
     GvsMotionCVTypeNum ct = {gvsMotionCVrot,mNrRotations-1};

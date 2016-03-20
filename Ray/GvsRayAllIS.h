@@ -28,6 +28,9 @@
 class GvsRayAllIS : public GvsRay
 {
 public:
+    GvsRayAllIS ( );
+    GvsRayAllIS ( GvsRayGen* gen );
+
     GvsRayAllIS ( const m4d::vec4 &orig, const m4d::vec4 &dir, GvsRayGen* gen);
     GvsRayAllIS ( const m4d::vec4 &orig, const m4d::vec4 &dir, GvsRayGen* gen,
                   double minSearchDist, double maxSearchDist );

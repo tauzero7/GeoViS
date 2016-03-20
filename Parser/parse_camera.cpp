@@ -215,7 +215,7 @@ void gvsP_init_pinHoleCam (GvsParseScheme* gP) {
 
     std::string idname = "unknown";
     if (!gP->getParameter("id",idname)) {
-        appendNum(idname,gpTypeID.size());
+        appendNum(idname, (int)gpTypeID.size());
     }
     else if (gpTypeID.find(idname)!=gpTypeID.end()) {
         scheme_error("init-camera: ID already exists!");
@@ -283,7 +283,7 @@ void gvsP_init_pinHoleStereoCam (GvsParseScheme* gP) {
 
     std::string idname = "unknown";
     if (!gP->getParameter("id",idname)) {
-        appendNum(idname,gpTypeID.size());
+        appendNum(idname, (int)gpTypeID.size());
     }
     else if (gpTypeID.find(idname)!=gpTypeID.end()) {
         scheme_error("init-camera: ID already exists!");
@@ -349,7 +349,7 @@ void gvsP_init_panoramaCam( GvsParseScheme* gP ) {
 
     std::string idname = "unknown";
     if (!gP->getParameter("id",idname)) {
-        appendNum(idname,gpTypeID.size());
+        appendNum(idname, (int)gpTypeID.size());
     }
     else if (gpTypeID.find(idname)!=gpTypeID.end()) {
         scheme_error("init-camera: ID schon vergeben!");
@@ -408,7 +408,7 @@ void gvsP_init_4PICam (GvsParseScheme* gP)
 
     std::string idname = "unknown";
     if (!gP->getParameter("id",idname)) {
-        appendNum(idname,gpTypeID.size());
+        appendNum(idname, (int)gpTypeID.size());
     }
     else if(gpTypeID.find(idname)!=gpTypeID.end()) {
         scheme_error("init-camera: ID already assigned!");
@@ -466,7 +466,7 @@ void gvsP_init_2PICam( GvsParseScheme* gP ) {
 
     std::string idname = "unknown";
     if (!gP->getParameter("id",idname)) {
-        appendNum(idname,gpTypeID.size());
+        appendNum(idname, (int)gpTypeID.size());
     }
     else if (gpTypeID.find(idname)!=gpTypeID.end()) {
         scheme_error("init-camera: ID already assigned!");

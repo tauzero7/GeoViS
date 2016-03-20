@@ -825,17 +825,29 @@ void GvsChannelImg2D::writeIntersecData( const char* filename , GvsCamFilter fil
     switch(filter) {
         case gvsCamFilterRGBpdz: {
             nc = NUM_PDZ_CHANNELS;
+#ifdef _WIN32
+            fopen_s(&fptr, (baseFilename + ".pdz").c_str(), "wb");
+#else
             fptr = fopen((baseFilename+".pdz").c_str(),"wb");
+#endif
             break;
         }
         case gvsCamFilterRGBjac: {
             nc = NUM_JAC_CHANNELS;
+#ifdef _WIN32
+            fopen_s(&fptr,(baseFilename + ".jac").c_str(), "wb");
+#else
             fptr = fopen((baseFilename+".jac").c_str(),"wb");
+#endif
             break;
         }
         case gvsCamFilterRGBpt: {
             nc = NUM_PT_CHANNELS;
+#ifdef _WIN32
+            fopen_s(&fptr, (baseFilename + ".pt").c_str(), "wb");
+#else
             fptr = fopen((baseFilename+".pt").c_str(),"wb");
+#endif
             break;
         }
 

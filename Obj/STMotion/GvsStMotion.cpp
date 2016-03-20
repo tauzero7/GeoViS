@@ -127,7 +127,7 @@ void
 GvsStMotion :: setLocalTetrad ( GvsLocalTetrad* locT )
 {
     localTetrad.push_back(locT);
-    numPositions = localTetrad.size();
+    numPositions = (int)localTetrad.size();
 }
 
 GvsLocalTetrad*
@@ -231,7 +231,11 @@ void GvsStMotion :: PrintToFile ( const char* filename ) {
     //  position, velocity, e0, e1, e2, e3
 
     FILE* filePtr;
+#ifdef _WIN32
+    fopen_s(&filePtr, filename, "w");
+#else
     filePtr = fopen(filename,"w");
+#endif
 
     for (int i = 0; i < numPositions; i++) {
         tau = localTetrad[i]->getLocalTime();

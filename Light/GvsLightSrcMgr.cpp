@@ -53,14 +53,14 @@ GvsLightSrcMgr :: remove ( int num )
     {
         lightSrcListPtr = lightSrcList.begin()+num;
         lightSrcList.erase(lightSrcListPtr);
-        listLength = lightSrcList.size();
+        listLength = (int)lightSrcList.size();
     }
 }
 
 
 void GvsLightSrcMgr :: append ( GvsLightSrc* elem ) {
     lightSrcList.push_back(elem);
-    listLength = lightSrcList.size();
+    listLength = (int)lightSrcList.size();
 }
 
 

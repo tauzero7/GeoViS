@@ -47,6 +47,7 @@ i686 {
 }
 
 CONFIG  += USE_PPM
+QMAKE_CXXFLAGS += -std=c++11
 
 DEFINES += #GVS_VERBOSE
 

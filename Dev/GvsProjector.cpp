@@ -23,7 +23,6 @@
 #include "Dev/GvsDevice.h"
 #include "Obj/GvsSceneObj.h"
 #include "Ray/GvsRayGen.h"
-#include "Ray/GvsRayVisual.h"
 #include "Ray/GvsSurfIntersec.h"
 #include "Shader/GvsShader.h"
 #include "Utils/GvsGramSchmidt.h"
@@ -206,6 +205,10 @@ GvsColor GvsProjector :: getSampleColor ( GvsDevice* device, double x, double y 
                 validRay = eyeRay->recalcJacobi(rayOrigin, rayDir, localRayDir, locTetrad);
                 break;
             }
+            case gvsCamFilterIntersec: {
+                // cannot be handled here
+                break;
+            }
         }
 
         if (camFilter == gvsCamFilterRGB ||
@@ -313,6 +316,62 @@ GvsColor GvsProjector :: getSampleColor( GvsRayVisual*& eyeRay, GvsDevice* devic
         bgColor = constraintColor;
     }
     return bgColor;
+}
+
+
+void GvsProjector::getSampleIntersection(GvsDevice* device, double x, double y) {
+    assert ( (rayGen != NULL) && (locTetrad != NULL) );
+
+    m4d::vec4 rayOrigin = locTetrad->getPosition();
+
+    if (device->camEye == gvsCamEyeLeft) {
+        m4d::vec3 leftEyePos = device->camera->GetLeftEyePos();
+        m4d::vec4 e0,e1,e2,e3;
+        locTetrad->getTetrad(e0,e1,e2,e3);
+        rayOrigin += leftEyePos.x(0)*e1 + leftEyePos.x(1)*e2 + leftEyePos.x(2)*e3;
+    } else if (device->camEye == gvsCamEyeRight) {
+        m4d::vec3 rightEyePos = device->camera->GetRightEyePos();
+        m4d::vec4 e0,e1,e2,e3;
+        locTetrad->getTetrad(e0,e1,e2,e3);
+        rayOrigin += rightEyePos.x(0)*e1 + rightEyePos.x(1)*e2 + rightEyePos.x(2)*e3;
+    }
+
+    // rayOrigin and rayDir in coordinates
+    m4d::vec4 rayDir;
+    m4d::vec3 localRayDir;
+    getRayDir ( device, x, y, rayDir, localRayDir );
+
+    GvsRayAllIS* eyeRay = new GvsRayAllIS(rayGen);
+
+    if (!rayDir.getAsV3D().isZero()) {
+        bool validRay = eyeRay->recalc(rayOrigin, rayDir);
+        if (validRay) {
+             getSampleIntersection(eyeRay, device);
+        }
+    } else {
+        //col.setValid(false);
+    }
+    delete eyeRay;
+    //TODO: return col;
+}
+
+
+
+void GvsProjector::getSampleIntersection(GvsRayAllIS*& eyeRay, GvsDevice* device) {
+
+//    m4d::vec4 lightDirStart, locLightDirStart, locLightDirEnd, lightDirEnd;
+//    double i,frak, wObs, wSrc;
+//    m4d::vec5 jacobi;
+
+return;
+
+    if ( (device->sceneGraph != NULL) &&
+         (device->sceneGraph->testIntersection( *eyeRay )) )
+    {
+       // TODO
+    }
+
+    // TODO
 }
 
 

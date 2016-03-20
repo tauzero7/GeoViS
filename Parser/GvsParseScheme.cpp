@@ -21,7 +21,7 @@
 #include "Parser/parse_helper.h"
 #include <sstream>
 
-extern
+//extern
 
 
 GvsParseScheme :: GvsParseScheme(scheme* s) {
@@ -46,7 +46,7 @@ GvsParseScheme :: ~GvsParseScheme() {
 void
 GvsParseScheme :: delParamList ( void )
 {
-    numParameter = paramListe.size();
+    numParameter = (int)paramListe.size();
     GvsParseParamType gpType;
 
     for (int i=0; i<numParameter; i++)
@@ -135,7 +135,11 @@ bool GvsParseScheme :: testArgType  ( const char* name, int &num ) {
     do {
         arg_name = (char*)(paramListe[num]->name);
         //std::cerr << num << " " << arg_name << std::endl;
+#ifdef _WIN32
+        if (strcmpi(arg_name, name) == 0) return true;
+#else
         if (strcasecmp(arg_name,name)==0) return true;
+#endif
         num++;
     }
     while (num<numParameter);
@@ -1177,7 +1181,7 @@ GvsParseScheme :: parse ( pointer a )
     }
     while (a != sc->NIL);
 
-    numParameter = paramListe.size();
+    numParameter = (int)paramListe.size();
 #ifdef GVS_VERBOSE
     std::cerr << "done.\n";
 #endif

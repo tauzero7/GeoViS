@@ -82,6 +82,10 @@ list( REMOVE_ITEM gvs_source_files ${CMAKE_SOURCE_DIR}/${GVS_OBJ_DIR}/STMotion/G
 # These definitions are inevitable for tinyscheme!
 add_definitions(-DUSE_INTERFACE -DSTANDALONE=0 -DUSE_MATH -DHAVE_LIBPPM)
 
+if (WIN32)
+add_definitions(-DNOMINMAX -DMETRIC_EXPORTS -DMOTION_EXPORTS -DMATH_EXPORTS -DEXTRA_EXPORTS -DUNUSED_ATTR)
+endif(WIN32)
+
 # Depending on the image formats available
 add_definitions( -DHAVE_PPM )
 if (TIFF_AVAILABLE)

@@ -90,10 +90,10 @@ void GvsFlashLight :: calcFlashPeriod () {
     flashPeriod = 0.0;
     flash.clear();
 
-    int len = flashPattern.size();
+    size_t len = flashPattern.size();
 
     int n = 0;
-    for (int i=0; i<len; i++) {
+    for (size_t i=0; i<len; i++) {
         std::string sub = flashPattern.substr(i,1);
         bool onOrOff = false;
         if (sub == "1" ) onOrOff = true;
@@ -266,8 +266,8 @@ bool GvsFlashLight :: testFlash ( const double lightTime ) {
         time = reltime - floor(reltime/flashPeriod)*flashPeriod;
 
 
-    int num = flash.size();
-    for (int i=0; i<num; i++) {
+    size_t num = flash.size();
+    for (size_t i=0; i<num; i++) {
         if ((time>=flash[i].min) && (time<flash[i].max)) {
       /*
       	if (flash[i].onoff)

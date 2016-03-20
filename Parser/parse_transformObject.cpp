@@ -99,8 +99,11 @@ pointer gvsP_translateObj (scheme *sc, pointer args) {
         // continue parsing for further transformations
         if (pair_car(pair_cdr(args)) != sc->NIL) {
             inMatrix2d = new m4d::Matrix<double,2,3>();
-
+#ifdef _WIN32
+            sprintf_s(buf, "translate-obj: read matrix (%s,%d)", __FILE__, __LINE__);
+#else
             sprintf(buf,"translate-obj: read matrix (%s,%d)",__FILE__,__LINE__);
+#endif
             get_matrix(pair_car(pair_cdr(args)), inMatrix2d, std::string(buf));
 
             *inMatrix2d = (*transformMat2d) * (*inMatrix2d);
@@ -217,8 +220,11 @@ pointer gvsP_rotateObj (scheme *sc, pointer args) {
         // continue parsing
         if (pair_car(pair_cdr(pair_cdr(args))) != sc->NIL) {
             inMatrix3d = new m4d::Matrix<double,3,4>();
-
-            sprintf(buf,"rotate-obj: read matrix (%s,%d)",__FILE__,__LINE__);
+#ifdef _WIN32
+            sprintf_s(buf,"rotate-obj: read matrix (%s,%d)",__FILE__,__LINE__);
+#else
+            sprintf(buf, "rotate-obj: read matrix (%s,%d)", __FILE__, __LINE__);
+#endif
             get_matrix(pair_car(pair_cdr(pair_cdr(args))), inMatrix3d,std::string(buf));
             *inMatrix3d = (*transformMat3d) * (*inMatrix3d);
 
@@ -285,8 +291,11 @@ pointer gvsP_scaleObj (scheme *sc, pointer args) {
         // continue parsing
         if (pair_cdr(args) != sc->NIL) {
             inMatrix3d = new m4d::Matrix<double,3,4>();
-
-            sprintf(buf,"scale-obj: read matrix (%s,%d)",__FILE__,__LINE__);
+#ifdef _WIN32
+            sprintf_s(buf,"scale-obj: read matrix (%s,%d)",__FILE__,__LINE__);
+#else
+            sprintf(buf, "scale-obj: read matrix (%s,%d)", __FILE__, __LINE__);
+#endif
             get_matrix(pair_car(pair_cdr(args)), inMatrix3d, std::string(buf));
             *inMatrix3d = (*transformMat3d) * (*inMatrix3d);
 

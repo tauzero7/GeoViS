@@ -3,6 +3,7 @@
 .svn
 build
 config
+compiled
 doc
 lib
 test

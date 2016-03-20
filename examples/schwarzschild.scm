@@ -57,6 +57,7 @@
              `(fov ,(vector fov fov ))
              '(res #(150 150))
              '(filter "FilterRGB")
+             ;'(filter "FilterIntersec")
              '(id "cam")
 )
 

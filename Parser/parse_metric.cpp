@@ -148,7 +148,7 @@ pointer gvsP_init_metric (scheme *sc, pointer args)
     // Write an entry into object-map, where the metric can be found in th gpMetric vector.
     std::string idname = "unknown";
     if (!gvsParser->getParameter("id",idname)) {
-        appendNum(idname,gpTypeID.size());
+        appendNum(idname, (int)gpTypeID.size());
     }
     else if (gpTypeID.find(idname)!=gpTypeID.end()) {
         scheme_error("init-metric: ID already assigned!");

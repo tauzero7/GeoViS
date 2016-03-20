@@ -79,7 +79,7 @@ void GvsBase::DelParam( std::string pName ) {
         }
 
         mParam.erase(mParamPtr);
-        mNumParam = mParam.size();
+        mNumParam = (int)mParam.size();
     }
 }
 
@@ -512,24 +512,24 @@ void GvsBase::Add ( GvsSceneObj*  ) {
 //       lowCase
 //----------------------------------------------------------------------------
 void
-GvsBase :: lowCase(std::string &s)
+GvsBase::lowCase(std::string &s)
 {
-  int l = s.length();
-  for (int i=0;i<l;i++) s[i] = tolower(s[i]);
-  // transform(s.begin(),s.end(),s.begin(),tolower);
+    size_t l = s.length();
+    for (size_t i = 0; i < l; i++) s[i] = tolower(s[i]);
+    // transform(s.begin(),s.end(),s.begin(),tolower);
 }
 
 std::string
-GvsBase :: getLowCase ( std::string &s ) const
+GvsBase::getLowCase(std::string &s) const
 {
-  std::string sOut = s;
-  int l = sOut.length();
-  for (int i=0;i<l;i++)
-  {
-    tolower(sOut[i]);
-  }
+    std::string sOut = s;
+    size_t l = sOut.length();
+    for (size_t i = 0; i < l; i++)
+    {
+        tolower(sOut[i]);
+    }
 
-  return sOut;
+    return sOut;
 }
 
 

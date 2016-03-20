@@ -115,15 +115,17 @@ enum GvsCamFilter {
     gvsCamFilterRGB = 0,   // rgb image only (default)
     gvsCamFilterRGBpdz,    // rgb image + position-,direction-4-vectors + freqshift
     gvsCamFilterRGBjac,    // rgb image + position-,direction-4-vectors + freqshift + Jacobi
-    gvsCamFilterRGBpt      // rgb image + position-4-vector + texture
+    gvsCamFilterRGBpt,     // rgb image + position-4-vector + texture
+    gvsCamFilterIntersec   // save all intersections
 };
 
-const int GvsNumCamFilters = 4;
+const int GvsNumCamFilters = 5;
 const std::string GvsCamFilterNames[GvsNumCamFilters] = {
     "FilterRGB",
     "FilterRGBpdz",
     "FilterRGBjac",
-    "FilterRGBpt"
+    "FilterRGBpt",
+    "FilterIntersec"
 };
 
 enum GvsCamEye {

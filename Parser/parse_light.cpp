@@ -179,7 +179,7 @@ void gvsP_init_pointlight (GvsParseScheme* gP)
 
     std::string idname = "unknown";
     if (!gP->getParameter("id",idname)) {
-        appendNum(idname,gpTypeID.size());
+        appendNum(idname, (int)gpTypeID.size());
     }
     else if(gpTypeID.find(idname)!=gpTypeID.end()) {
         scheme_error("init-light: ID already assigned!");
@@ -249,7 +249,7 @@ void gvsP_init_flashlight (GvsParseScheme* gP)
 
     std::string idname = "unknown";
     if (!gP->getParameter("id",idname)) {
-        appendNum(idname,gpTypeID.size());
+        appendNum(idname, (int)gpTypeID.size());
     }
     else if(gpTypeID.find(idname)!=gpTypeID.end()) {
         scheme_error("init-light: ID already assigned!");

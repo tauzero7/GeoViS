@@ -110,7 +110,7 @@ bool GvsPpmIO :: writeChannelImg( GvsChannelImg2D& chanImg, const char *filename
 
 
 #ifdef _WIN32
-    fscanf_s(fptr,"%s\n%d %d\n%d\n",s,&width,&height,&c);
+    fprintf_s(fptr,"P6\n%d %d\n%d\n",width,height,maxval);
 #else
     fprintf(fptr,"P6\n%d %d\n%d\n",width,height,maxval);
 #endif

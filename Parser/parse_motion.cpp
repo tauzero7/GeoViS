@@ -51,6 +51,7 @@
 #include "Obj/STMotion/GvsStMotionConstVelocity.h"
 //#include <Obj/STMotion/GvsStMotionWorldline.h>
 
+
 extern std::vector<GvsGeodSolver*>     gpSolver;
 extern std::vector<Gvsm4dMetricDummy*> gpMetric;
 extern std::vector<GvsLocalTetrad*>    gpLocalTetrad;

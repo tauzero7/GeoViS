@@ -26,6 +26,7 @@
 #include "Obj/STMotion/GvsStMotion.h"
 #include "Obj/STMotion/GvsLocalTetrad.h"
 #include "Ray/GvsRayVisual.h"
+#include "Ray/GvsRayAllIS.h"
 
 /**
  * @brief The projector represents the observer within a scene given
@@ -64,6 +65,9 @@ public:
     //! Get the sample color from the calculated light ray.
     GvsColor  getSampleColor ( GvsRayVisual*& eyeRay, GvsDevice* device  ) const;
 
+    void getSampleIntersection(GvsDevice* device, double x, double y);
+    void getSampleIntersection(GvsRayAllIS*& eyeRay, GvsDevice* device);
+
     void            setLocalTetrad ( GvsLocalTetrad* lT );
     GvsLocalTetrad* getLocalTetrad ( );
     void            setTetrad      ( const m4d::vec4 &e0, const m4d::vec4 &e1, const m4d::vec4 &e2, const m4d::vec4 &e3, bool inCoord=false );
@@ -76,8 +80,8 @@ public:
 
     virtual void setActualPos ( int nr );   //!< Select a position from the motion.
 
-    virtual int SetParam ( const std::string pName, m4d::vec4 pt );
-    virtual int SetParam ( const std::string pName, int nr );
+    virtual int SetParam ( std::string pName, m4d::vec4 pt );
+    virtual int SetParam ( std::string pName, int nr );
 
     /** Get ray direction
      * The initial light ray direction is determined with respect to the camera model

@@ -36,6 +36,7 @@ HEADERS += GvsGlobalDefs.h \
            $$DEV_DIR/GvsSampleMgr.h \
            $$IMG_DIR/GvsColor.h \
            $$IMG_DIR/GvsChannelImg2D.h \
+           $$IMG_DIR/GvsIntersecOutput.h \
            $$IMG_DIR/GvsPicIOEnvelope.h \
            $$IMG_DIR/GvsPictureIO.h \
            $$LGH_DIR/GvsLightSrc.h \
@@ -107,6 +108,7 @@ SOURCES += $$PROJECT_MAIN \
            $$DEV_DIR/GvsSampleMgr.cpp \
            $$IMG_DIR/GvsColor.cpp \
            $$IMG_DIR/GvsChannelImg2D.cpp \
+           $$IMG_DIR/GvsIntersecOutput.cpp \
            $$IMG_DIR/GvsPicIOEnvelope.cpp \
            $$IMG_DIR/GvsPictureIO.cpp \
            $$LGH_DIR/GvsLightSrc.cpp \

@@ -142,7 +142,7 @@ pointer gvsP_local_tetrad (scheme *sc, pointer args) {
 
     std::string idname = "unknown";
     if (!gvsParser->getParameter("id",idname))     {
-        appendNum(idname,gpTypeID.size());
+        appendNum(idname, (int)gpTypeID.size());
     } else if (gpTypeID.find(idname)!=gpTypeID.end()) {
         scheme_error("local-tetrad: ID already in use!");
     }

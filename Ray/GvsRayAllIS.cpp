@@ -20,6 +20,16 @@
 #include "Ray/GvsRayAllIS.h"
 
 
+GvsRayAllIS :: GvsRayAllIS ( )
+    : GvsRay ()
+{
+}
+
+GvsRayAllIS :: GvsRayAllIS ( GvsRayGen* gen )
+    : GvsRay ( gen )
+{
+}
+
 GvsRayAllIS::GvsRayAllIS(const m4d::vec4 &orig, const m4d::vec4 &dir, GvsRayGen* gen)
     : GvsRay ( orig, dir, gen )
 {

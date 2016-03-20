@@ -134,7 +134,7 @@ pointer gvsP_compound_obj (scheme *sc, pointer args)
 
     std::string idname = "unknown";
     if (!gvsParser->getParameter("id",idname)) {
-        appendNum(idname,gpTypeID.size());
+        appendNum(idname, (int)gpTypeID.size());
     }
     else if (gpTypeID.find(idname)!=gpTypeID.end()) {
         scheme_error("comp-object: ID already assigned!");
@@ -295,7 +295,7 @@ pointer gvsP_local_comp_obj (scheme *sc, pointer args)
     // In der Objekt-Map einen Eintrag schreiben, wo sich das LocalCompObj im gpSceneObj-Vektor befindet
     std::string idname = "unknown";
     if (!gvsParser->getParameter("id",idname)) {
-        appendNum(idname,gpTypeID.size());
+        appendNum(idname, (int)gpTypeID.size());
     }
     else if (gpTypeID.find(idname)!=gpTypeID.end()) {
         scheme_error("local-comp-obj: ID already assigned!");

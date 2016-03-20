@@ -41,14 +41,14 @@ void GvsObjPtrList::clear() {
 
 void GvsObjPtrList::Add( GvsSceneObj *obj ) {
     objList.push_back(obj);
-    listLength = objList.size();
+    listLength = (int)objList.size();
 }
 
 void
 GvsObjPtrList::append( GvsSceneObj *obj )  // hinten anhaengen
 {
     objList.push_back(obj);
-    listLength = objList.size();
+    listLength = (int)objList.size();
     // cout << "Object appended." << std::endl;
 }
 

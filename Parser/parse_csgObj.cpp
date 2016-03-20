@@ -145,7 +145,7 @@ pointer gvsP_init_csg_obj (scheme *sc, pointer args)
 
     idname = "unknown";
     if (!gvsParser->getParameter("id",idname)) {
-        appendNum(idname,gpTypeID.size());
+        appendNum(idname, (int)gpTypeID.size());
     }
     else if (gpTypeID.find(idname)!=gpTypeID.end()) {
         scheme_error("csg-obj: ID already assigned!");

@@ -51,15 +51,15 @@ void scheme_error(const std::string& msg) {
 }
 
 void lowCase(std::string &s) {
-    int l = s.length();
-    for (int i=0;i<l;i++) s[i] = tolower(s[i]);
+    size_t l = s.length();
+    for (size_t i=0;i<l;i++) s[i] = tolower(s[i]);
     // transform(s.begin(),s.end(),s.begin(),tolower);
 }
 
 std::string getLowCase ( std::string s ) {
     std::string s1 = s;
-    int l = s.length();
-    for (int i=0;i<l;i++) s1[i] = tolower(s[i]);
+    size_t l = s.length();
+    for (size_t i=0;i<l;i++) s1[i] = tolower(s[i]);
     //transform(s1.begin(),s1.end(),s1.begin(),tolower);
     return s1;
 }

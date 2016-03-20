@@ -24,6 +24,7 @@
 #include "GvsGlobalDefs.h"
 #include "Img/GvsColor.h"
 #include "Img/GvsChannelImg2D.h"
+#include "Img/GvsIntersecOutput.h"
 
 #include "m4dGlobalDefs.h"
 
@@ -57,6 +58,7 @@ public:
      * @return  Color of the pixel.
      */
     GvsColor calcPixelColor ( int i, int j ) const;
+    void     calcPixelIntersections(int i, int j);
 
     void     extractRegion     ( int x1, int y1, int x2, int y2, uchar* p ) const;
     void     extractRegionData ( int x1, int y1, int x2, int y2, uchar* p, gvsData* data ) const;
@@ -64,6 +66,8 @@ public:
     void     setMask ( const char *filename );
 
     void     writePicture( char *filename ) const; //!< Write picture to disc.
+
+    void     writeIntersecData(char* filename) const;
 
 protected:
     int  resX;
@@ -73,6 +77,7 @@ protected:
     m4d::ivec2   samplePixCoord;    //!< pixel which has to be calculated
 
     GvsChannelImg2D*  samplePicture;
+    GvsIntersecOutput*  sampleIntersecPicture;
     GvsDevice*        sampleDevice;
     double            aspectRatio;
     bool         mShowProgress;

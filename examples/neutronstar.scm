@@ -5,7 +5,6 @@
 (define homedir (getenv "HOME"))
 (define bg_image (string-append homedir "/local/Texturen/MilkyWay/eso0932a2.png"))
 
-
 (define r_obs 55.0 )
 (define incl  90.0 )
 (define fview 15.0 )
@@ -33,8 +32,9 @@
              `(dir #( 1.0 0.0 0.0) )
              '(vup #( 0.0 0.0 1.0) )
              `(fov ,(vector  fview fview ))
-             '(res #(1024 1024))
-             '(filter "FilterRGBjac")
+             ;'(res #(1024 1024))
+             '(res #(50 50))
+             '(filter "FilterRGB")
              '(id "cam")
 )
 
@@ -93,10 +93,9 @@
 )
 
 ;(define background_image_name "examples/checker.tif")
-(define background_image_name "examples/mwpan1600.tif")
 (init-shader  '(type "SurfShader")
               `(objcolor ,(init-texture '(type "Image")
-                                        `(file ,background_image_name)
+                                        `(file ,bg_image)
                                         `(transform ,(scale-obj #(-1.0 -1.0)))
                                         )
                          )

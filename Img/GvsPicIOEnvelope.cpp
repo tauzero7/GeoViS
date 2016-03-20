@@ -77,7 +77,7 @@ void GvsPicIOEnvelope :: allocPicIOMgr( const char *filename )
 
 bool GvsPicIOEnvelope :: testImageExtension ( const std::string filename ) {
     std::string ext;
-    int k = filename.rfind(".");
+    size_t k = filename.rfind(".");
     ext.assign(filename,k+1,filename.size());
 
     bool imageExt_exists = false;

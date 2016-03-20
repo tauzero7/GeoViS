@@ -17,7 +17,10 @@
 //  along with GeoViS.  If not, see <http://www.gnu.org/licenses/>.
 // ---------------------------------------------------------------------
 
+#ifndef _WIN32
 #include <unistd.h>
+#endif
+
 #include "Dev/GvsDevice.h"
 #include "Parser/GvsParser.h"
 #include "Texture/GvsTexture.h"
@@ -319,7 +322,7 @@ GvsParser :: getMotion ( unsigned int k )
  * @return
  */
 int GvsParser::getNumDevices() const {
-    return gpDevice.size();
+    return (int)gpDevice.size();
 }
 
 /**
@@ -389,7 +392,7 @@ GvsParser :: initStandard ( GvsDevice *device ) {
     //device->spacetime = getSpacetime();
     //  device->solver = getSolver();
 
-    device->sceneGraph = getSceneObj(gpSceneObj.size()-1);
+    device->sceneGraph = getSceneObj((int)gpSceneObj.size()-1);
     device->lightSrcMgr = getLightMgr();
 
     //device->Print();
@@ -413,7 +416,11 @@ void GvsParser::read_scene(const char* name) {
     scheme_set_output_port_file(&sc, stdout);
 
     // Init-File lesen
+#ifdef _WIN32
+    fopen_s(&fin, file_name.c_str(), "r");
+#else
     fin=fopen(file_name.c_str(),"r");
+#endif
     if (fin==0) {
         fprintf(stderr,"Could not open file %s\n",file_name.c_str());
         exit(-1);
@@ -487,7 +494,11 @@ void GvsParser::read_scene(const char* name) {
 
     // read SDL file
     file_name = name;
-    fscm = fopen(file_name.c_str(),"r");
+#ifdef _WIN32
+    fopen_s(&fscm, file_name.c_str(), "r");
+#else
+    fscm = fopen(file_name.c_str(), "r");
+#endif
 
     if ((fscm==0) || (file_name=="") ) {
         fprintf(stderr,"GvsParser :: Could not open file %s\n",file_name.c_str());
@@ -500,7 +511,32 @@ void GvsParser::read_scene(const char* name) {
     fclose(fin);
 }
 
+#ifdef _WIN32
+std::string GvsParser::getFullPathname() {
+    char *exeDirName;
+    const unsigned int nSize = 0xFFFF;
+    char *cwd = new char[nSize];
+    if (::GetModuleFileNameA(NULL, cwd, nSize)
+        == ERROR_INSUFFICIENT_BUFFER) {
+        cwd[0] = 0;
+    }
+    else {
+        if (::GetLastError() != ERROR_SUCCESS) {
+            cwd[0] = 0;
+        }
+    }
+    auto pos = strrchr(cwd, '\\');
+    if (*pos != 0) {
+        *(pos+1) = 0;
+    }
+    int cwdlen = static_cast<int>(strlen(cwd)) + 1;
+    exeDirName = new char[cwdlen];
 
+    strcpy(exeDirName, cwd);
+    delete [] cwd;
+    return std::string(exeDirName);
+}
+#else
 std::string GvsParser::getFullPathname() {
     std::string path;
     pid_t pid = getpid();
@@ -520,3 +556,4 @@ std::string GvsParser::getFullPathname() {
     }
     return std::string();
 }
+#endif //_WIN32
