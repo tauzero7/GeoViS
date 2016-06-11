@@ -182,7 +182,9 @@ bool GvsSolConvexPrim::testIntersection ( GvsRay &ray ) {
 
             surfIntersec.partIndex = entryFace;
             surfIntersec.setRaySegNumber(seg);
-            return ray.store( surfIntersec );
+            if (ray.store(surfIntersec) == GvsRayStatus::finished) {
+                return true;
+            }
         }
         else if (GvsRay::isIn(seg,tExit,maxSeg) && ray.isValidSurfIntersec( GvsRay::calcRayDist(seg,tExit))) {
             //std::cerr << "Exit-Schnitt: " << tExit << std::endl;
@@ -205,8 +207,9 @@ bool GvsSolConvexPrim::testIntersection ( GvsRay &ray ) {
 
             surfIntersec.partIndex = exitFace;
             surfIntersec.setRaySegNumber(seg);
-            return ray.store( surfIntersec );
-
+            if (ray.store(surfIntersec) == GvsRayStatus::finished) {
+                return true;
+            }
         }
     }
     return false;
@@ -296,7 +299,9 @@ bool GvsSolConvexPrim::testLocalIntersection( GvsRay &ray, const int seg,
         surfIntersec.partIndex = entryFace;
 
         surfIntersec.setRaySegNumber(seg);
-        return ray.store( surfIntersec );
+        if (ray.store(surfIntersec) == GvsRayStatus::finished) {
+            return true;
+        }
     }
     else if (GvsRay::isIn(seg,tExit,maxSeg) && ray.isValidSurfIntersec( GvsRay::calcRayDist(seg,tExit)))  {
        // std::cerr << "Schnitt tExit: " << tExit << std::endl;
@@ -325,7 +330,9 @@ bool GvsSolConvexPrim::testLocalIntersection( GvsRay &ray, const int seg,
         surfIntersec.partIndex = exitFace;
 
         surfIntersec.setRaySegNumber(seg);
-        return ray.store( surfIntersec );
+        if (ray.store(surfIntersec) == GvsRayStatus::finished) {
+            return true;
+        }
     }
     return false;
 }

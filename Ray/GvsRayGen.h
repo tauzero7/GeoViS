@@ -35,27 +35,58 @@
 class GvsRayGen : public GvsBase
 {
 public:
+    /**
+     * C'tor
+     */
     GvsRayGen();
+
+    /**
+     * Standard constructor to generate a backward directed light ray.
+     * @param solver  pointer to geodesic solver
+     */
     GvsRayGen( GvsGeodSolver *solver );
+
+    /**
+     * Standard constructor to generate a geodesic.
+     * @param solver  pointer to geodesic solver
+     * @param type    type of geodesic (timelike, lightlike, lightlike-sachs, spacelike)
+     * @param dir     time direction of geodesic (forward or backward in time)
+     */
     GvsRayGen( GvsGeodSolver *solver, m4d::enum_geodesic_type type, m4d::enum_time_direction dir );
     virtual ~GvsRayGen();
 
     void           setBoundBox ( const GvsBoundBox4D &box );
     GvsBoundBox4D  getBoundBox ( ) const;
 
+    /**
+     * Set maximum number of points to be integrated for the geodesic
+     * @param maxPoints
+     */
     void setMaxNumPoints ( const int maxPoints );
+
+    /**
+     * Get currently set maximum number of points to be integrated
+     * @return
+     */
     int  getMaxNumPoints ( ) const;
 
     void           setActualSolver ( GvsGeodSolver* solver );
     GvsGeodSolver* getActualSolver ( ) const;
 
-    //! Calculate simple light ray only.
-    m4d::vec4* calcPolyline( const m4d::vec4 &startOrig, const m4d::vec4 &startDir, int &numPoints,
-                             m4d::enum_break_condition &bc );
+    /**
+     * Calculate simple light ray only.
+     * @param startOrig   Initial position of the ray in coordinates.
+     * @param startDir    Initial direction of the ray in coordinates.
+     * @param numPoints   Reference to number of points calculated.
+     * @param pointer to ray points (memory will be allocated inside)
+     * @return break condition
+     */
+    m4d::enum_break_condition calcPolyline( const m4d::vec4 &startOrig, const m4d::vec4 &startDir,
+                                            m4d::vec4*& points, int &numPoints);
 
     //! Calculate simple light ray and return also directions.
-    m4d::vec4* calcPolyline( const m4d::vec4 &startOrig, const m4d::vec4 &startDir, m4d::vec4 *&dirs,
-                             int &numPoints, m4d::enum_break_condition &bc );
+    m4d::enum_break_condition calcPolyline( const m4d::vec4 &startOrig, const m4d::vec4 &startDir,
+                                            m4d::vec4*& points, m4d::vec4*& dirs, int &numPoints);
 
     //! Calculate light ray and parallel transported local tetrad.
     GvsLocalTetrad* calcParTransport( const m4d::vec4 &startOrig, const m4d::vec4 &startDir, const GvsLocalTetrad *lt,

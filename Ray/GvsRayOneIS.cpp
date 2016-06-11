@@ -51,15 +51,14 @@ GvsRayOneIS :: ~GvsRayOneIS() {
 }
 
 
-bool GvsRayOneIS :: store( const GvsSurfIntersec &surfIntersec ) {
-    if ( isValidSurfIntersec( surfIntersec.dist() ) )
-    {
+GvsRayStatus GvsRayOneIS :: store( const GvsSurfIntersec &surfIntersec ) {
+    if ( isValidSurfIntersec( surfIntersec.dist() )) {
         raySurfIntersec = surfIntersec;
         setMaxSearchDist(surfIntersec.dist());
         //std::cerr << "store: " << raySurfIntersec.dist() << std::endl;
-        return true;
+        return GvsRayStatus::finished;
     }
-    return false;
+    return GvsRayStatus::active;
 }
 
 

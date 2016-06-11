@@ -82,20 +82,20 @@ void GvsSampleMgr::setRegionToImage() {
     sampleRegionUR.setX(0,sampleDevice->camera->GetResolution().x(0)-1);
     sampleRegionUR.setX(1,sampleDevice->camera->GetResolution().x(1)-1);
 
-    bool withData = false;
-    GvsCamFilter filter = sampleDevice->camera->getCamFilter();
-    if ((filter == gvsCamFilterRGBpdz) ||
-            (filter == gvsCamFilterRGBjac) ||
-            (filter == gvsCamFilterRGBpt)) {
-        withData = true;
-    }
     resX = sampleDevice->camera->GetResolution().x(0);
     resY = sampleDevice->camera->GetResolution().x(1);
 
+    GvsCamFilter filter = sampleDevice->camera->getCamFilter();
     if (filter == gvsCamFilterIntersec) {
         sampleIntersecPicture->resize(resX, resY);
     }
     else {
+        bool withData = false;
+        if ((filter == gvsCamFilterRGBpdz) ||
+                (filter == gvsCamFilterRGBjac) ||
+                (filter == gvsCamFilterRGBpt)) {
+            withData = true;
+        }
         samplePicture->resize( resX, resY, withData );
     }
 }
@@ -139,27 +139,33 @@ void GvsSampleMgr :: setRegion ( const m4d::ivec2 &corner1, const m4d::ivec2 &co
         samplePicture->resize( sampleDevice->camera->GetResolution().x(0),
                                sampleDevice->camera->GetResolution().x(1) );
     }
-
 }
 
 
 int GvsSampleMgr::calcRegionBytes( int x1, int y1, int x2, int y2 ) const {
     assert (x2 >= x1);
     assert (y2 >= y1);
-    return (y2 -y1 + 1) * (x2 - x1 + 1) * samplePicture->numChannels();
+    if (samplePicture != NULL) {
+        return (y2 - y1 + 1) * (x2 - x1 + 1) * samplePicture->numChannels();
+    }
+    else if (sampleIntersecPicture != NULL) {
+        return (y2 - y1 + 1) * (x2 - x1 + 1); //TODO: * sampleIntersecPicture->dataSize;
+    }
+    return calcRegionPixels(x1, y1, x2, y2);
 }
 
 
 int GvsSampleMgr::calcRegionPixels ( int x1, int y1, int x2, int y2 ) const {
     assert (x2 >= x1);
     assert (y2 >= y1);
-    return (y2 -y1 + 1) * (x2 - x1 + 1);
+    return (y2 - y1 + 1) * (x2 - x1 + 1);
 }
 
 
 bool GvsSampleMgr::putFirstPixel() {
     samplePixCoord = sampleRegionLL;        
     if (sampleDevice->camera->getCamFilter() == gvsCamFilterIntersec) {
+        // TODO: return value
         calcPixelIntersections(samplePixCoord.x(0), samplePixCoord.x(1));
         //TODO: sampleIntersecPicture->setData();
     }
@@ -179,6 +185,7 @@ bool GvsSampleMgr::putNextPixel() {
     }
 
     if (sampleDevice->camera->getCamFilter() == gvsCamFilterIntersec) {
+        // TODO: return value
         calcPixelIntersections(samplePixCoord.x(0), samplePixCoord.x(1));
         //TODO: sampleIntersecPicture->setData();
     }
@@ -188,6 +195,7 @@ bool GvsSampleMgr::putNextPixel() {
     }
     return true;
 }
+
 
 GvsColor GvsSampleMgr :: calcPixelColor( int i, int j ) const {
     if (mShowProgress) {

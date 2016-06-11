@@ -78,58 +78,12 @@ GvsStMotion* GvsSceneObj :: getMotion ( void ) const {
     return stMotion;
 }
 
-/*
-//----------------------------------------------------------------------------
-//         stBoundBox
-//----------------------------------------------------------------------------
-void
-GvsSceneObj :: calcSTBoundBox ( GvsBoundBox box )
-{
-  m4d::vec3 low = box.lowBounds();
-  m4d::vec3 upp = box.uppBounds();
-
-  // Bestimme die gr��ten Koordinatenwerte der normalen BoundingBox im lokalen System
-  double m1 = GVS_MAX(low.x(0),upp.x(0));
-  double m2 = GVS_MAX(low.x(1),upp.x(1));
-  double m3 = GVS_MAX(low.x(2),upp.x(2));
-
-  // Transformiere den Ortsvektor ins Koordinatensystem
-  m4d::vec4 maxBound = m4d::vec4(1.0,m1,m2,m3);
-  maxBound.print();
-  m4d::vec4 maxBoundCoords = localTetrad->transToCoords(maxBound);
-
-  // Bestimme daraus den maximalen raumartigen und zeitartigen Abstand der BoundingBox
-  GvsMetric* metric = localTetrad->getMetric();
-  double spaceDist,timeDist;
-  metric->calcDist(localTetrad->getPosition(),maxBoundCoords,spaceDist,timeDist);
-
-  cout << "Distances: " << spaceDist << " " << timeDist << std::endl;
-
-  // Setze hier spaceDist und timeDist als stBoundingBox
-  //  stBoundBox = GvsBoundBox4D(minBoundCoords,maxBoundCoords);
-}
-*/
-
-
 bool GvsSceneObj :: testIntersection(GvsRay&) {
     std::cerr << "Error in GvsSceneObj::testIntersection(GvsRay&): not implemented." << std::endl;
     return false;
 }
 
-/*
-bool
-GvsSceneObj::testLocalIntersection( GvsRay &ray, const int rayPartIndex, const int seg,
-                                    GvsLocalTetrad* lt0, GvsLocalTetrad* lt1,
-                                    const m4d::vec4 p0, const m4d::vec4 p1,
-                                    double& tau0, double& tau1 )
-{
-  std::cerr << "Error in GvsSceneObj::testLocalIntersection(GvsRay&): not implemented." << std::endl;
-  return false;
-}
-*/
-
-bool
-GvsSceneObj::testLocalIntersection(GvsRay &, const int ,
+bool GvsSceneObj::testLocalIntersection(GvsRay &, const int ,
                                     GvsLocalTetrad* , GvsLocalTetrad* ,
                                     const m4d::vec4 , const m4d::vec4 )
 {

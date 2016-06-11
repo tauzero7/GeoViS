@@ -29,9 +29,9 @@
 #include "Ray/GvsRayAllIS.h"
 
 /**
- * @brief The projector represents the observer within a scene given
- *        with respect to a local reference frame (LRF). This LRF can
- *        be either defined as simple local tetrad or as a motion.
+ * The projector represents the observer within a scene given
+ * with respect to a local reference frame (LRF). This LRF can
+ * be either defined as simple local tetrad or as a motion.
  *
  */
 class GvsProjector : public GvsBase
@@ -59,20 +59,65 @@ public:
     GvsColor  getBreakDownColor() const;
     void      setBreakDownColor( const GvsColor &col );
 
-    //! Get the sample color for pixel (x,y)
+    /**
+     * Get the sample color for pixel (x,y).
+     *   A visual ray for pixel (x,y) is generated depending on the camera of the scene.
+     *   Then, the 'getSampleColor(eyeRay, device)' is called.
+     * @param device   pointer to current scene device
+     * @param x   x-coordinate of pixel
+     * @param y   y-coordinate of pixel
+     * @return  rendered color
+     */
     GvsColor  getSampleColor ( GvsDevice* device, double x, double y ) const;
 
-    //! Get the sample color from the calculated light ray.
+    /**
+     * Get the sample color from the light ray.
+     *   The visual ray is tested for intersections with all objects in the scene.
+     * @param eyeRay  visual ray
+     * @param device  scene device
+     * @return rendered color
+     */
     GvsColor  getSampleColor ( GvsRayVisual*& eyeRay, GvsDevice* device  ) const;
 
     void getSampleIntersection(GvsDevice* device, double x, double y);
     void getSampleIntersection(GvsRayAllIS*& eyeRay, GvsDevice* device);
 
-    void            setLocalTetrad ( GvsLocalTetrad* lT );
-    GvsLocalTetrad* getLocalTetrad ( );
-    void            setTetrad      ( const m4d::vec4 &e0, const m4d::vec4 &e1, const m4d::vec4 &e2, const m4d::vec4 &e3, bool inCoord=false );
+    /**
+     * Set the local tetrad (local reference frame) of the observer.
+     * @param lT  pointer to local tetrad
+     */
+    void  setLocalTetrad ( GvsLocalTetrad* lT );
 
-    void       setPosition( const m4d::vec4 &pos );
+    /**
+     * Get the currently set local tetrad of the observer.
+     * @return  pointer to the local tetrad.
+     */
+    GvsLocalTetrad* getLocalTetrad ( );
+
+    /**
+     * Set the local tetrad (local reference frame) of the observer by means of the basis
+     * vectors e0-e3
+     * @param e0   basis-vector e0 of the local tetrad
+     * @param e1   basis-vector e1 of the local tetrad
+     * @param e2   basis-vector e2 of the local tetrad
+     * @param e3   basis-vector e3 of the local tetrad
+     * @param inCoord   true if basis-vectors are in coordinate representation
+     */
+    void  setTetrad( const m4d::vec4 &e0, const m4d::vec4 &e1, const m4d::vec4 &e2,
+                     const m4d::vec4 &e3, bool inCoord=false );
+
+    /**
+     * Set the current position of the observer.
+     *   This method can be called only after setting a local tetrad.
+     *   The local tetrad will be adapted accordingly.
+     * @param pos
+     */
+    void  setPosition( const m4d::vec4 &pos );
+
+    /**
+     * Get the current position of the observer.
+     * @return position
+     */
     m4d::vec4  getPosition() const;
 
     virtual void         setMotion( GvsStMotion* motion );
@@ -80,6 +125,12 @@ public:
 
     virtual void setActualPos ( int nr );   //!< Select a position from the motion.
 
+    /**
+     * Set projector parameters by key-value pair.
+     * @param pName   parameter name
+     * @param pt      parameter value
+     * @return
+     */
     virtual int SetParam ( std::string pName, m4d::vec4 pt );
     virtual int SetParam ( std::string pName, int nr );
 

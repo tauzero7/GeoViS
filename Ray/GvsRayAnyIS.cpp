@@ -40,10 +40,10 @@ bool GvsRayAnyIS :: testIntersection( GvsObjPtrList&  ) {
 }
 
 
-bool GvsRayAnyIS :: store ( const GvsSurfIntersec &surfIntersec ) {
+GvsRayStatus GvsRayAnyIS::store( const GvsSurfIntersec &surfIntersec ) {
     if (isValidSurfIntersec( surfIntersec.dist() )) {
         raySurfIntersec = surfIntersec;
-        return true;
+        return GvsRayStatus::finished;
     }
-    return false;
+    return GvsRayStatus::active;
 }

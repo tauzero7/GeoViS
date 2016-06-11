@@ -133,9 +133,11 @@ void GvsProjector :: setMotion ( GvsStMotion* motion ) {
     locTetrad = stMotion->getLocalTetrad(0);
 }
 
+
 GvsStMotion* GvsProjector :: getMotion() const {
     return stMotion;
 }
+
 
 GvsColor GvsProjector :: getSampleColor ( GvsDevice* device, double x, double y ) const {
     assert ( (rayGen != NULL) && (locTetrad != NULL) );
@@ -167,29 +169,6 @@ GvsColor GvsProjector :: getSampleColor ( GvsDevice* device, double x, double y 
     GvsColor col = errorColor;
 
     if (!rayDir.getAsV3D().isZero()) {
-        /*
-        switch (camFilter) {
-            case gvsCamFilterRGB: {
-                if (eyeRay->recalc( rayOrigin, rayDir )) {
-                    col = getSampleColor( eyeRay, device );
-                }
-                break;
-            }
-            case gvsCamFilterRGBpdz: {
-                if (eyeRay->recalc( rayOrigin, rayDir, locTetrad)) {
-                    col = getSampleColor( eyeRay, device );
-                }
-                break;
-            }
-            case gvsCamFilterRGBjac: {
-                if (eyeRay->recalcJacobi( rayOrigin, rayDir, localRayDir, locTetrad)) {
-                    col = getSampleColor( eyeRay, device );
-                }
-                break;
-            }
-        }
-        */
-
         bool validRay = false;
         switch (camFilter) {
             case gvsCamFilterRGBpt:
@@ -367,7 +346,11 @@ return;
 
     if ( (device->sceneGraph != NULL) &&
          (device->sceneGraph->testIntersection( *eyeRay )) )
-    {
+    {        
+        GvsSurfIntersec* surfIntersec = eyeRay->getFirstSurfIntersec();
+        while((surfIntersec = eyeRay->getNextSurfIntersec()) != NULL) {
+
+        }
        // TODO
     }
 

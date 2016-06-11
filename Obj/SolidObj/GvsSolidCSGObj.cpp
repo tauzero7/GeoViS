@@ -103,7 +103,9 @@ bool GvsSolidCSGObj :: testIntersection( GvsRay& ray ) {
             if ( spanList.getFirstValidSpan( spanStart, spanEnd ) ) {
                 if ( ray.isValidSurfIntersec( spanStart.dist() ) ) {
                     spanStart.setSurfIsSelfDescribing( false );
-                    return ray.store( spanStart );
+                    if (ray.store(spanStart) == GvsRayStatus::finished) {
+                        return true;
+                    }
                 }
             }
         }

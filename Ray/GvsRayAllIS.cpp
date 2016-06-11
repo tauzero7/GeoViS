@@ -41,17 +41,39 @@ GvsRayAllIS :: GvsRayAllIS ( const m4d::vec4 &orig, const m4d::vec4 &dir, GvsRay
 {
 }
 
-GvsRayAllIS :: ~GvsRayAllIS()
-{
-}
-
-bool GvsRayAllIS :: intersecFound ( void ) const {
-    return true; //...
-}
-
-bool GvsRayAllIS :: store( const GvsSurfIntersec &surfIntersec ) {
-    if ( isValidSurfIntersec(surfIntersec.dist()) ) {
-        return true;
+GvsRayAllIS :: ~GvsRayAllIS() {
+    if (!raySurfIntersecs.empty()) {
+        raySurfIntersecs.clear();
     }
-    return false;
+}
+
+bool GvsRayAllIS :: intersecFound() const {
+    return (!raySurfIntersecs.empty());
+}
+
+GvsRayStatus GvsRayAllIS::store( const GvsSurfIntersec &surfIntersec ) {
+//    if ( isValidSurfIntersec(surfIntersec.dist()) ) {
+//        return true;
+//    }
+//    return false;
+    if (isValidSurfIntersec(surfIntersec.dist())) {
+        raySurfIntersecs.push_back(surfIntersec);
+    }
+    return GvsRayStatus::active;
+}
+
+
+GvsSurfIntersec* GvsRayAllIS::getFirstSurfIntersec() {
+    currSurfIntersec = 0;
+    if (currSurfIntersec < raySurfIntersecs.size()) {
+        return &raySurfIntersecs[currSurfIntersec++];
+    }
+    return NULL;
+}
+
+GvsSurfIntersec* GvsRayAllIS::getNextSurfIntersec() {
+    if (currSurfIntersec < raySurfIntersecs.size()) {
+        return &raySurfIntersecs[currSurfIntersec++];
+    }
+    return NULL;
 }

@@ -37,7 +37,7 @@ public:
     virtual ~GvsRayAnyIS ();
 
     virtual bool testIntersection ( GvsObjPtrList& objPtrList );
-    virtual bool store ( const GvsSurfIntersec &surfIntersec  );
+    virtual GvsRayStatus store( const GvsSurfIntersec &surfIntersec);
 };
 
 #endif

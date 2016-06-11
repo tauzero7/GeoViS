@@ -69,8 +69,8 @@
 )
 
 (init-camera '(type "2PICam") 
-			 '(heading -90.0)
-			 '(pitch    90.0)
+             '(heading -90.0)
+             '(pitch    90.0)
              '(res  #(100 100))
              '(filter "FilterRGB")
              '(id "pancam")
@@ -97,7 +97,7 @@
 
 ;; --- Initialize projector with observer tetrad
 (init-projector '(localTetrad "locTedObs")
-                '(color #(0.0 0.0 0.0))
+                '(color #(0.2 0.2 0.2))
                 '(id "proj")
 )
 

@@ -19,6 +19,8 @@
 #ifndef GVS_RAY_ALL_IS_H
 #define GVS_RAY_ALL_IS_H
 
+#include <vector>
+
 #include "GvsGlobalDefs.h"
 #include "Ray/GvsSurfIntersec.h"
 #include "Ray/GvsRay.h"
@@ -38,7 +40,14 @@ public:
     virtual ~GvsRayAllIS ();
 
     virtual bool intersecFound ( void ) const;
-    virtual bool store ( const GvsSurfIntersec &surfIntersec );
+    virtual GvsRayStatus store ( const GvsSurfIntersec &surfIntersec );
+
+    GvsSurfIntersec* getFirstSurfIntersec();
+    GvsSurfIntersec* getNextSurfIntersec();
+
+protected:
+    std::vector<GvsSurfIntersec>  raySurfIntersecs;
+    size_t currSurfIntersec;
 };
 
 #endif

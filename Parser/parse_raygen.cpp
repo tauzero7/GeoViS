@@ -283,11 +283,10 @@ pointer gvsP_calc_ray ( scheme *sc, pointer args )
     //metric->localToCoord(startPos,startDirLoc,startDir);
     startDir = locTed->localToCoord(startDirLoc);
 
-    m4d::enum_break_condition bc = m4d::enum_break_none;
 
     int num=0;
-    m4d::vec4* polyray = new m4d::vec4[rayGen->getMaxNumPoints()];
-    polyray = rayGen->calcPolyline(startPos,startDir,num,bc);
+    m4d::vec4* polyray = NULL;
+    rayGen->calcPolyline(startPos,startDir,polyray, num);
 
     std::ofstream out(outFileName.c_str());
     for (int i=0; i<num; i++) {

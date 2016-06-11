@@ -687,8 +687,9 @@ bool GvsOBJMesh::testIntersection( GvsRay &ray ) {
                 surfIntersec.setTexUVParam(rayIntersecTexUV.x(0),rayIntersecTexUV.x(1));
 
                 surfIntersec.setRaySegNumber(seg);
-                return ray.store( surfIntersec );
-
+                if (ray.store( surfIntersec ) == GvsRayStatus::finished) {
+                    return true;
+                }
             }
         }
     }

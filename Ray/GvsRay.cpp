@@ -69,10 +69,12 @@ GvsRay :: GvsRay ( const m4d::vec4 &orig, const m4d::vec4 &dir, GvsRayGen* gen )
 
     rayID = getNextRayID();
 
-    rayDirs = new m4d::vec4[rayGen->getMaxNumPoints()];
+    rayPoints = NULL;
+    rayDirs = NULL;
 
     rayNumPoints = 0;
-    rayPoints= rayGen->calcPolyline(orig,dir,rayDirs,rayNumPoints,rayBreakCond);   // construct ray
+
+    rayBreakCond = rayGen->calcPolyline(orig,dir,rayPoints,rayDirs,rayNumPoints);
     assert(rayNumPoints >= 2);
 
     rayMinSearchDist = GVS_EPS;
@@ -96,10 +98,11 @@ GvsRay :: GvsRay ( const m4d::vec4 &orig, const m4d::vec4 &dir, GvsRayGen* gen,
 
     rayID = getNextRayID();
 
-    rayDirs = new m4d::vec4[rayGen->getMaxNumPoints()];
+    rayPoints = NULL;
+    rayDirs = NULL;
 
     rayNumPoints = 0;
-    rayPoints= rayGen->calcPolyline(orig,dir,rayDirs,rayNumPoints,rayBreakCond);
+    rayBreakCond = rayGen->calcPolyline(orig,dir,rayPoints,rayDirs,rayNumPoints);
 
     setSearchInterval(minSearchDist,maxSearchDist);
 
@@ -121,7 +124,7 @@ GvsRay :: GvsRay ( const m4d::vec4 &orig, const m4d::vec4 &dir, const GvsLocalTe
 
     rayID = getNextRayID();
 
-    rayPoints= NULL;
+    rayPoints = NULL;
     rayDirs  = NULL;
 
     rayNumPoints = 0;
@@ -261,7 +264,7 @@ bool  GvsRay :: recalc ( const m4d::vec4 &orig, const m4d::vec4 &dir ) {
     rayID = getNextRayID();
 
     rayNumPoints = 0;
-    rayPoints = rayGen->calcPolyline(orig,dir,rayNumPoints,rayBreakCond);
+    rayBreakCond = rayGen->calcPolyline(orig,dir,rayPoints,rayNumPoints);
     if (rayPoints==NULL || rayNumPoints<2) {
         return false;
     }

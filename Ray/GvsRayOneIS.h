@@ -43,8 +43,12 @@ public:
 
     virtual ~GvsRayOneIS();
 
-
-    virtual bool  store( const GvsSurfIntersec &surfIntersec  );
+    /**
+     * Store surface intersection
+     * @param surfIntersec  reference to surface intersection object
+     * @return finished if no more intersections shall be tested
+     */
+    virtual GvsRayStatus store(const GvsSurfIntersec &surfIntersec);
 
     GvsSurfIntersec& surfIntersec   ();
     GvsSurfIntersec* getSurfIntersec();

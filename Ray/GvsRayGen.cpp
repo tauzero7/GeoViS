@@ -73,36 +73,31 @@ GvsGeodSolver* GvsRayGen :: getActualSolver ( ) const {
     return actualSolver;
 }
 
-/**
- * @param startOrig   Initial position of the ray in coordinates.
- * @param startDir    Initial direction of the ray in coordinates.
- * @param numPoints   Reference to number of points calculated.
- * @return pointer to ray points.
- */
-m4d::vec4* GvsRayGen :: calcPolyline(const m4d::vec4 &startOrig, const m4d::vec4 &startDir,
-                                     int &numPoints, m4d::enum_break_condition &bc) {
+
+m4d::enum_break_condition GvsRayGen::calcPolyline(const m4d::vec4 &startOrig, const m4d::vec4 &startDir,
+                                     m4d::vec4*& points, int &numPoints) {
     assert(actualSolver!=NULL);
 
     m4d::Metric* metric = actualSolver->getMetric();
-    if ( metric!=NULL) {
+    if (metric != NULL) {
         if (metric->breakCondition(startOrig) ) {
             std::cerr << "Error in GvsRayGenSimple :: calcPolyline" << std::endl;
             std::cerr << "StartPos already satisfies breakCondition" << std::endl;
-            bc = m4d::enum_break_other;
-            return NULL;
+            points = NULL;
+            return m4d::enum_break_other;
         }
     }
 
-    m4d::vec4* points = NULL;
     m4d::vec4* dirs = NULL;
-    bc = actualSolver->calculateGeodesic(startOrig,startDir,maxNumPoints,points,dirs,numPoints);
+    m4d::enum_break_condition bc = actualSolver->calculateGeodesic(startOrig,startDir,maxNumPoints,points,dirs,numPoints);
     delete [] dirs;
-    return points;
+    return bc;
 }
 
 
-m4d::vec4* GvsRayGen :: calcPolyline(const m4d::vec4 &startOrig, const m4d::vec4 &startDir,
-                                     m4d::vec4 *&dirs, int &numPoints, m4d::enum_break_condition &bc)
+m4d::enum_break_condition
+GvsRayGen :: calcPolyline(const m4d::vec4 &startOrig, const m4d::vec4 &startDir,
+                          m4d::vec4*& points, m4d::vec4 *&dirs, int &numPoints)
 {
     // startOrig and startDir have to be given in coordinates !!    
     assert(actualSolver!=NULL);
@@ -112,14 +107,11 @@ m4d::vec4* GvsRayGen :: calcPolyline(const m4d::vec4 &startOrig, const m4d::vec4
         if (metric->breakCondition(startOrig) ) {
             std::cerr << "error in GvsRayGenSimple :: calcPolyline" << std::endl;
             std::cerr << "StartPos already satisfies breakCondition" << std::endl;
-            bc = m4d::enum_break_other;
-            return NULL;
+            return m4d::enum_break_other;
         }
     }
 
-    m4d::vec4* points = NULL;
-    bc = actualSolver->calculateGeodesic(startOrig,startDir,maxNumPoints,points,dirs,numPoints);
-    return points;
+    return actualSolver->calculateGeodesic(startOrig,startDir,maxNumPoints,points,dirs,numPoints);
 }
 
 

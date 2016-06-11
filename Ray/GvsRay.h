@@ -38,6 +38,13 @@ enum GvsRayType {
     polRayAnyIS, polRayAllIS
 };
 
+
+enum class GvsRayStatus {
+    active = 0,
+    finished
+};
+
+
 class GvsRayGen;
 class GvsSurfIntersec;
 
@@ -86,7 +93,13 @@ public:
     double         maxSearchDist  ( ) const;
 
     virtual bool   intersecFound  ( ) const = 0;
-    virtual bool   store          ( const GvsSurfIntersec &surfIntersec ) = 0;  // pure virtual
+
+    /**
+     * Store surface intersection
+     * @param surfIntersec  reference to surface intersection object
+     * @return finished if no more intersections shall be tested
+     */
+    virtual GvsRayStatus store( const GvsSurfIntersec &surfIntersec ) = 0;  // pure virtual
     virtual bool   isValidSurfIntersec ( double dist ) const;
 
     virtual void   Print ( FILE* fptr = stderr );

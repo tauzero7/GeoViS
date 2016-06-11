@@ -31,8 +31,7 @@
 class GvsDevice;
 
 /**
- * @brief  The sample manager is responsible for determining the color
- *         of each pixel.
+ * The sample manager is responsible for determining the color of each pixel.
  */
 class GvsSampleMgr
 {
@@ -40,15 +39,58 @@ public:
     GvsSampleMgr ( GvsDevice* rtDev, bool showProgress = false );
     virtual ~GvsSampleMgr ( );
 
-    void     clear();
+    void clear();
 
-    void     setRegionToImage ( );
-    void     setRegion        ( const m4d::ivec2 &corner1, const m4d::ivec2 &corner2 );
-    int      calcRegionBytes  ( int x1, int y1, int x2, int y2 ) const;
-    int      calcRegionPixels ( int x1, int y1, int x2, int y2 ) const;
+    /**
+     * Set region to image.
+     *   Resize the internal image to fit the camera resolution of the scene.
+     */
+    void  setRegionToImage();
 
-    bool     putFirstPixel  ( );
-    bool     putNextPixel   ( );
+    /**
+     * Set region.
+     *   Resize the internal image to fit the camera resolution of the scene.
+     *   However, the region to be sampled is restricted by the lower-left and
+     *   upper-right corners.
+     * @param corner1   lower-left corner of sampling region
+     * @param corner2   upper-right corner of sampling region
+     */
+    void  setRegion(const m4d::ivec2 &corner1, const m4d::ivec2 &corner2);
+
+    /**
+     * Calculate the number of bytes necessary for the region defined by x_i,y_i
+     * @param x1   x-coordinate of lower-left corner
+     * @param y1   y-coordinate of lower-left corner
+     * @param x2   x-coordinate of upper-right corner
+     * @param y2   y-coordinate of upper-right corner
+     * @return  number of bytes
+     */
+    int  calcRegionBytes ( int x1, int y1, int x2, int y2 ) const;
+
+    /**
+     * Calculate the number of pixel covered by the region
+     * @param x1   x-coordinate of lower-left corner
+     * @param y1   y-coordinate of lower-left corner
+     * @param x2   x-coordinate of upper-right corner
+     * @param y2   y-coordinate of upper-right corner
+     * @return number of pixels
+     */
+    int  calcRegionPixels ( int x1, int y1, int x2, int y2 ) const;
+
+    /**
+     * Put first pixel.
+     *   Render the pixel of the lower-left corner.
+     * @return always true
+     */
+    bool  putFirstPixel();
+
+    /**
+     * Put next pixel.
+     *    Render the next pixel of the region. Call this function within a while-loop
+     *    until false is returned.
+     * @return  true if there is another pixel to be rendered, false if the region is finished
+     */
+    bool  putNextPixel();
 
     /**
      * For each individual pixel (i,j), the projector is instructed to determine
@@ -60,14 +102,48 @@ public:
     GvsColor calcPixelColor ( int i, int j ) const;
     void     calcPixelIntersections(int i, int j);
 
-    void     extractRegion     ( int x1, int y1, int x2, int y2, uchar* p ) const;
-    void     extractRegionData ( int x1, int y1, int x2, int y2, uchar* p, gvsData* data ) const;
+    /**
+     * Read image pixels from the region defined by x_i,y_i.
+     *   Note: p must point to an allocated memory block which can hold the data of the region.
+     * @param x1   x-coordinate of lower-left corner
+     * @param y1   y-coordinate of lower-left corner
+     * @param x2   x-coordinate of upper-right corner
+     * @param y2   y-coordinate of upper-right corner
+     * @param p  pointer to memory where data from the image will be copied
+     */
+    void  extractRegion     ( int x1, int y1, int x2, int y2, uchar* p ) const;
 
-    void     setMask ( const char *filename );
+    /**
+     * Read image pixels from the region defined by x_i,y_i as well as intersection data.
+     *   This method can only be used for camera filters RGBpdz, RGBjac, RGBpt.
+     * @param x1   x-coordinate of lower-left corner
+     * @param y1   y-coordinate of lower-left corner
+     * @param x2   x-coordinate of upper-right corner
+     * @param y2   y-coordinate of upper-right corner
+     * @param p  pointer to memory where data from the image will be copied
+     * @param data  pointer to memory where data from the intersections will be copied
+     */
+    void  extractRegionData ( int x1, int y1, int x2, int y2, uchar* p, gvsData* data ) const;
 
-    void     writePicture( char *filename ) const; //!< Write picture to disc.
+    /**
+     * Set mask.
+     *   A mask is used to constrain the calculation of pixels to those regions, where
+     *   the mask image is not black.
+     * @param filename
+     */
+    void  setMask(const char *filename);
 
-    void     writeIntersecData(char* filename) const;
+    /**
+     * Write picture to file.
+     * @param filename
+     */
+    void  writePicture( char *filename ) const;
+
+    /**
+     * Writee intersection data to file.
+     * @param filename
+     */
+    void  writeIntersecData(char* filename) const;
 
 protected:
     int  resX;

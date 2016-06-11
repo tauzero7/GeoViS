@@ -429,7 +429,9 @@ bool GvsSolRing::testIntersection ( GvsRay &ray ) {
 
             surfIntersec.partIndex = entryFace;
             surfIntersec.setRaySegNumber(seg);
-            return ray.store( surfIntersec );
+            if (ray.store(surfIntersec) == GvsRayStatus::finished) {
+                return true;
+            }
         }
         else if (validExitInner && 
             GvsRay::isIn(seg,tExitInner,maxSeg) && 
@@ -453,7 +455,9 @@ bool GvsSolRing::testIntersection ( GvsRay &ray ) {
 
             surfIntersec.partIndex = exitFaceInner;
             surfIntersec.setRaySegNumber(seg);
-            return ray.store( surfIntersec );
+            if (ray.store(surfIntersec) == GvsRayStatus::finished) {
+                return true;
+            }
         }
         else if (validExit && 
             GvsRay::isIn(seg,tExit,maxSeg) && 
@@ -478,7 +482,9 @@ bool GvsSolRing::testIntersection ( GvsRay &ray ) {
 
             surfIntersec.partIndex = exitFace;
             surfIntersec.setRaySegNumber(seg);
-            return ray.store( surfIntersec );
+            if (ray.store(surfIntersec) == GvsRayStatus::finished) {
+                return true;
+            }
         }
         else if (validEntryInner && 
             GvsRay::isIn(seg,tEntryInner,maxSeg) && 
@@ -502,7 +508,9 @@ bool GvsSolRing::testIntersection ( GvsRay &ray ) {
 
             surfIntersec.partIndex = entryFaceInner;
             surfIntersec.setRaySegNumber(seg);
-            return ray.store( surfIntersec );
+            if (ray.store(surfIntersec) == GvsRayStatus::finished) {
+                return true;
+            }
         }
     }
     return false;

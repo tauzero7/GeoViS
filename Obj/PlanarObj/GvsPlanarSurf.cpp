@@ -130,7 +130,9 @@ bool GvsPlanarSurf :: testIntersection ( GvsRay& ray ) {
                     surfIntersec.setLocalDirection( vtrans );
 
                     surfIntersec.setRaySegNumber(seg);
-                    return ray.store( surfIntersec );
+                    if (ray.store(surfIntersec) == GvsRayStatus::finished) {
+                        return true;
+                    }
                 }
             }
         }
