@@ -13,6 +13,9 @@
 ;
 ; ---------------------------------------------------------------------
 
+;(define background_image_name  "/export/home/tmueller/local/Texturen/MilkyWay/mwpan1600.tif")
+(define background_image_name  "/home/tmueller/local/Texturen/MilkyWay/eso0932a.png")
+
 (init-metric '(type "MorrisThorne")
              '(b0 0.0001)
              '(id "metric1")
@@ -39,6 +42,13 @@
 (init-camera '(type "4PICam")
              '(res #( 2000 1000 ))
              '(id "cam2")
+)
+
+(init-camera '(type "2PICam")
+             '(res #( 150 150 ))
+             '(heading 0.0)
+             '(pitch  -50.0)
+             '(id "cam3")
 )
 
 (init-raygen '(type    "RayGenSimple")
@@ -250,11 +260,6 @@
 
 
 
-
-(define background_image_name  "/export/home/tmueller/local/Texturen/MilkyWay/mwpan1600.tif")
-
-
-
 ; ----------------
 ;    Background 1
 ; ----------------
@@ -348,8 +353,8 @@
 
 (init-device '(type "standard")
              '(obj "scene")
-             `(setparam ("locTedObs" "pos" ,(vector 0.0 0.01 1.5707963 1.5707963)))
-             '(camera "cam2")
+             `(setparam ("locTedObs" "pos" ,(vector 0.0 10.01 1.5707963 0.0)))
+             '(camera "cam3")
 )
 
 

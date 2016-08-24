@@ -39,6 +39,8 @@ GvsSampleMgr ::  GvsSampleMgr ( GvsDevice* rtDev, bool showProgress )
     resX = 720;
     resY = 576;
 
+    // This does not work, because there is no camera yet!!!
+    /*
     GvsCamFilter filter = sampleDevice->camera->getCamFilter();
     if (filter == gvsCamFilterIntersec) {
         sampleIntersecPicture = new GvsIntersecOutput(resX, resY);
@@ -50,6 +52,11 @@ GvsSampleMgr ::  GvsSampleMgr ( GvsDevice* rtDev, bool showProgress )
         assert(samplePicture!=NULL);
         sampleIntersecPicture = NULL;
     }
+    */
+
+    samplePicture = new GvsChannelImg2D( resX, resY, 3 );
+    assert(samplePicture!=NULL);
+    sampleIntersecPicture = NULL;
 
     haveMask = false;
 }

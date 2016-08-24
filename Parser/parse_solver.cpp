@@ -101,7 +101,7 @@ pointer gvsP_init_solver (scheme *sc, pointer args) {
     }
 
     m4d::IntegratorDatabase* IntDB = m4d::IntegratorDatabase::getInstance();
-    m4d::enum_integrator solverID = IntDB->getIntegratorNr(solverName);
+    m4d::enum_integrator solverID = IntDB->getIntegratorNr(solverName.c_str());
     if (solverID==m4d::gsUnknown) scheme_error("Solver is not in the m4d database!");
     
     // Initialize solver
