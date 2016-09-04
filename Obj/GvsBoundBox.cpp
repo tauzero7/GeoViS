@@ -168,6 +168,21 @@ GvsBoundBox :: extendBoxToContain( const m4d::vec3& pt )
             boxUppBounds[i] = pt[i];
 }
 
+void GvsBoundBox::setBounds(const m4d::vec3 lower, const m4d::vec3 upper) {
+    boxLowBounds = lower;
+    boxUppBounds = upper;
+}
+
+
+void GvsBoundBox::setBounds(
+        const double llx, const double lly, const double llz,
+        const double urx, const double ury, const double urz)
+{
+    boxLowBounds = m4d::vec3(llx, lly, llz);
+    boxUppBounds = m4d::vec3(urx, ury, urz);
+}
+
+
 //-------------------------------------------------------------------------
 //     operator=
 //-------------------------------------------------------------------------

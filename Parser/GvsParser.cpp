@@ -447,6 +447,7 @@ void GvsParser::read_scene(const char* name) {
     scheme_define(&sc, sc.global_env, mk_symbol(&sc, "calc-proj-ray"),mk_foreign_func(&sc, gvsP_calc_proj_ray));
 
     scheme_define(&sc, sc.global_env, mk_symbol(&sc, "comp-object"),mk_foreign_func(&sc, gvsP_compound_obj));
+    scheme_define(&sc, sc.global_env, mk_symbol(&sc, "comp-octree-object"),mk_foreign_func(&sc, gvsP_compound_octree_obj));
     scheme_define(&sc, sc.global_env, mk_symbol(&sc, "local-comp-object"),mk_foreign_func(&sc, gvsP_local_comp_obj));
     scheme_define(&sc, sc.global_env, mk_symbol(&sc, "add-object"),mk_foreign_func(&sc, gvsP_add_object));
 

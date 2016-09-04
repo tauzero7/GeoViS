@@ -24,9 +24,9 @@
 
 #include "GvsGlobalDefs.h"
 
-class GvsBoundBox
-{
-  public:
+class GvsBoundBox {
+
+public:
     GvsBoundBox ( void );
     GvsBoundBox ( const m4d::vec3& lowBounds, const m4d::vec3& uppBounds, bool testBounds = true );
     GvsBoundBox ( double x,  double y,  double z,
@@ -35,16 +35,19 @@ class GvsBoundBox
 
     virtual ~GvsBoundBox(){}
 
-    bool      isEmpty   ( ) const;
-    m4d::vec3       lowBounds ( ) const;
-    m4d::vec3       uppBounds ( ) const;
-    m4d::vec3       size      ( ) const;
+    bool  isEmpty() const;
+    m4d::vec3 lowBounds ( ) const;
+    m4d::vec3 uppBounds ( ) const;
+    m4d::vec3 size      ( ) const;
     double    size      ( int coord ) const;   // Tiefe, Hoehe
     double    volume    ( ) const;
     double    surface   ( ) const;
 
-    bool      contains  ( const m4d::vec3 &point ) const;
-    void      extendBoxToContain ( const m4d::vec3& pt );
+    bool contains  ( const m4d::vec3 &point ) const;
+    void extendBoxToContain ( const m4d::vec3& pt );
+    void setBounds(const m4d::vec3 lower, const m4d::vec3 upper);
+    void setBounds(const double llx, const double lly, const double llz,
+                   const double urx, const double ury, const double urz);
 
     // -------- operators --------
     GvsBoundBox&  operator=  ( const GvsBoundBox &otherBox );
@@ -67,7 +70,7 @@ class GvsBoundBox
 
     void      Print ( FILE* fptr = stderr );
 
-  protected:
+protected:
     m4d::vec3  boxLowBounds;
     m4d::vec3  boxUppBounds;
 };
@@ -76,13 +79,13 @@ class GvsBoundBox
 inline
 m4d::vec3 GvsBoundBox :: lowBounds ( ) const
 {
-  return boxLowBounds;
+    return boxLowBounds;
 }
 
 inline
 m4d::vec3 GvsBoundBox :: uppBounds ( ) const
 {
-  return boxUppBounds;
+    return boxUppBounds;
 }
 
 #endif

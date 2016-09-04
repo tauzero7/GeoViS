@@ -47,10 +47,12 @@ HEADERS += GvsGlobalDefs.h \
            $$OBJ_DIR/GvsBoundBox.h \
            $$OBJ_DIR/GvsBoundBox4D.h \
            $$OBJ_DIR/GvsObjPtrList.h \
+           $$OBJ_DIR/GvsOctree.h \
            $$OBJ_DIR/GvsSceneObj.h \
            $$OBJ_DIR/GvsSurface.h \
            $$OBJ_DIR/GvsTransformObj.h \
            $$OBJ_DIR/Comp/GvsCompoundObj.h \
+           $$OBJ_DIR/Comp/GvsCompoundOctreeObj.h \
            $$OBJ_DIR/Comp/GvsLocalCompObj.h \
            $$OBJ_DIR/MeshObj/GvsOBJMesh.h \
            $$OBJ_DIR/PlanarObj/GvsPlanarRing.h \
@@ -119,10 +121,12 @@ SOURCES += $$PROJECT_MAIN \
            $$OBJ_DIR/GvsBoundBox.cpp \
            $$OBJ_DIR/GvsBoundBox4D.cpp \
            $$OBJ_DIR/GvsObjPtrList.cpp \
+           $$OBJ_DIR/GvsOctree.cpp \
            $$OBJ_DIR/GvsSceneObj.cpp \
            $$OBJ_DIR/GvsSurface.cpp \
            $$OBJ_DIR/GvsTransformObj.cpp \
            $$OBJ_DIR/Comp/GvsCompoundObj.cpp \
+           $$OBJ_DIR/Comp/GvsCompoundOctreeObj.cpp \
            $$OBJ_DIR/Comp/GvsLocalCompObj.cpp \
            $$OBJ_DIR/MeshObj/GvsOBJMesh.cpp \
            $$OBJ_DIR/PlanarObj/GvsPlanarRing.cpp \

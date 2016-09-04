@@ -30,6 +30,22 @@
     Note that the transformation only acts on already included objects. Those objects
     that are added later by 'add-object' will not be transformed!
 
+    @verbatim
+    (comp-octree-obj '(lower #(0.0 0.0 0.0))
+                     '(upper #(1.0 1.0 1.0))
+                     '(subdivs 3)
+                     '(obj "objID1")
+                     '(obj "objID2")
+                     ...
+                     '(id "string")
+    )@endverbatim
+
+
+    @verbatim
+    (add-octree-obj '(add-to "compOctObjID")
+                    '(obj "objID")
+    )@endverbatim
+
 
     @verbatim
     (local-comp-obj '(obj "objID1")
@@ -57,7 +73,7 @@
 #include <Obj/STMotion/GvsStMotion.h>
 #include <Obj/Comp/GvsLocalCompObj.h>
 #include <Obj/Comp/GvsCompoundObj.h>
-
+#include <Obj/Comp/GvsCompoundOctreeObj.h>
 
 extern std::vector<GvsLocalTetrad*>     gpLocalTetrad;
 extern std::vector<GvsLocalCompObj*>    gpLocalCompObj;
@@ -129,6 +145,95 @@ pointer gvsP_compound_obj (scheme *sc, pointer args)
         transMat3D.setIdent();
     }
     compObj->transform(transMat3D);
+
+    gpSceneObj.push_back(compObj);
+
+    std::string idname = "unknown";
+    if (!gvsParser->getParameter("id",idname)) {
+        appendNum(idname, (int)gpTypeID.size());
+    }
+    else if (gpTypeID.find(idname)!=gpTypeID.end()) {
+        scheme_error("comp-object: ID already assigned!");
+    }
+
+    GvsTypeID tid = { gtSceneObj,static_cast<int>(gpSceneObj.size())-1,gpSceneObj[gpSceneObj.size()-1]};
+    gpTypeID.insert(std::pair<std::string,GvsTypeID>(idname,tid));
+    delete gvsParser;
+
+    pointer R = ((sc->vptr->mk_symbol)(sc, "gtSceneObj"));
+    return R;
+}
+
+
+
+/**
+ * @brief gvsP_compound_octree_obj
+ * @param sc
+ * @param args
+ * @return
+ */
+pointer gvsP_compound_octree_obj (scheme *sc, pointer args)
+{
+#ifdef GVS_VERBOSE
+    std::cerr << "\n..........gvsP_compound_octree_obj..........\n";
+#endif
+    if (args == sc->NIL) scheme_error("comp-octree-object: no arguments");
+    if (!is_pair(args)) scheme_error("comp-octree-object: less arguments");
+
+    std::string allowedNames[] = {"id","obj","lower", "upper", "subdivs"};
+    GvsParseAllowedNames allowedTypes[] = {{gp_string_string,0},  // id
+                                           {gp_string_string,0},  // object
+                                           {gp_string_double,3},   // lower
+                                           {gp_string_double,3},   // upper
+                                           {gp_string_int,1}       // subdivs
+                                          };
+    GvsParseScheme* gvsParser = new GvsParseScheme(sc, allowedNames, allowedTypes, 5);
+    args = gvsParser->parse(args);
+    gvsParser->testParamNames("comp-octree-object");
+
+    GvsCompoundOctreeObj* compObj = new GvsCompoundOctreeObj;
+
+    std::string objID;
+    GvsSceneObj* object;
+
+    // if (gpSceneObj.empty()) { scheme_error("CompObj: Szene-Objekt fehlt\n"); }
+    int num = 0;
+    do {
+        if (gvsParser->getParameter("obj",objID,num)) {
+            if (objID=="gtSceneObj") {
+                object = gpSceneObj[gpSceneObj.size()-1];
+                compObj->Add(object);
+            }
+            else {
+                if (gpSceneObj.size()>=1) {
+                    getIDptr(gvsParser,"CompObj","Object","obj",gtSceneObj,num);
+                    object = gpSceneObj[(gpTypeIDptr->second).vectorID];
+                    compObj->Add(object);
+                }
+                else {
+                    scheme_error("comp-object: no scene object available!\n");
+                }
+            }
+        }
+        num++;
+    }
+    while ( num < gvsParser->getNumParam() );
+
+    if (compObj->getNumObjs() == 0) {
+        std::cerr << "Warning: no scene object read!" << std::endl;
+    }
+
+    double lowerBounds[3];
+    double upperBounds[3];
+    if (!gvsParser->getParameter("lower", lowerBounds)) {
+        lowerBounds[0] = lowerBounds[1] = lowerBounds[2] = 0.0;
+    }
+
+    if (!gvsParser->getParameter("upper", upperBounds)) {
+        upperBounds[0] = upperBounds[1] = upperBounds[2] = 1.0;
+    }
+
+    compObj->setBounds(lowerBounds, upperBounds);;
 
     gpSceneObj.push_back(compObj);
 

@@ -25,6 +25,7 @@ extern "C" {
 }
 
 pointer gvsP_compound_obj   ( scheme *sc, pointer args );
+pointer gvsP_compound_octree_obj(scheme *sc, pointer args);
 pointer gvsP_local_comp_obj ( scheme *sc, pointer args );
 
 pointer gvsP_add_object ( scheme *sc, pointer args );
