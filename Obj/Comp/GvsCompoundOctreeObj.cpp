@@ -21,7 +21,7 @@
 #include "Obj/Comp/GvsCompoundOctreeObj.h"
 
 GvsCompoundOctreeObj :: GvsCompoundOctreeObj() : GvsSceneObj() {
-    octreeBox.setBounds(m4d::vec3(0.0, 0.0, 0.0), m4d::vec3(1.0, 1.0, 1.0));
+    mOctree.setBounds(0.0, 0.0, 0.0, 1.0, 1.0, 1.0);
     mNumSubDivs = 0;
 
     objList  = new GvsObjPtrList();
@@ -91,13 +91,13 @@ void GvsCompoundOctreeObj::Print( FILE* fptr ) {
 
 
 void GvsCompoundOctreeObj::setBounds(m4d::vec3 lower, m4d::vec3 upper) {
-    // TODO
+    mOctree.setBounds(lower, upper);
 }
 
 
 void GvsCompoundOctreeObj::subDivide(int numSubDivs) {
     if (numSubDivs >= 0) {
         mNumSubDivs = numSubDivs;
-        //TODO
+        mOctree.createSons(numSubDivs);
     }
 }

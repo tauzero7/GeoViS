@@ -233,7 +233,13 @@ pointer gvsP_compound_octree_obj (scheme *sc, pointer args)
         upperBounds[0] = upperBounds[1] = upperBounds[2] = 1.0;
     }
 
-    compObj->setBounds(lowerBounds, upperBounds);;
+    int subDivs;
+    if (!gvsParser->getParameter("subdivs", &subDivs)) {
+        subDivs = 0;
+    }
+
+    compObj->setBounds(lowerBounds, upperBounds);
+    compObj->subDivide(subDivs);
 
     gpSceneObj.push_back(compObj);
 

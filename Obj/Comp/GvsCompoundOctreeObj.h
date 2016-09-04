@@ -24,6 +24,7 @@
 #include "Obj/GvsBoundBox4D.h"
 #include "Obj/GvsObjPtrList.h"
 #include "Obj/GvsSceneObj.h"
+#include "Obj/GvsOctree.h"
 #include "Obj/STMotion/GvsStMotion.h"
 #include "Ray/GvsRay.h"
 
@@ -51,7 +52,7 @@ public:
 
 
 protected:
-    GvsBoundBox octreeBox;
+    GvsOctree  mOctree;
     int        mNumSubDivs;
     GvsBoundBox     compBoundBox;  // Bounding Box with respect to local frame
     GvsObjPtrList*  objList;

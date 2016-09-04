@@ -213,12 +213,14 @@ GvsColor GvsProjector :: getSampleColor( GvsRayVisual*& eyeRay, GvsDevice* devic
     m4d::vec5 jacobi;
 
     GvsCamFilter camFilter = device->camera->getCamFilter();
+    GvsColor sampleColor = getBackgroundColor();
+
     if ( (device->sceneGraph != NULL) &&
          (device->sceneGraph->testIntersection( *eyeRay )) )
     {
         GvsShader* shader = eyeRay->intersecShader();
          if (shader != NULL) {
-            GvsColor sampleColor = shader->getIncidentLight(device,*eyeRay);
+              sampleColor = shader->getIncidentLight(device,*eyeRay);
            // sampleColor.Print();
 
             // Direction of the light ray at the intersection points.
@@ -285,16 +287,15 @@ GvsColor GvsProjector :: getSampleColor( GvsRayVisual*& eyeRay, GvsDevice* devic
                     sampleColor.data.objID = static_cast<double>(surfIntersec->surface()->GetID());
                 }
             }
-            return sampleColor.trim();
+            sampleColor = sampleColor.trim();
         }
     }
 
-    GvsColor bgColor = getBackgroundColor();
     if (eyeRay->getBreakCond()==m4d::enum_break_constraint ||
             eyeRay->getBreakCond()==m4d::enum_break_cond) {
-        bgColor = constraintColor;
+        sampleColor = constraintColor;
     }
-    return bgColor;
+    return sampleColor;
 }
 
 

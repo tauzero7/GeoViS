@@ -40,6 +40,9 @@ public:
     GvsOctree*  findLeaf(GvsOctree *t, double x, double y, double z, int lod);
     GvsOctree*  findLeaf(double x, double y, double z, int lod);
 
+    void setBounds(m4d::vec3 lower, m4d::vec3 upper);
+    void setBounds(double llx, double lly, double llz, double urx, double ury, double urz);
+
     void Print ( FILE* fptr = stderr );
 
 public:

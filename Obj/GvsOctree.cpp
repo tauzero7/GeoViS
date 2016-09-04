@@ -20,6 +20,7 @@ void GvsOctree::createSons(GvsOctree* t, int maxSubDivs) {
 
     long llid = lower(t->id);
     for(int c=0; c < 8; c++) {
+        t->son[c] = new GvsOctree();
         t->son[c]->lod = t->lod + 1;
         t->son[c]->id  = llid + c;
         for(int cc=0; cc < 8; cc++) {
@@ -71,6 +72,10 @@ void GvsOctree::createSons(GvsOctree* t, int maxSubDivs) {
             ur[0], ur[1], ur[2]);
 
     for(int c=0; c < 8; c++) {
+        t->son[c]->box.Print();
+    }
+
+    for(int c=0; c < 8; c++) {
         createSons(t->son[c], maxSubDivs);
     }
 }
@@ -111,4 +116,13 @@ GvsOctree* GvsOctree::findLeaf(GvsOctree *t, double x, double y, double z, int l
 
 GvsOctree* GvsOctree::findLeaf(double x, double y, double z, int lod) {
     return findLeaf(this, x, y, z, lod);
+}
+
+
+void GvsOctree::setBounds(m4d::vec3 lower, m4d::vec3 upper) {
+    box.setBounds(lower, upper);
+}
+
+void GvsOctree::setBounds(double llx, double lly, double llz, double urx, double ury, double urz) {
+    box.setBounds(llx, lly, llz, urx, ury, urz);
 }
