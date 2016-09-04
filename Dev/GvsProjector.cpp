@@ -215,6 +215,7 @@ GvsColor GvsProjector :: getSampleColor( GvsRayVisual*& eyeRay, GvsDevice* devic
     GvsCamFilter camFilter = device->camera->getCamFilter();
     GvsColor sampleColor = getBackgroundColor();
 
+    bool intersecFound = false;
     if ( (device->sceneGraph != NULL) &&
          (device->sceneGraph->testIntersection( *eyeRay )) )
     {
@@ -288,11 +289,12 @@ GvsColor GvsProjector :: getSampleColor( GvsRayVisual*& eyeRay, GvsDevice* devic
                 }
             }
             sampleColor = sampleColor.trim();
+            intersecFound = true;
         }
     }
 
-    if (eyeRay->getBreakCond()==m4d::enum_break_constraint ||
-            eyeRay->getBreakCond()==m4d::enum_break_cond) {
+    if (!intersecFound && (eyeRay->getBreakCond()==m4d::enum_break_constraint ||
+            eyeRay->getBreakCond()==m4d::enum_break_cond)) {
         sampleColor = constraintColor;
     }
     return sampleColor;
