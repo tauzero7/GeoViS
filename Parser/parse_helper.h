@@ -178,7 +178,11 @@ template <class mType, int n, int m> void get_matrix(pointer s_vec, m4d::Matrix<
 template <class mType, int n, int m> void mk_matrix(pointer *retMat, m4d::Matrix<mType, n, m> *inMat, const std::string ) {
     // column vector of row vectors...
     pointer vecRowPointer;
+#ifdef _WIN32
+	pointer tempPointer;
+#else
      UNUSED_ATTR pointer tempPointer;
+#endif
     //pointer tempPointer;
 
     *retMat = ((*sc.vptr->mk_vector)( &sc, n ));

@@ -25,8 +25,11 @@
 #include "Parser/GvsParser.h"
 #include "Utils/GvsLog.h"
 
+#ifndef _WIN32
 GvsLog& LOG = GvsLog::instance();
-
+#else
+m4d::MetricDatabase* m4d::MetricDatabase::m_instance = nullptr;
+#endif
 
 void renderDevice( GvsDevice* dev, char* outFileName ) {   
     GvsSampleMgr* sampleMgr = new GvsSampleMgr(dev,true);

@@ -39,7 +39,7 @@ class GvsSceneObj;
 /**
  * @brief The GvsBase class
  */
-class GvsBase
+class API_EXPORT GvsBase
 {
 public:
     GvsBase();

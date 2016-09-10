@@ -3,6 +3,19 @@
 
 #include <m4dGlobalDefs.h>
 
+#if defined _WIN32
+#if defined(gvs_EXPORTS)
+#define API_EXPORT __declspec(dllexport)
+#else 
+#define API_EXPORT __declspec(dllimport)
+#endif 
+#define M4D_CALL __stdcall
+#else // _WIN32
+#define M4D_CALL
+#define API_EXPORT
+#endif // _WIN32
+
+
 #ifdef __GNUC__
 #define UNUSED_ATTR  __attribute__((unused))
 #endif

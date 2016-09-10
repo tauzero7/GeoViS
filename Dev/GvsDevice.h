@@ -49,7 +49,7 @@ typedef struct GvsChangeObj_t
  *        be initialized in .scm file.
  *
  */
-class GvsDevice : public GvsBase
+class API_EXPORT GvsDevice : public GvsBase
 {
 public:
     GvsDevice();

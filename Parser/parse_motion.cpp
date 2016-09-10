@@ -51,6 +51,9 @@
 #include "Obj/STMotion/GvsStMotionConstVelocity.h"
 //#include <Obj/STMotion/GvsStMotionWorldline.h>
 
+#ifdef _WIN32
+#define UNUSED_ATTR
+#endif
 
 extern std::vector<GvsGeodSolver*>     gpSolver;
 extern std::vector<Gvsm4dMetricDummy*> gpMetric;
@@ -427,7 +430,11 @@ pointer gvsP_print_motion (scheme *sc, pointer args)
     std::string filename;
     if (gvsParser->getParameter("file",filename)) {
         char file[128];
+#ifdef _WIN32
+		strcpy_s(file, filename.c_str());
+#else
         strcpy(file,filename.c_str());
+#endif
 
         gvsObject->PrintToFile(file);
     }

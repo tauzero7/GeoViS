@@ -33,7 +33,7 @@ class GvsDevice;
 /**
  * The sample manager is responsible for determining the color of each pixel.
  */
-class GvsSampleMgr
+class API_EXPORT GvsSampleMgr
 {
 public:
     GvsSampleMgr ( GvsDevice* rtDev, bool showProgress = false );

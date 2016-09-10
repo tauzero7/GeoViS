@@ -438,7 +438,11 @@ pointer gvsP_calc_proj_ray ( scheme *sc, pointer args )
         scheme_error("calc-proj-ray: filename is missing!");
 
     FILE *out;
+#ifdef _WIN32
+	fopen_s(&out, outFileName.c_str(), "w");
+#else
     out = fopen(outFileName.c_str(),"w");
+#endif
 
     double val[25];
     m4d::vec4 pos,cpos;

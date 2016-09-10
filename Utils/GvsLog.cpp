@@ -20,7 +20,11 @@ GvsLog& GvsLog :: instance() {
 
 void GvsLog :: setLogFile( std::string fileName, int logLevel ) {
     this->logLevel = logLevel;
+#ifdef _WIN32
+	fopen_s(&this->fptr, fileName.c_str(), "w");
+#else
     this->fptr = fopen(fileName.c_str(),"w");
+#endif
     if (fptr==NULL) {
         fprintf(stderr,"Cannot open logfile for output - exiting now.\n");
         exit(1);
@@ -40,7 +44,11 @@ void GvsLog::printf( int level, const char* fmt, ... ) {
         va_list ap;
         char text[1024];
         va_start(ap,fmt);
+#ifdef _WIN32
+		vsprintf_s(text, fmt, ap);
+#else
         vsprintf(text,fmt,ap);
+#endif
         va_end(ap);
 
         fprintf(fptr,"%s\n",text);
@@ -60,7 +68,11 @@ void GvsLog::printf( const char* fmt, ... ) {
     va_list ap;
     char text[1024];
     va_start(ap,fmt);
+#ifdef _WIN32
+	vsprintf_s(text, fmt, ap);
+#else
     vsprintf(text,fmt,ap);
+#endif
     va_end(ap);
 
     fprintf(fptr,"%s\n",text);

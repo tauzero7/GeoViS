@@ -405,7 +405,7 @@ GvsParser :: initStandard ( GvsDevice *device ) {
 void GvsParser::read_scene(const char* name) {
     FILE *fin;
     FILE *fscm;
-    std::string file_name = getFullPathname() + "Parser/init.scm";
+    std::string file_name = getFullPathname() + "./Parser/init.scm";
     //std::cerr << file_name << std::endl;
     if (!scheme_init(&sc)) {
         fprintf(stderr,"Could not initialize!\n");
@@ -514,9 +514,10 @@ void GvsParser::read_scene(const char* name) {
 
 #ifdef _WIN32
 std::string GvsParser::getFullPathname() {
-    char *exeDirName;
+    char *exeDirName = nullptr;
     const unsigned int nSize = 0xFFFF;
     char *cwd = new char[nSize];
+	/*
     if (::GetModuleFileNameA(NULL, cwd, nSize)
         == ERROR_INSUFFICIENT_BUFFER) {
         cwd[0] = 0;
@@ -536,6 +537,8 @@ std::string GvsParser::getFullPathname() {
     strcpy(exeDirName, cwd);
     delete [] cwd;
     return std::string(exeDirName);
+	*/
+	return std::string(".");
 }
 #else
 std::string GvsParser::getFullPathname() {

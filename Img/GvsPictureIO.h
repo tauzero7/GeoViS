@@ -27,7 +27,7 @@ class GvsChannelImg2D;
  * @brief The PictureIO class is responsible to read and write image data
  *        depending on their file extension.
  */
-class GvsPictureIO
+class API_EXPORT GvsPictureIO
 {
 public:
     GvsPictureIO(){}

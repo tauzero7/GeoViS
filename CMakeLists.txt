@@ -25,7 +25,7 @@ set(TIFF_LIB_DIR  $ENV{TIFF_LIB_PATH}     CACHE FILEPATH "TIFF library directory
 set(PNG_AVAILABLE OFF CACHE BOOL "have png library available")
 set(PNG_INC_DIR  $ENV{PNG_PATH}         CACHE FILEPATH "PNG include directory")
 set(PNG_LIB_DIR  $ENV{PNG_LIB_PATH}     CACHE FILEPATH "PNG library directory")
-
+set(ZLIB_DIR     $ENV{ZLIB_DIR}         CACHE FILEPATH "zlib dir")
 
 # The Motion4D src folder has four sub-folders
 set(M4D_EXTRA_DIR  ${M4D_ROOT_DIR}/src/extra)
@@ -56,22 +56,31 @@ include_directories(${GVS_CAM_DIR} ${GVS_DEV_DIR})
 include_directories(${MPI_DIR}/include)
 
 # Gather source files of the Motion4D library
-file( GLOB m4d_source_files ${M4D_EXTRA_DIR}/*.cpp ${M4D_MATH_DIR}/*.cpp ${M4D_METRIC_DIR}/*.cpp ${M4D_MOTION_DIR}/*.cpp )
+file( GLOB m4d_source_files ${M4D_ROOT_DIR}/src/m4dGlobalDefs.h
+                            ${M4D_EXTRA_DIR}/*.cpp ${M4D_EXTRA_DIR}/*.h 
+                            ${M4D_MATH_DIR}/*.cpp ${M4D_MATH_DIR}/*.h
+                            ${M4D_METRIC_DIR}/*.cpp  ${M4D_METRIC_DIR}/*.h
+                            ${M4D_MOTION_DIR}/*.cpp  ${M4D_MOTION_DIR}/*.h)
 list( REMOVE_ITEM m4d_source_files ${CMAKE_SOURCE_DIR}/${M4D_METRIC_DIR}/m4dMetricAlcubierreAccel.cpp )
 
 # Gather source files of GeoViS
-file( GLOB gvs_source_files ${GVS_CAM_DIR}/*.cpp ${GVS_DEV_DIR}/*.cpp
-                            ${GVS_IMG_DIR}/*.cpp ${GVS_LIGHT_DIR}/*.cpp 
-                            ${GVS_OBJ_DIR}/*.cpp  
-                            ${GVS_OBJ_DIR}/Comp/*.cpp  
-                            ${GVS_OBJ_DIR}/MeshObj/*.cpp
-                            ${GVS_OBJ_DIR}/PlanarObj/*.cpp  
-                            ${GVS_OBJ_DIR}/SolidObj/*.cpp  
-                            ${GVS_OBJ_DIR}/STMotion/*.cpp 
-                            ${GVS_PARSER_DIR}/*.cpp ${GVS_PARSER_DIR}/*.c 
-                            ${GVS_RAY_DIR}/*.cpp ${GVS_SHADER_DIR}/*.cpp
-                            ${GVS_SHADER_DIR}/Surface/*.cpp
-                            ${GVS_TEX_DIR}/*.cpp ${GVS_UTILS_DIR}/*.cpp)
+file( GLOB gvs_source_files GvsGlobalDefs.h dllmain.cpp
+                            ${GVS_CAM_DIR}/*.cpp ${GVS_CAM_DIR}/*.h 
+                            ${GVS_DEV_DIR}/*.cpp ${GVS_DEV_DIR}/*.h
+                            ${GVS_IMG_DIR}/*.cpp ${GVS_IMG_DIR}/*.h 
+                            ${GVS_LIGHT_DIR}/*.cpp ${GVS_LIGHT_DIR}/*.h
+                            ${GVS_OBJ_DIR}/*.cpp  ${GVS_OBJ_DIR}/*.h
+                            ${GVS_OBJ_DIR}/Comp/*.cpp  ${GVS_OBJ_DIR}/Comp/*.h
+                            ${GVS_OBJ_DIR}/MeshObj/*.cpp ${GVS_OBJ_DIR}/MeshObj/*.h
+                            ${GVS_OBJ_DIR}/PlanarObj/*.cpp  ${GVS_OBJ_DIR}/PlanarObj/*.h
+                            ${GVS_OBJ_DIR}/SolidObj/*.cpp ${GVS_OBJ_DIR}/SolidObj/*.h
+                            ${GVS_OBJ_DIR}/STMotion/*.cpp ${GVS_OBJ_DIR}/STMotion/*.h
+                            ${GVS_PARSER_DIR}/*.cpp ${GVS_PARSER_DIR}/*.c ${GVS_PARSER_DIR}/*.h
+                            ${GVS_RAY_DIR}/*.cpp ${GVS_RAY_DIR}/*.h 
+                            ${GVS_SHADER_DIR}/*.cpp ${GVS_SHADER_DIR}/*.h
+                            ${GVS_SHADER_DIR}/Surface/*.cpp ${GVS_SHADER_DIR}/Surface/*.h
+                            ${GVS_TEX_DIR}/*.cpp ${GVS_TEX_DIR}/*.h
+                            ${GVS_UTILS_DIR}/*.cpp ${GVS_UTILS_DIR}/*.h)
 
 # currently the following items are not in use
 list( REMOVE_ITEM gvs_source_files ${CMAKE_SOURCE_DIR}/${GVS_TEX_DIR}/GvsChequeredTimeT2D.cpp )
@@ -83,7 +92,7 @@ list( REMOVE_ITEM gvs_source_files ${CMAKE_SOURCE_DIR}/${GVS_OBJ_DIR}/STMotion/G
 add_definitions(-DUSE_INTERFACE -DSTANDALONE=0 -DUSE_MATH -DHAVE_LIBPPM)
 
 if (WIN32)
-add_definitions(-DNOMINMAX -DMETRIC_EXPORTS -DMOTION_EXPORTS -DMATH_EXPORTS -DEXTRA_EXPORTS -DUNUSED_ATTR)
+add_definitions(-DNOMINMAX -Dgvs_EXPORTS -DM4D_LIB -Dm4d_EXPORTS)
 endif(WIN32)
 
 # Depending on the image formats available
@@ -114,20 +123,38 @@ endif()
 # ------------------------------
 # build GeoViS as shared library
 # ------------------------------
-add_library(gvs${BITS}${DAR} SHARED ${m4d_source_files} ${gvs_source_files})
+link_directories(${GSL_LIB_DIR} ${PNG_LIB_DIR})
+link_directories(${ZLIB_DIR}/lib)
 
+add_library(gvs${BITS}${DAR} SHARED ${m4d_source_files} ${gvs_source_files})
+target_link_libraries(gvs${BITS}${DAR} gsl gslcblas)
+if (PNG_AVAILABLE)
+    if (WIN32)
+        target_link_libraries(gvs${BITS}${DAR} libpng16_static${DAR} zlibstatic)
+    else(WIN32)
+        target_link_libraries(gvs${BITS}${DAR} png)
+    endif(WIN32)
+endif()
 
 # ------------------------------
 # build gvsRender
 # ------------------------------
 link_directories(${GSL_LIB_DIR} ${TIFF_LIB_DIR})
 add_executable(gvsRender${BITS}${DAR} geovis.cpp)
+if (WIN32)
+target_link_libraries(gvsRender${BITS}${DAR} gvs${BITS}${DAR}  gsl gslcblas gvs${BITS}${DAR})
+else(WIN32)
 target_link_libraries(gvsRender${BITS}${DAR} gvs${BITS}${DAR}  gsl gslcblas dl)
+endif(WIN32)
 if (TIFF_AVAILABLE)
     target_link_libraries(gvsRender${BITS}${DAR} tiff)
 endif()
 if (PNG_AVAILABLE)
-    target_link_libraries(gvsRender${BITS}${DAR} png)
+    if (WIN32)
+        target_link_libraries(gvsRender${BITS}${DAR} libpng16_static${DAR} zlibstatic)
+    else(WIN32)
+        target_link_libraries(gvsRender${BITS}${DAR} png)
+    endif(WIN32)
 endif()
 
 

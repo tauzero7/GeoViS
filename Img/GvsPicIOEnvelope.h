@@ -24,7 +24,7 @@
 
 class GvsChannelImg2D;
 
-class GvsPicIOEnvelope : public GvsPictureIO
+class API_EXPORT GvsPicIOEnvelope : public GvsPictureIO
 {
 public:
     GvsPicIOEnvelope();

@@ -80,7 +80,7 @@ class GvsDevice;
 /**
  * @brief The GvsParser class
  */
-class GvsParser
+class API_EXPORT GvsParser
 {
 public:
     GvsParser();

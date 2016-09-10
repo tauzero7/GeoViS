@@ -530,7 +530,11 @@ void gvsP_init_image2dsampler ( GvsParseScheme* gP )
     if (gP->getParameter("file",filename))
     {
         char file[256];
+#ifdef _WIN32
+		strcpy(file, filename.c_str());
+#else
         strcpy(file,filename.c_str());
+#endif
         fileRead = imgFile->readChannelImg(*chanImg,file);
 
         if (!fileRead) {

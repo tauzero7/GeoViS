@@ -28,7 +28,7 @@
  * @brief  Base class for all camera models.
  *
  */
-class GvsCamera : public GvsBase
+class API_EXPORT GvsCamera : public GvsBase
 {
 public:
     GvsCamera();

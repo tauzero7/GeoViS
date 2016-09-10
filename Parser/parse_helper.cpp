@@ -424,7 +424,19 @@ pointer gvsP_getenv( scheme *sc, pointer args ) {
     get_string(pair_car(args),envName);
     //std::cerr << getenv(envName.c_str()) << std::endl;
 
+#ifdef _WIN32
+	char* buf = nullptr;
+	size_t sz = 0;
+	if (_dupenv_s(&buf, &sz, envName.c_str()) == 0 && buf != nullptr) {
+		printf("EnvVarName = %s\n", buf);
+		std::string ename = std::string(buf);
+		free(buf);
+		return  (sc->vptr->mk_string)(sc, ename.c_str());
+	}
+	return sc->NIL;
+#else
     return (sc->vptr->mk_string)(sc,getenv(envName.c_str()));
+#endif
 }
 
 

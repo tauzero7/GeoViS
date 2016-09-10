@@ -31,6 +31,14 @@
 #include <float.h>
 #include <ctype.h>
 
+//TM
+#ifdef _WIN32
+#pragma warning(push)
+#pragma warning(disable: 4996)
+#pragma warning(disable: 4217)
+#endif
+
+
 #if USE_STRCASECMP
 #include <strings.h>
 # ifndef __APPLE__

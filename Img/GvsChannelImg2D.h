@@ -38,7 +38,7 @@ static const std::string GvsWrapPolicyName[3] = {"clamp","periodic","const_color
 /**
  * @brief The GvsChannelImg2D class
  */
-class GvsChannelImg2D
+class API_EXPORT GvsChannelImg2D
 {
 public:
     GvsChannelImg2D ();
