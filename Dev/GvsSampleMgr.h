@@ -77,6 +77,8 @@ public:
      */
     int  calcRegionPixels ( int x1, int y1, int x2, int y2 ) const;
 
+    int calcRegionData(int x1, int y1, int x2, int y2) const;
+
     /**
      * Put first pixel.
      *   Render the pixel of the lower-left corner.
@@ -99,8 +101,7 @@ public:
      * @param j  Vertical pixel id.
      * @return  Color of the pixel.
      */
-    GvsColor calcPixelColor ( int i, int j ) const;
-    void     calcPixelIntersections(int i, int j);
+    void calcPixelColor ( int i, int j, GvsColor &col, gvsData &data ) const;
 
     /**
      * Read image pixels from the region defined by x_i,y_i.

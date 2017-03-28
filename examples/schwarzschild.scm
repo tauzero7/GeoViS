@@ -52,17 +52,18 @@
 
 ;; --- Initialize pinhole camera
 (init-camera '(type "PinHoleCam")
-             `(dir #( 1.0 0.0 0.0) )
+             `(dir #( 0.0 1.0 0.0) )
              '(vup #( 0.0 0.0 1.0) )
              `(fov ,(vector fov fov ))
-             '(res #(150 150))
-             '(filter "FilterRGB")
-             ;'(filter "FilterIntersec")
+             '(res #(350 350))
+             ;'(res #(50 50))
+             ;'(filter "FilterRGB")
+             '(filter "FilterRGBIntersec")
              '(id "cam")
 )
 
 (init-camera '(type "PinHoleStereoCam")
-             `(dir #( 1.0 0.0 0.0) )
+             `(dir #( 0.0 1.0 0.0) )
              '(vup #( 0.0 0.0 1.0) )
              `(fov ,(vector fov fov ))
              '(res #(150 150))
@@ -73,7 +74,7 @@
 
 ;; --- Initialize panorama camera
 (init-camera '(type "PanoramaCam")
-             '(dir #( 1.0 0.0 0.0 ))
+             '(dir #( 0.0 1.0 0.0 ))
              '(vup #( 0.0 0.0 1.0 ))
              '(fov #( 360.0 120.0 ))
              '(res #( 360 120 ))
@@ -101,8 +102,8 @@
 ;; --- Set local reference frame of observer
 (local-tetrad `(pos ,(vector 0.0 r_obs 1.5707963 0.0 ))
               '(e0  #(1.0  0  0  0) )
-              '(e1  #(0.0 -1  0  0) )
-              '(e2  #(0.0  0  0 -1) )
+              '(e1  #(0.0  0  0  1) )
+              '(e2  #(0.0 -1  0  0) )
               '(e3  #(0.0  0 -1  0) )
               '(incoords #f) 
               '(id  "locTedObs")

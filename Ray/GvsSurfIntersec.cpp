@@ -205,28 +205,28 @@ m4d::vec3 GvsSurfIntersec :: normal() {
 }
 
 m4d::vec3 GvsSurfIntersec :: normNormal() {
-    if ( !insecNormalIsValid ) {
+    if ( !insecNormalIsValid  && insecSurface != NULL) {
         insecSurface->calcNormal(*this);
     }
     return insecNormNormal;
 }
 
 m4d::vec3 GvsSurfIntersec :: derivS () {
-    if ( ! insecDerivSIsValid )
+    if ( ! insecDerivSIsValid  && insecSurface != NULL)
         insecSurface->calcDerivatives( *this );
 
     return insecDerivS;
 }
 
 m4d::vec3 GvsSurfIntersec :: derivT () {
-    if ( ! insecDerivTIsValid )
+    if ( ! insecDerivTIsValid && insecSurface != NULL )
         insecSurface->calcDerivatives( *this );
 
     return insecDerivT;
 }
 
 m4d::vec2 GvsSurfIntersec :: texUVParam () {
-    if ( ! insecTexUVParamAreValid )
+    if ( ! insecTexUVParamAreValid && insecSurface != NULL)
         insecSurface->calcTexUVParam( *this );
 
     return insecTexUVParam;

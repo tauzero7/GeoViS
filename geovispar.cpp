@@ -252,16 +252,22 @@ int main(int argc, char* argv[]) {
                 taskManager->getViewPort(actTask,x1,y1,x2,y2);
                 long numBytes  = sampleMgr.calcRegionBytes ( x1, y1, x2, y2 );
                 long numPixels = sampleMgr.calcRegionPixels( x1, y1, x2, y2 );
+                long numData   = sampleMgr.calcRegionData(x1, y1, x2, y2);
 
                 uchar* regionBuffer = new uchar[numBytes];
                 assert(regionBuffer!=NULL);
+
+                gvsData* regionData = NULL;
+                if (numData > 0) {
+                    regionData = new gvsData[numData];
+                    assert(regionData != NULL);
+                }
+
 
                 char hostname[1024];
                 gethostname(hostname,1024);
 
                 fprintf(stderr,"  Node %3i (%s): ",myrank,hostname);
-
-                gvsData* regionData = NULL;
                 GvsCamFilter filter = device.camera->getCamFilter();
 
                 int imgNr = taskManager->getImageNr(actTask) + taskManager->getStartDevNr();
@@ -271,11 +277,11 @@ int main(int argc, char* argv[]) {
 
                 if ((filter == gvsCamFilterRGBpdz) ||
                         (filter == gvsCamFilterRGBjac) ||
-                        (filter == gvsCamFilterRGBpt)) {
-                    //regionData = reinterpret_cast<gvsData*>(malloc(sizeof(gvsData)*numPixels));
-                    regionData = new gvsData[numPixels];
+                        (filter == gvsCamFilterRGBpt) ||
+                        (filter == gvsCamFilterRGBIntersec)) {
+
                     msgPt.numPixels = numPixels;
-                    RayTraceRegionData(x1,y1,x2,y2, imgNr, regionBuffer,regionData);
+                    RayTraceRegionData(x1,y1,x2,y2, imgNr, regionBuffer, regionData);
                 } else {
                     msgPt.numPixels = -1;
                     RayTraceRegion(x1,y1,x2,y2, imgNr, regionBuffer);
@@ -291,7 +297,7 @@ int main(int argc, char* argv[]) {
                 MPI_Send ( regionBuffer, numBytes, MPI_UNSIGNED_CHAR, 0, TAG_REGION_BUFFER, MPI_COMM_WORLD );
                 delete [] regionBuffer;
 
-                if (msgPt.numPixels>0) {
+                if (msgPt.numPixels > 0) {
                     MPI_Send ( regionData, numPixels*sizeof(gvsData), MPI_BYTE, 0, TAG_DATA_BUFFER, MPI_COMM_WORLD );
                 }
                 if (regionData!=NULL) {
@@ -333,11 +339,12 @@ int main(int argc, char* argv[]) {
                 gvsData* regionData = NULL;
 
                 MPI_Recv ( regionBuffer, numBytes, MPI_UNSIGNED_CHAR, fromNode, TAG_REGION_BUFFER, MPI_COMM_WORLD, &status );
-                if (numPixels>0) {
+                if (numPixels > 0) {
                     regionData = new gvsData[numPixels];
-                    MPI_Recv ( regionData, numPixels*sizeof(gvsData), MPI_BYTE, fromNode, TAG_DATA_BUFFER, MPI_COMM_WORLD, &status);
+                    MPI_Recv ( regionData, numPixels*sizeof(gvsData), MPI_BYTE, fromNode, TAG_DATA_BUFFER, MPI_COMM_WORLD, &status);                    
                 }
-                taskManager->insertRegion( currTask, regionBuffer, regionData );
+
+                taskManager->insertRegion( currTask, regionBuffer, regionData);
 
                 delete [] regionBuffer;
                 if (regionData!=NULL) {

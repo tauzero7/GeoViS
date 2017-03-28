@@ -68,7 +68,7 @@ public:
      * @param y   y-coordinate of pixel
      * @return  rendered color
      */
-    GvsColor  getSampleColor ( GvsDevice* device, double x, double y ) const;
+    void  getSampleColor ( GvsDevice* device, double x, double y, GvsColor &col, gvsData &data ) const;
 
     /**
      * Get the sample color from the light ray.
@@ -77,10 +77,11 @@ public:
      * @param device  scene device
      * @return rendered color
      */
-    GvsColor  getSampleColor ( GvsRayVisual*& eyeRay, GvsDevice* device  ) const;
+    GvsColor getSampleColor(GvsRayVisual*& eyeRay, GvsDevice* device) const;
 
     void getSampleIntersection(GvsDevice* device, double x, double y);
-    void getSampleIntersection(GvsRayAllIS*& eyeRay, GvsDevice* device);
+    //void getSampleIntersection(GvsRayAllIS*& eyeRay, GvsDevice* device);
+    gvsData getSampleIntersection(GvsRayVisual*& eyeRay, GvsDevice* device) const;
 
     /**
      * Set the local tetrad (local reference frame) of the observer.

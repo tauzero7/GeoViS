@@ -144,7 +144,8 @@ bool GvsMpiTaskManager :: initialize ( int , int numNodesImage ) {
             }
             case gvsCamFilterRGBpdz:
             case gvsCamFilterRGBjac:
-            case gvsCamFilterRGBpt: {
+            case gvsCamFilterRGBpt:
+            case gvsCamFilterRGBIntersec: {
                 //numChannels = 3;
                 mImage[image].setWithData(true);
                 break;

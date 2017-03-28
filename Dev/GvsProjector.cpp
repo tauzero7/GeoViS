@@ -139,11 +139,10 @@ GvsStMotion* GvsProjector :: getMotion() const {
 }
 
 
-GvsColor GvsProjector :: getSampleColor ( GvsDevice* device, double x, double y ) const {
+void GvsProjector::getSampleColor(GvsDevice* device, double x, double y , GvsColor &col, gvsData &data) const {
     assert ( (rayGen != NULL) && (locTetrad != NULL) );
 
     m4d::vec4 rayOrigin = locTetrad->getPosition();
-
     if (device->camEye == gvsCamEyeLeft) {
         m4d::vec3 leftEyePos = device->camera->GetLeftEyePos();
         m4d::vec4 e0,e1,e2,e3;
@@ -166,12 +165,13 @@ GvsColor GvsProjector :: getSampleColor ( GvsDevice* device, double x, double y 
     GvsRayVisual* eyeRay = new GvsRayVisual(rayGen);
 
     GvsCamFilter camFilter = device->camera->getCamFilter();
-    GvsColor col = errorColor;
+    col = errorColor;
 
     if (!rayDir.getAsV3D().isZero()) {
         bool validRay = false;
         switch (camFilter) {
             case gvsCamFilterRGBpt:
+            case gvsCamFilterRGBIntersec:
             case gvsCamFilterRGB: {
                 validRay = eyeRay->recalc(rayOrigin, rayDir);
                 break;
@@ -183,30 +183,30 @@ GvsColor GvsProjector :: getSampleColor ( GvsDevice* device, double x, double y 
             case gvsCamFilterRGBjac: {
                 validRay = eyeRay->recalcJacobi(rayOrigin, rayDir, localRayDir, locTetrad);
                 break;
-            }
-            case gvsCamFilterIntersec: {
-                // cannot be handled here
-                break;
-            }
+            }            
         }
 
         if (camFilter == gvsCamFilterRGB ||
                 camFilter == gvsCamFilterRGBpdz ||
                 camFilter == gvsCamFilterRGBjac ||
-                camFilter == gvsCamFilterRGBpt) {
+                camFilter == gvsCamFilterRGBpt ||
+                camFilter == gvsCamFilterRGBIntersec) {
             if (validRay) {
                 col = getSampleColor( eyeRay, device );
-            }
+                if (camFilter == gvsCamFilterRGBIntersec) {
+                    data = getSampleIntersection(eyeRay, device);
+                }
+            }            
         }
+
     } else {
         col.setValid(false);
     }    
-    delete eyeRay;
-    return col;
+    delete eyeRay;    
 }
 
 
-GvsColor GvsProjector :: getSampleColor( GvsRayVisual*& eyeRay, GvsDevice* device ) const {
+GvsColor GvsProjector::getSampleColor(GvsRayVisual*& eyeRay, GvsDevice* device ) const {
 
     m4d::vec4 lightDirStart, locLightDirStart, locLightDirEnd, lightDirEnd;
     double i,frak, wObs, wSrc;
@@ -302,6 +302,7 @@ GvsColor GvsProjector :: getSampleColor( GvsRayVisual*& eyeRay, GvsDevice* devic
 
 
 void GvsProjector::getSampleIntersection(GvsDevice* device, double x, double y) {
+#if 0
     assert ( (rayGen != NULL) && (locTetrad != NULL) );
 
     m4d::vec4 rayOrigin = locTetrad->getPosition();
@@ -335,10 +336,11 @@ void GvsProjector::getSampleIntersection(GvsDevice* device, double x, double y) 
     }
     delete eyeRay;
     //TODO: return col;
+#endif
 }
 
 
-
+/*
 void GvsProjector::getSampleIntersection(GvsRayAllIS*& eyeRay, GvsDevice* device) {
 
 //    m4d::vec4 lightDirStart, locLightDirStart, locLightDirEnd, lightDirEnd;
@@ -358,6 +360,25 @@ return;
     }
 
     // TODO
+}
+*/
+
+gvsData GvsProjector::getSampleIntersection(GvsRayVisual*& eyeRay, GvsDevice* device) const {
+    GvsSurfIntersec* surfIntersec = eyeRay->getSurfIntersec();
+    gvsData data;
+    if (surfIntersec != NULL) {
+        m4d::vec4 ip = surfIntersec->point();
+        //ip.printF();
+        data.pos[0] = ip[0];
+        data.pos[1] = ip[1];
+        data.pos[2] = ip[2];
+        data.pos[3] = ip[3];
+
+        m4d::vec2 texuv = surfIntersec->texUVParam();
+        data.uv[0] = texuv.x(0);
+        data.uv[1] = texuv.x(1);
+    }
+    return data;
 }
 
 

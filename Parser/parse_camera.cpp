@@ -189,6 +189,7 @@ void gvsP_init_pinHoleCam (GvsParseScheme* gP) {
         bool filterFound = false;
         while ((camFilter<GvsNumCamFilters-1) && (filterFound==false)) {
             if (camFilterName == GvsCamFilterNames[++camFilter]) filterFound = true;
+            //std::cerr << camFilterName << " --- " << GvsCamFilterNames[camFilter] << std::endl;
         }
         if (!filterFound) {
             std::cerr << "This camera filter does not exist!" << std::endl;

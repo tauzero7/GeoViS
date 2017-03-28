@@ -46,7 +46,7 @@ class GvsMpiImage
     void    setNumTasks        ( int num );
     int     getNumTasksLeft    ( void ) const;
 
-    void    writePicture       ( GvsCamFilter filter = gvsCamFilterRGB, double gamma = 1.0 );
+    void    writePicture       ( GvsCamFilter filter = gvsCamFilterRGB, double gamma = 1.0 );    
     bool    writeImageFileIfPossible ( GvsCamFilter filter = gvsCamFilterRGB, double gamma = 1.0 );
 
     void    Print ( FILE* fptr = stderr ) const;

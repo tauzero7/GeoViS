@@ -13,8 +13,19 @@ public:
 
     void resize(int width, int height);
 
+    int  dataSize();
+
+    bool getData(int i, int j, gvsData* dat);
+
+    void setData(int i, int j, gvsData &dat);
+
+    bool write(const char* filename);
+
 private:
     // list of gvsData for every pixel
+
+    int width, height;
+    gvsData* m_data;
 };
 
 #endif // GVS_INTERSEC_OUTPUT_H

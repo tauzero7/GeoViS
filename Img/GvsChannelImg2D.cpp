@@ -817,7 +817,7 @@ void GvsChannelImg2D::writeIntersecData( const char* filename , GvsCamFilter fil
     std::string baseFilename = std::string(filename);
     size_t pos = baseFilename.find_last_of(".");
     baseFilename = baseFilename.substr(0,pos);
-
+std::cerr << "GvsChannelImg2D::WriteIntersecData() ... " << filename << std::endl;
     FILE* fptr = NULL;
 
     // position and direction;
@@ -851,6 +851,15 @@ void GvsChannelImg2D::writeIntersecData( const char* filename , GvsCamFilter fil
             break;
         }
 
+        case gvsCamFilterRGBIntersec: {
+#ifdef _WIN32
+            fopen_s(&fptr,(baseFilename + ".dat").c_str(), "wb");
+#else
+            fptr = fopen((baseFilename+".dat").c_str(),"wb");
+#endif
+            nc = 0;
+            break;
+        }
         default:
         case gvsCamFilterRGB: {
             break;
@@ -862,23 +871,34 @@ void GvsChannelImg2D::writeIntersecData( const char* filename , GvsCamFilter fil
     if (fptr!=NULL && imgIntersecData!=NULL) {
         fwrite((void*)&imgWidth,sizeof(int),1,fptr);
         fwrite((void*)&imgHeight,sizeof(int),1,fptr);
-        fwrite((void*)&nc,sizeof(int),1,fptr);
-        int pos;        
-        for(int y=imgHeight-1; y>=0; y--) {
-            for(int x=0; x<imgWidth; x++) {
-                pos = y*imgWidth+x;
-                fwrite((void*)imgIntersecData[pos].pos,sizeof(double),4,fptr);
+        if (nc > 0) {
+            fwrite((void*)&nc,sizeof(int),1,fptr);
+        }
 
-                if (filter==gvsCamFilterRGBpdz || filter==gvsCamFilterRGBjac) {
-                    fwrite((void*)imgIntersecData[pos].dir,sizeof(double),4,fptr);
-                    fwrite((void*)&imgIntersecData[pos].objID,sizeof(double),1,fptr);
-                    fwrite((void*)&imgIntersecData[pos].freqshift,sizeof(double),1,fptr);
-                    if (filter==gvsCamFilterRGBjac) {
-                        fwrite((void*)imgIntersecData[pos].jacobi,sizeof(double),5,fptr);
+
+        if (filter == gvsCamFilterRGBIntersec) {
+            fwrite(imgIntersecData, sizeof(gvsData), imgWidth * imgHeight, fptr);
+        }
+        else {
+
+            int pos;
+            for(int y=imgHeight-1; y>=0; y--) {
+                for(int x=0; x<imgWidth; x++) {
+                    pos = y*imgWidth+x;
+                    fwrite((void*)imgIntersecData[pos].pos,sizeof(double),4,fptr);
+
+                    if (filter==gvsCamFilterRGBpdz || filter==gvsCamFilterRGBjac) {
+                        fwrite((void*)imgIntersecData[pos].dir,sizeof(double),4,fptr);
+                        fwrite((void*)&imgIntersecData[pos].objID,sizeof(double),1,fptr);
+                        fwrite((void*)&imgIntersecData[pos].freqshift,sizeof(double),1,fptr);
+                        if (filter==gvsCamFilterRGBjac) {
+                            fwrite((void*)imgIntersecData[pos].jacobi,sizeof(double),5,fptr);
+                        }
                     }
-                } else if (filter==gvsCamFilterRGBpt) {
-                    fwrite((void*)imgIntersecData[pos].uv, sizeof(double), 2, fptr);
-                    fwrite((void*)&imgIntersecData[pos].objID,sizeof(double),1,fptr);
+                    else if (filter==gvsCamFilterRGBpt) {
+                        fwrite((void*)imgIntersecData[pos].uv, sizeof(double), 2, fptr);
+                        fwrite((void*)&imgIntersecData[pos].objID,sizeof(double),1,fptr);
+                    }
                 }
             }
         }

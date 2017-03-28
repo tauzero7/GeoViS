@@ -19,6 +19,9 @@ set(PNG_AVAILABLE OFF CACHE BOOL "have png library available")
 set(PNG_INC_DIR  $ENV{PNG_PATH}         CACHE FILEPATH "PNG_INC_DIR")
 set(PNG_LIB_DIR  $ENV{PNG_LIB_PATH}     CACHE FILEPATH "PNG_LIB_DIR")
 
+set(FREEGLUT_DIR  "/usr/"   CACHE FILEPATH "Freeglut root dir")
+set(FREEGLUT_LIB_DIR  "/usr/lib"       CACHE FILEPATH "Freeglut lib dir")
+
 
 set(CMAKE_SHARED_LINKER_FLAGS "-Wl,-rpath ${GSL_LIB_DIR}")
 
@@ -29,9 +32,11 @@ set(TBAR_DIR AntTweakBar)
 
 include_directories(${GVS_DIR} ${GSL_DIR}/include)
 include_directories(${M4D_DIR}/src ${GL3W_DIR} ${GLM_DIR} ${TBAR_DIR}/include)
+include_directories(${FREEGLUT_DIR}/include)
 
 link_directories(${CMAKE_SOURCE_DIR}/../lib)
 link_directories(${CMAKE_SOURCE_DIR}/${TBAR_DIR}/lib ${GSL_LIB_DIR})
+link_directories(${FREEGLUT_LIB_DIR})
 
 add_definitions(-DUSE_INTERFACE -DSTANDALONE=0 -DUSE_MATH -DHAVE_LIBPPM)
 if (TIFF_AVAILABLE)

@@ -105,7 +105,7 @@ void GvsMpiImage :: insertRegion ( int x1, int y1, int x2, int y2, uchar* p, gvs
                 p++;
             }
             if (data!=NULL && mData!=NULL) {
-                memcpy(&mData[j*mImageWidth+i],dptr,sizeof(gvsData)*1);
+                memcpy(&mData[j*mImageWidth+i],dptr,sizeof(gvsData));
                 dptr++;
             }
         }

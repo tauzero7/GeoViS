@@ -39,24 +39,11 @@ GvsSampleMgr ::  GvsSampleMgr ( GvsDevice* rtDev, bool showProgress )
     resX = 720;
     resY = 576;
 
-    // This does not work, because there is no camera yet!!!
-    /*
-    GvsCamFilter filter = sampleDevice->camera->getCamFilter();
-    if (filter == gvsCamFilterIntersec) {
-        sampleIntersecPicture = new GvsIntersecOutput(resX, resY);
-        assert(sampleIntersecPicture != NULL);
-        samplePicture = NULL;
-    }
-    else {
-        samplePicture = new GvsChannelImg2D( resX, resY, 3 );
-        assert(samplePicture!=NULL);
-        sampleIntersecPicture = NULL;
-    }
-    */
-
     samplePicture = new GvsChannelImg2D( resX, resY, 3 );
     assert(samplePicture!=NULL);
-    sampleIntersecPicture = NULL;
+
+    sampleIntersecPicture = new GvsIntersecOutput(0, 0);
+    assert(sampleIntersecPicture != NULL);
 
     haveMask = false;
 }
@@ -93,18 +80,17 @@ void GvsSampleMgr::setRegionToImage() {
     resY = sampleDevice->camera->GetResolution().x(1);
 
     GvsCamFilter filter = sampleDevice->camera->getCamFilter();
-    if (filter == gvsCamFilterIntersec) {
+    if (filter == gvsCamFilterRGBIntersec) {
         sampleIntersecPicture->resize(resX, resY);
     }
-    else {
-        bool withData = false;
-        if ((filter == gvsCamFilterRGBpdz) ||
-                (filter == gvsCamFilterRGBjac) ||
-                (filter == gvsCamFilterRGBpt)) {
-            withData = true;
-        }
-        samplePicture->resize( resX, resY, withData );
+
+    bool withData = false;
+    if ((filter == gvsCamFilterRGBpdz) ||
+            (filter == gvsCamFilterRGBjac) ||
+            (filter == gvsCamFilterRGBpt)) {
+        withData = true;
     }
+    samplePicture->resize( resX, resY, withData );
 }
 
 
@@ -138,14 +124,12 @@ void GvsSampleMgr :: setRegion ( const m4d::ivec2 &corner1, const m4d::ivec2 &co
         sampleRegionUR.setX(1,tmp);
     }
 
-    if (sampleDevice->camera->getCamFilter() == gvsCamFilterIntersec) {
+    if (sampleDevice->camera->getCamFilter() == gvsCamFilterRGBIntersec) {
         sampleIntersecPicture->resize( sampleDevice->camera->GetResolution().x(0),
                                        sampleDevice->camera->GetResolution().x(1) );
     }
-    else {
-        samplePicture->resize( sampleDevice->camera->GetResolution().x(0),
-                               sampleDevice->camera->GetResolution().x(1) );
-    }
+    samplePicture->resize( sampleDevice->camera->GetResolution().x(0),
+                           sampleDevice->camera->GetResolution().x(1) );
 }
 
 
@@ -154,9 +138,6 @@ int GvsSampleMgr::calcRegionBytes( int x1, int y1, int x2, int y2 ) const {
     assert (y2 >= y1);
     if (samplePicture != NULL) {
         return (y2 - y1 + 1) * (x2 - x1 + 1) * samplePicture->numChannels();
-    }
-    else if (sampleIntersecPicture != NULL) {
-        return (y2 - y1 + 1) * (x2 - x1 + 1); //TODO: * sampleIntersecPicture->dataSize;
     }
     return calcRegionPixels(x1, y1, x2, y2);
 }
@@ -169,16 +150,24 @@ int GvsSampleMgr::calcRegionPixels ( int x1, int y1, int x2, int y2 ) const {
 }
 
 
+int GvsSampleMgr::calcRegionData(int x1, int y1, int x2, int y2) const {
+    if (sampleIntersecPicture != NULL) {
+        return (y2 - y1 + 1) * (x2 - x1 + 1);
+    }
+    return 0;
+}
+
+
 bool GvsSampleMgr::putFirstPixel() {
     samplePixCoord = sampleRegionLL;        
-    if (sampleDevice->camera->getCamFilter() == gvsCamFilterIntersec) {
-        // TODO: return value
-        calcPixelIntersections(samplePixCoord.x(0), samplePixCoord.x(1));
-        //TODO: sampleIntersecPicture->setData();
-    }
-    else {
-        GvsColor pixcol = calcPixelColor( samplePixCoord.x(0), samplePixCoord.x(1) );
-        samplePicture->setColor( samplePixCoord.x(0), samplePixCoord.x(1), pixcol );
+
+    GvsColor pixcol;
+    gvsData data;
+    calcPixelColor( samplePixCoord.x(0), samplePixCoord.x(1), pixcol, data );
+    samplePicture->setColor( samplePixCoord.x(0), samplePixCoord.x(1), pixcol );
+
+    if (sampleIntersecPicture != NULL) {
+        sampleIntersecPicture->setData(samplePixCoord.x(0), samplePixCoord.x(1), data);
     }
     return true;
 }
@@ -191,20 +180,21 @@ bool GvsSampleMgr::putNextPixel() {
         samplePixCoord[0] = sampleRegionLL[0];
     }
 
-    if (sampleDevice->camera->getCamFilter() == gvsCamFilterIntersec) {
-        // TODO: return value
-        calcPixelIntersections(samplePixCoord.x(0), samplePixCoord.x(1));
-        //TODO: sampleIntersecPicture->setData();
-    }
-    else {
-        GvsColor pixcol = calcPixelColor( samplePixCoord.x(0), samplePixCoord.x(1) );
-        samplePicture->setColor( samplePixCoord.x(0), samplePixCoord.x(1), pixcol );
+    GvsColor pixcol;
+    gvsData data;
+    calcPixelColor( samplePixCoord.x(0), samplePixCoord.x(1), pixcol, data );
+    samplePicture->setColor( samplePixCoord.x(0), samplePixCoord.x(1), pixcol );
+
+    if (sampleDevice->camera->getCamFilter() == gvsCamFilterRGBIntersec) {
+        if (sampleIntersecPicture != NULL) {
+            sampleIntersecPicture->setData(samplePixCoord.x(0), samplePixCoord.x(1), data);
+        }
     }
     return true;
 }
 
 
-GvsColor GvsSampleMgr :: calcPixelColor( int i, int j ) const {
+void GvsSampleMgr::calcPixelColor(int i, int j , GvsColor &col, gvsData &data) const {
     if (mShowProgress) {
         fprintf(stderr,"\r%4d %4d / %4d %4d",i+1,j+1,
                 sampleDevice->camera->GetResolution().x(0),
@@ -221,24 +211,25 @@ GvsColor GvsSampleMgr :: calcPixelColor( int i, int j ) const {
         }
     }
 
-    GvsColor col = RgbBlack;
+    col = RgbBlack;
     if (doSample) {
-        col = sampleDevice->projector->getSampleColor( sampleDevice, double(i), double (j) );
-    }
-    return col;
+        sampleDevice->projector->getSampleColor( sampleDevice, double(i), double (j), col, data );
+    }    
 }
 
 
-void GvsSampleMgr::calcPixelIntersections(int i, int j) {
-    if (mShowProgress) {
-        fprintf(stderr,"\r%4d %4d / %4d %4d",i+1,j+1,
-                sampleDevice->camera->GetResolution().x(0),
-                sampleDevice->camera->GetResolution().x(1));
-    }
-
-    sampleDevice->projector->getSampleIntersection(sampleDevice, double(i), double(j));
-    // return TODO
-}
+//void GvsSampleMgr::calcPixelIntersections(int i, int j) {
+//    std::cerr << "GvsSampleMgr::calcPixelInt\n";
+//#if 0
+//    if (mShowProgress) {
+//        fprintf(stderr,"\r%4d %4d / %4d %4d",i+1,j+1,
+//                sampleDevice->camera->GetResolution().x(0),
+//                sampleDevice->camera->GetResolution().x(1));
+//    }
+//#endif
+//    sampleDevice->projector->getSampleIntersection(sampleDevice, double(i), double(j));
+//    // return TODO
+//}
 
 
 void GvsSampleMgr :: extractRegion ( int x1, int y1, int x2, int y2, uchar* p ) const {
@@ -267,6 +258,10 @@ void GvsSampleMgr::extractRegionData (int x1, int y1, int x2, int y2, uchar* p, 
         for(int x=x1; x<=x2; x++, pptr+=numChan,dptr++) {
             samplePicture->sampleChannels(x,y,pptr);
             samplePicture->sampleData(x,y,dptr);
+
+            if (sampleIntersecPicture != NULL) {
+                sampleIntersecPicture->getData(x, y, dptr);
+            }
         }
     }
 }
@@ -280,9 +275,8 @@ void GvsSampleMgr::setMask ( const char *filename ) {
 
 
 void GvsSampleMgr :: writePicture( char *filename ) const {    
-    if (sampleDevice->camera->getCamFilter() == gvsCamFilterIntersec) {
+    if (sampleDevice->camera->getCamFilter() == gvsCamFilterRGBIntersec) {
         writeIntersecData(filename);
-        return;
     }
 
     if (sampleDevice->camEye == gvsCamEyeLeft) {
@@ -319,6 +313,14 @@ void GvsSampleMgr :: writePicture( char *filename ) const {
 
 
 void GvsSampleMgr::writeIntersecData(char* filename) const {
-    // TODO
+    if (sampleIntersecPicture != NULL) {
+        std::string newFilename = std::string(filename);
+        size_t pos = newFilename.find_last_of(".");
+        if (pos != std::string::npos && pos>0) {
+            std::string name = newFilename.substr(0,pos);
+            newFilename = name + ".dat";
+            sampleIntersecPicture->write(newFilename.c_str());
+        }
+    }
     return;
 }
