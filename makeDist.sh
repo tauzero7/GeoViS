@@ -26,6 +26,8 @@ $GVS_DIR/Cam/GvsPanoramaCam.cpp \
 $GVS_DIR/Cam/GvsPanoramaCam.h \
 $GVS_DIR/Cam/GvsPinHoleCam.cpp \
 $GVS_DIR/Cam/GvsPinHoleCam.h \
+$GVS_DIR/Cam/GvsPinHoleStereoCam.cpp \
+$GVS_DIR/Cam/GvsPinHoleStereoCam.h \
 $GVS_DIR/Dev/GvsDevice.cpp \
 $GVS_DIR/Dev/GvsDevice.h \
 $GVS_DIR/Dev/GvsProjector.cpp \
@@ -36,6 +38,8 @@ $GVS_DIR/Img/GvsChannelImg2D.cpp \
 $GVS_DIR/Img/GvsChannelImg2D.h \
 $GVS_DIR/Img/GvsColor.cpp \
 $GVS_DIR/Img/GvsColor.h \
+$GVS_DIR/Img/GvsIntersecOutput.cpp \
+$GVS_DIR/Img/GvsIntersecOutput.h \
 $GVS_DIR/Img/GvsPicIOEnvelope.cpp \
 $GVS_DIR/Img/GvsPicIOEnvelope.h \
 $GVS_DIR/Img/GvsPictureIO.cpp \
@@ -65,6 +69,8 @@ $GVS_DIR/Obj/GvsBoundBox4D.cpp \
 $GVS_DIR/Obj/GvsBoundBox4D.h \
 $GVS_DIR/Obj/GvsBoundBox.cpp \
 $GVS_DIR/Obj/GvsBoundBox.h \
+$GVS_DIR/Obj/GvsOctree.cpp \
+$GVS_DIR/Obj/GvsOctree.h \
 $GVS_DIR/Obj/GvsObjPtrList.cpp \
 $GVS_DIR/Obj/GvsObjPtrList.h \
 $GVS_DIR/Obj/GvsSceneObj.cpp \
@@ -77,6 +83,8 @@ $GVS_DIR/Obj/Comp/GvsCompoundObj.cpp \
 $GVS_DIR/Obj/Comp/GvsCompoundObj.h \
 $GVS_DIR/Obj/Comp/GvsLocalCompObj.cpp \
 $GVS_DIR/Obj/Comp/GvsLocalCompObj.h \
+$GVS_DIR/Obj/Comp/GvsCompoundOctreeObj.cpp \
+$GVS_DIR/Obj/Comp/GvsCompoundOctreeObj.h \
 $GVS_DIR/Obj/MeshObj/GvsOBJMesh.h \
 $GVS_DIR/Obj/MeshObj/GvsOBJMesh.cpp \
 $GVS_DIR/Obj/PlanarObj/GvsPlanarSurf.cpp \
@@ -140,6 +148,12 @@ $GVS_DIR/Shader/GvsShader.cpp \
 $GVS_DIR/Shader/GvsShader.h \
 $GVS_DIR/Shader/Surface/GvsSurfaceShader.cpp \
 $GVS_DIR/Shader/Surface/GvsSurfaceShader.h \
+$GVS_DIR/Texture/GvsChequeredT2D.cpp \
+$GVS_DIR/Texture/GvsChequeredT2D.h \
+$GVS_DIR/Texture/GvsChequeredTimeT2D.cpp \
+$GVS_DIR/Texture/GvsChequeredTimeT2D.h \
+$GVS_DIR/Texture/GvsColorGradTex.cpp \
+$GVS_DIR/Texture/GvsColorGradTex.h \
 $GVS_DIR/Texture/GvsCheckerT2D.cpp \
 $GVS_DIR/Texture/GvsCheckerT2D.h \
 $GVS_DIR/Texture/GvsDieT2D.cpp \

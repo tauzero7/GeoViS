@@ -1,18 +1,33 @@
-;; ---------------------------------------------------------------------
-;;  GeoViS:  neutronstar.scm
-;; ---------------------------------------------------------------------
+; ---------------------------------------------------------------------
+;  File:    collapse.scm
+;  Author:  Thomas Mueller
+;
+;   Fake simulation of a collapsing star.
+; ---------------------------------------------------------------------
 
 (define homedir (getenv "HOME"))
 (define bg_image (string-append homedir "/local/Texturen/MilkyWay/eso0932a2.png"))
+(define star_image "2-stereoreache.png")
 
 (define r_obs 35.0 )
 (define incl  90.0 )
-(define fview 35.0 )
+(define fview 45.0 )
+
+;(define imageRes #(100 100))
+(define imageRes #(512 512))
+
+(define numImages 2)
 
 (define mass_min 0.001)
-(define mass_max 0.95)
-(define numImages 10)
-(define mStep (/ (- mass_max mass_min) (- numImages 1)))
+(define mass_max 1.01)
+
+(define radius_min 2.0)
+(define radius_max 5.0)
+
+(define xStep (/ 1.0 (- numImages 1)))
+
+(define smoothStep (lambda (x)  (* (* x x) (+ 3.0 (* x (- 2))))))
+(define interpolate (lambda (x xmin xmax) (+ (* xmin (- 1.0 x)) (* xmax x))))
 
 
 ;; ---- Metrik ----
@@ -34,18 +49,15 @@
              `(dir #( 1.0 0.0 0.0) )
              '(vup #( 0.0 0.0 1.0) )
              `(fov ,(vector  fview fview ))
-             ;'(res #(1024 1024))
-             ;'(res #(50 50))
-             '(res #(200 200))
+             `(res ,imageRes)
              '(filter "FilterRGB")
              '(id "cam")
 )
 
 (init-camera '(type "2PICam")
              `(heading 180.0)
-             `(pitch  ,(+ 60.0))
-             ;'(res #(200 200))
-             '(res #(500 500))
+             `(pitch  ,(+ 70.0))
+             `(res ,imageRes)
              '(filter "FilterRGB")
              '(id "domecam")
 )
@@ -104,6 +116,17 @@
               '(id "checkShader")
 )
 
+(init-shader '(type "SurfShader")
+             `(objcolor ,(init-texture '(type "Image")
+                                       `(file ,star_image)
+                                       `(transform ,(scale-obj #(1.0 1.0)))
+                         )
+              )
+             '(ambient 0.3)
+             '(diffuse 1.0)
+             '(id "starShader")
+)
+
 ;(define background_image_name "examples/checker.tif")
 (init-shader  '(type "SurfShader")
               `(objcolor ,(init-texture '(type "Image")
@@ -127,7 +150,8 @@
 (solid-ellipsoid `(objtype ,gpObjTypeInCoords)
                  '(center #(0.0 0.0 0.0))
                  `(axlen  ,(vector 2.0 2.0 2.0))
-                 '(shader "checkShader")
+                 ;'(shader "checkShader")
+                 '(shader "starShader")
                  '(id "star")
 )
 
@@ -138,10 +162,15 @@
 
 
 (do ((count 0 (+ count 1))) ((= count numImages))
-  (define nmass (+ mass_min (* count mStep)))
-  (init-device '(type "standard")
-               '(obj "scene")
-               '(camera "domecam")
-               `(setparam ("metric" "mass" ,nmass))
-  )
+    (define t (* count xStep))
+    (define x (smoothstep t))
+    (define nmass (interpolate x mass_min mass_max))
+    (define nrad  (interpolate x radius_max radius_min))            
+    (init-device '(type "standard")
+                 '(obj "scene")
+                 '(camera "domecam")
+                 `(setparam ("bgimage" "transform" ,(rotate-obj "Z" 35.0 (rotate-obj "X" 30.0))))
+                 `(setparam ("star" "axlen" ,(vector nrad nrad nrad)))
+                 `(setparam ("metric" "mass" ,nmass))
+    )
 )
