@@ -26,7 +26,7 @@
 #include "Utils/GvsLog.h"
 
 #ifndef _WIN32
-static GvsLog& LOG = GvsLog::instance();
+GvsLog& LOG = GvsLog::instance();
 #else
 m4d::MetricDatabase* m4d::MetricDatabase::m_instance = nullptr;
 #endif

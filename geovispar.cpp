@@ -13,10 +13,10 @@
 #include "MpiUtils/MpiTaskManager.h"
 
 
-char* inFileName   = NULL;
-char* outFileName  = NULL;
-char* maskFileName = NULL;
-char* logFileName  = NULL;
+char* inFileName   = nullptr;
+char* outFileName  = nullptr;
+char* maskFileName = nullptr;
+char* logFileName  = nullptr;
 int   numNodesImage = 1;
 int   renderDevice  = -1;
 int   startDevice   = 0;
