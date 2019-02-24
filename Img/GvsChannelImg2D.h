@@ -56,9 +56,9 @@ public:
     virtual double   sampleValueDirectly ( double u, double v ) const;
 
     // Gets RGB of one pixel (i,j). Values are between 0..1
-    virtual GvsColor sampleColor    ( int i, int j ) const;
+    virtual GvsColor sampleColor    ( long i, long j ) const;
     virtual GvsColor sampleColor    ( double u, double v ) const;
-    virtual GvsColor sampleColorDirectly ( int i, int j ) const;
+    virtual GvsColor sampleColorDirectly ( long i, long j ) const;
     virtual GvsColor sampleColorDirectly ( double u, double v ) const;
 
     // Gets values of imgData for one pixel (i,j). Values are written to uchar* and are between 0..255
@@ -80,7 +80,7 @@ public:
     virtual void setValue    ( int i, int j, double val );
 
     // Sets the color of one pixel (i,j). Entries of col have to be 0..1, entries in imgData become 0..255
-    virtual void setColor    ( int i, int j, const GvsColor& col );
+    virtual void setColor    ( long i, long j, const GvsColor& col );
 
     // Same as above, but entries of col have to be 0..255
     virtual void setChannels ( int i, int j, uchar *col );
@@ -139,7 +139,7 @@ protected:
     int    imgHeight;
     int    imgNumChannels;
     char*  imgFileName;
-    int    imgChanSize;   	// width * height, the size of one "color-datablock", see ".EXPLANATION"
+    long   imgChanSize;   	// width * height, the size of one "color-datablock", see ".EXPLANATION"
 
     GvsImgOrder imgDataOrder;    // block structure is standard image format
 

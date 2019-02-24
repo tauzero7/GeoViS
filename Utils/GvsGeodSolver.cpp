@@ -19,7 +19,7 @@ GvsGeodSolver::GvsGeodSolver( m4d::Metric *metric, m4d::enum_integrator m4dGeodS
     stepSize = 0.01;
     maxStepsize = DEF_MAX_STEPSIZE;
 
-    m4dSolver = NULL;
+    m4dSolver = nullptr;
     setSolver( m4dGeodSolver );
 
     int solverID = static_cast<int>(m4dGeodSolver);
@@ -43,7 +43,7 @@ GvsGeodSolver::GvsGeodSolver( m4d::Metric *metric, m4d::enum_geodesic_type gType
     stepSize = 0.01;
     maxStepsize = DEF_MAX_STEPSIZE;
 
-    m4dSolver = NULL;
+    m4dSolver = nullptr;
     setSolver( m4dGeodSolver );
 
     int solverID = static_cast<int>(m4dGeodSolver);
@@ -57,7 +57,7 @@ GvsGeodSolver::GvsGeodSolver( m4d::Metric *metric, m4d::enum_geodesic_type gType
 
 GvsGeodSolver::~GvsGeodSolver() {
     delete m4dSolver;
-    mMetric = NULL;
+    mMetric = nullptr;
 }
 
 
@@ -70,7 +70,7 @@ m4d::Metric* GvsGeodSolver::getMetric() {
 }
 
 bool GvsGeodSolver::setSolver( m4d::enum_integrator m4dGeodSolver ) {
-    if (mMetric == NULL) {
+    if (mMetric == nullptr) {
         return false;
     }
 
@@ -78,15 +78,15 @@ bool GvsGeodSolver::setSolver( m4d::enum_integrator m4dGeodSolver ) {
         return false;
     }
 
-    if (m4dSolver!=NULL) {
+    if (m4dSolver!=nullptr) {
         delete m4dSolver;
     }
-    m4dSolver=NULL;
+    m4dSolver=nullptr;
 
-    m4d::IntegratorDatabase* IntDB = m4d::IntegratorDatabase::getInstance();
+    m4d::IntegratorDatabase intDB;
     m4dGeodSolverType = m4dGeodSolver;
-    m4dSolver = IntDB->getIntegrator(mMetric, m4dGeodSolver);
-    solverName = IntDB->getIntegratorName(m4dGeodSolver);    
+    m4dSolver = intDB.getIntegrator(mMetric, m4dGeodSolver);
+    solverName = intDB.getIntegratorName(m4dGeodSolver);
     return true;
 }
 

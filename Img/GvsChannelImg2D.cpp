@@ -24,7 +24,7 @@
 
 GvsChannelImg2D :: GvsChannelImg2D()
     : imgData(NULL),
-      imgChanSize(0),
+      imgChanSize(0L),
       imgWithData(false),
       imgIntersecData(NULL)
 {
@@ -57,14 +57,14 @@ GvsChannelImg2D :: GvsChannelImg2D(int width, int height, int numChannels , bool
     imgWrapConstValue = 0.0;
 
     imgData = new uchar[ imgChanSize * imgNumChannels ];
-    for (int i=0; i<imgChanSize*imgNumChannels; i++) {
+    for (long i=0; i < imgChanSize*imgNumChannels; i++) {
         imgData[i] = (uchar)0;
     }
     assert( imgData != NULL );
 
     if (imgWithData) {
         imgIntersecData = new gvsData[imgChanSize];
-        for(int i=0; i<imgChanSize; i++) {
+        for(long i=0; i<imgChanSize; i++) {
             imgIntersecData[i] = gvsData_T();
         }
     }
@@ -80,7 +80,7 @@ void GvsChannelImg2D :: setSize( int width, int height, int numChannels ) {
     imgChanSize    = width * height;
     imgNumChannels = numChannels;
 
-    imgData = new uchar[ imgChanSize * imgNumChannels ];
+    imgData = new uchar[imgChanSize * numChannels];
     assert( imgData != NULL );
 }
 
@@ -91,7 +91,7 @@ void GvsChannelImg2D :: resize(int newWidth, int newHeight , bool resizeData) {
         uchar *newData = new uchar[ newWidth * newHeight * imgNumChannels ];
         assert( newData != NULL );
 
-        int indx = 0;
+        long indx = 0L;
         int newChanSize = newWidth * newHeight;
 
         double newWidthD  = double( newWidth  );
@@ -109,7 +109,7 @@ void GvsChannelImg2D :: resize(int newWidth, int newHeight , bool resizeData) {
                 double oldX = x * factorX;
 
                 // interpolColor = sampleColor( oldX, oldY );
-                interpolColor = sampleColor( int(oldX+0.5), int(oldY+0.5) );//FG (richtiges Runden)
+                interpolColor = sampleColor( long(oldX+0.5), long(oldY+0.5) );//FG (richtiges Runden)
 
                 newData[ indx                 ] = uchar( interpolColor.red  *255.0 );
                 newData[ indx + newChanSize   ] = uchar( interpolColor.green*255.0 );
@@ -168,7 +168,7 @@ void GvsChannelImg2D :: assign( const GvsChannelImg2D& T ) {
 
 GvsChannelImg2D :: GvsChannelImg2D( const GvsChannelImg2D& T )
     : imgData(NULL),
-      imgChanSize(0)
+      imgChanSize(0L)
 {
     assign( T );
 }
@@ -189,7 +189,9 @@ GvsChannelImg2D :: ~GvsChannelImg2D() {
 
 void GvsChannelImg2D :: deleteAll() {
     //  std::cerr << "deleteAll...\n";
-    imgWidth = imgHeight = imgChanSize = imgNumChannels = 0;
+    imgWidth = imgHeight = imgNumChannels = 0;
+    imgChanSize = 0L;
+
     if (imgData!=NULL) {
         delete [] imgData;
         imgData = NULL;
@@ -281,7 +283,7 @@ double GvsChannelImg2D :: sampleValueDirectly ( double u, double v ) const {
 
 double GvsChannelImg2D :: sampleValueDirectly ( int x, int y ) const {
     static double inv255 = 1.0 / 255.0;
-    int indx = y * imgWidth + x;
+    long indx = y * imgWidth + x;
 
     switch ( imgNumChannels ) {
         case 1:
@@ -291,13 +293,13 @@ double GvsChannelImg2D :: sampleValueDirectly ( int x, int y ) const {
         case 3:
             return GvsColor( imgData[ indx                 ] * inv255,
                              imgData[ indx + imgChanSize   ] * inv255,
-                    imgData[ indx + imgChanSize*2 ] * inv255  ).luminance();
+                             imgData[ indx + imgChanSize*2 ] * inv255  ).luminance();
 
 
         case 2:
             return GvsColor( imgData[ indx               ] * inv255,
                              imgData[ indx + imgChanSize ] * inv255,
-                    0.0                                       ).luminance();
+                              0.0 ).luminance();
         default:
             std::cerr << "Error in GvsChannelImg2D::sampleValueDirectly(): "
                       << "unsupported # of channels: " << imgNumChannels << std::endl;
@@ -307,13 +309,13 @@ double GvsChannelImg2D :: sampleValueDirectly ( int x, int y ) const {
 
 
 GvsColor GvsChannelImg2D :: sampleColor ( double u, double v ) const {
-    int x = (int)(u*imgWidth + 0.5);
-    int y = (int)(v*imgHeight + 0.5);
+    long x = (long)(u*imgWidth + 0.5);
+    long y = (long)(v*imgHeight + 0.5);
     return sampleColor(x,y);
 }
 
 
-GvsColor GvsChannelImg2D :: sampleColor ( int x, int y ) const {
+GvsColor GvsChannelImg2D :: sampleColor (long x, long y ) const {
     if (x < 0) {
         switch (imgWrapPolicyX) {
             case GVS_WP_CLAMP:
@@ -374,28 +376,28 @@ GvsColor GvsChannelImg2D :: sampleColor ( int x, int y ) const {
 
 
 GvsColor GvsChannelImg2D :: sampleColorDirectly ( double u, double v ) const {
-    int x = (int)(u*imgWidth  + 0.5);
-    int y = (int)(v*imgHeight + 0.5);
+    long x = (long)(u*imgWidth  + 0.5);
+    long y = (long)(v*imgHeight + 0.5);
 
     return sampleColorDirectly(x,y);
 }
 
 
-GvsColor GvsChannelImg2D :: sampleColorDirectly ( int x, int y ) const {
+GvsColor GvsChannelImg2D :: sampleColorDirectly ( long x, long y ) const {
     static double inv255 = 1.0 / 255.0;
-    int indx = y * imgWidth + x;
+    long indx = y * imgWidth + x;
 
     switch ( imgNumChannels ) {
         case 3: {
             return GvsColor( imgData[ indx                 ] * inv255,
                              imgData[ indx + imgChanSize   ] * inv255,
-                    imgData[ indx + imgChanSize*2 ] * inv255  );
+                             imgData[ indx + imgChanSize*2 ] * inv255  );
         }
         case 4: {
             return GvsColor( imgData[ indx                 ] * inv255,
                              imgData[ indx + imgChanSize   ] * inv255,
-                    imgData[ indx + imgChanSize*2 ] * inv255,
-                    imgData[ indx + imgChanSize*3 ]);
+                             imgData[ indx + imgChanSize*2 ] * inv255,
+                             imgData[ indx + imgChanSize*3 ]);
         }
         case 1: {
             float val = imgData[ indx ] * inv255;
@@ -423,10 +425,10 @@ void GvsChannelImg2D::sampleChannels( int x, int y, uchar *col ) const {
         x = y = 0;
     }
 
-    int indx = y*imgWidth+x;
+    long indx = y*imgWidth+x;
     for(int i=0; i<imgNumChannels; i++) {
         col[i] = imgData[indx];
-        indx+=imgChanSize;
+        indx += imgChanSize;
     }
 }
 
@@ -438,7 +440,7 @@ void GvsChannelImg2D::sampleData( int x, int y, gvsData* dat ) const {
                   << imgHeight << ", x = " << x << ", y = " << y << ")" << std::endl;
         x = y = 0;
     }
-    int indx = y*imgWidth+x;
+    long indx = y*imgWidth+x;
     if (imgIntersecData!=NULL) {
         memcpy(dat,&imgIntersecData[indx],sizeof(gvsData)*1);
     }
@@ -453,8 +455,8 @@ void GvsChannelImg2D::setDataBlock( int i, int j, int width, int height, gvsData
     assert(((i+width)<=imgWidth) && ((j+height)<=imgHeight) && (i>=0) && (j>=0) && (width>0) && (height>0));
 
     gvsData* bptr = block;
-    for(int y=j; y<(j+height); y++) {
-        for(int x=i; x<(i+width); x++) {
+    for(long y=j; y<(j+height); y++) {
+        for(long x=i; x<(i+width); x++) {
             if (imgIntersecData!=NULL && block!=NULL) {
                 memcpy(&imgIntersecData[y*imgWidth+x],bptr,sizeof(gvsData)*1);
             }
@@ -471,8 +473,8 @@ void GvsChannelImg2D::setBlock ( int i, int j, int width, int height, uchar* blo
 
     uchar* col = new uchar[imgNumChannels];
     int num=0;
-    for (int n=j; n<(j+height); n++) {
-        for (int m=i; m<(i+width); m++) {
+    for (long n=j; n<(j+height); n++) {
+        for (long m=i; m<(i+width); m++) {
             for (int c=0; c<imgNumChannels; c++) {
                 col[c]=block[num+c];
             }
@@ -491,8 +493,8 @@ void GvsChannelImg2D::sampleBlock( int i, int j, int width, int height, uchar* b
 
     uchar* col = new uchar[imgNumChannels];
     int num=0;
-    for (int n=j; n<(j+height); n++) {
-        for (int m=i; m<(i+width); m++) {
+    for (long n=j; n<(j+height); n++) {
+        for (long m=i; m<(i+width); m++) {
             sampleChannels(m,n,col);
             for (int c=0; c<imgNumChannels; c++) {
                 block[num+c]=col[c];
@@ -511,8 +513,8 @@ void GvsChannelImg2D::setBlock ( int i, int j, int width, int height, double* bl
 
     uchar* col = new uchar[imgNumChannels];
     int num=0;
-    for (int n=j; n<(j+height); n++) {
-        for (int m=i; m<(i+width); m++) {
+    for (long n=j; n<(j+height); n++) {
+        for (long m=i; m<(i+width); m++) {
             for (int c=0; c<imgNumChannels; c++) {
                 col[c]=uchar(block[num+c]*255.0);
             }
@@ -532,8 +534,8 @@ void GvsChannelImg2D::sampleBlock( int i, int j, int width, int height, double* 
 
     uchar* col = new uchar[imgNumChannels];
     int num=0;
-    for (int n=j; n<(j+height); n++) {
-        for (int m=i; m<(i+width); m++) {
+    for (long n=j; n<(j+height); n++) {
+        for (long m=i; m<(i+width); m++) {
             sampleChannels(m,n,col);
             for (int c=0; c<imgNumChannels; c++) {
                 block[num+c]=uchar(col[c]*255.0);
@@ -553,7 +555,7 @@ uchar* GvsChannelImg2D :: getImagePtr ( ) const {
 
 void GvsChannelImg2D :: setValue( int x, int y, double val )
 {
-    int indx = y * imgWidth + x;
+    long indx = y * imgWidth + x;
 
     switch ( imgNumChannels ) {
         case 1: {
@@ -581,10 +583,10 @@ void GvsChannelImg2D :: setValue( int x, int y, double val )
 }
 
 
-void GvsChannelImg2D :: setColor( int x, int y, const GvsColor& col )
+void GvsChannelImg2D :: setColor( long x, long y, const GvsColor& col )
 {
     // col.Print();
-    int indx = y * imgWidth + x;
+    long indx = y * imgWidth + x;
 
     switch ( imgNumChannels ) {
         case 3: {
@@ -629,7 +631,7 @@ void GvsChannelImg2D :: setColor( int x, int y, const GvsColor& col )
 
 
 void GvsChannelImg2D :: setChannels( int x, int y, uchar *col ) {
-    int indx = y * imgWidth + x;
+    long indx = y * imgWidth + x;
     for ( int i = 0; i < imgNumChannels; i++ ) {
         imgData[indx] = col[i];
         indx += imgChanSize;
@@ -638,7 +640,7 @@ void GvsChannelImg2D :: setChannels( int x, int y, uchar *col ) {
 
 
 void GvsChannelImg2D :: setChannel  ( int x, int y, int chNum, uchar ch ) {
-    int indx = y * imgWidth + x;
+    long indx = y * imgWidth + x;
     imgData[indx+imgChanSize*chNum] = ch;
 }
 
@@ -654,7 +656,7 @@ void GvsChannelImg2D :: correctGamma ( double gamma ) {
     }
     invGamma = 1.0 / gamma;
 
-    for ( int i = 0; i < imgChanSize * imgNumChannels; i++ ) {
+    for ( long i = 0L; i < imgChanSize * imgNumChannels; i++ ) {
         if ( imgData[i] != 0U ) {
             imgData[i] = uchar( maxVal *
                                 pow( double(imgData[i]) * invMaxVal, invGamma) +
@@ -668,8 +670,8 @@ void GvsChannelImg2D :: copyFrom ( const GvsChannelImg2D& T ) {
     int minWidth = (imgWidth < T.imgWidth) ? imgWidth : T.imgWidth;
     int minHeight = (imgHeight < T.imgHeight) ? imgHeight : T.imgHeight;
 
-    for ( int y = 0; y < minHeight; y++ ) {
-        for ( int x = 0; x < minWidth; x++ ) {
+    for ( long y = 0; y < minHeight; y++ ) {
+        for ( long x = 0; x < minWidth; x++ ) {
             setColor( x, y, T.sampleColor( x, y ) );
         }
     }
@@ -682,8 +684,8 @@ void GvsChannelImg2D :: clear() {
 
 
 void GvsChannelImg2D :: clear ( int left, int bottom, int right, int top ) {
-    for (int x=left; x<=right; x++) {
-        for (int y=bottom; y<top; y++) {
+    for (long x=left; x<=right; x++) {
+        for (long y=bottom; y<top; y++) {
             setColor(x,y,GvsColor(0.0));
         }
     }
@@ -726,8 +728,8 @@ void GvsChannelImg2D :: blockToRow() {
         uchar* col = new uchar[imgNumChannels];
 
         uchar* newImgData = new uchar[imgWidth*imgHeight*imgNumChannels];
-        for (int i=0; i<imgHeight; i++) {
-            for (int j=0; j<imgWidth; j++) {
+        for (long i=0; i<imgHeight; i++) {
+            for (long j=0; j<imgWidth; j++) {
                 for (int k=0; k<imgNumChannels; k++) {
                     sampleChannels(j,i,col);
                     newImgData[imgNumChannels*(i*imgWidth+j)+k] = col[k];
@@ -750,8 +752,8 @@ void GvsChannelImg2D :: rowToBlock() {
     }
     else {
         uchar* newImgData = new uchar[imgWidth*imgHeight*imgNumChannels];
-        for (int i=0; i<imgHeight; i++) {
-            for (int j=0; j<imgWidth; j++) {
+        for (long i=0; i<imgHeight; i++) {
+            for (long j=0; j<imgWidth; j++) {
                 for (int k=0; k<imgNumChannels; k++) {
                     newImgData[k*imgWidth*imgHeight+(i*imgWidth+j)] = imgData[imgNumChannels*(i*imgWidth+j)+k];
                 }
@@ -881,9 +883,9 @@ std::cerr << "GvsChannelImg2D::WriteIntersecData() ... " << filename << std::end
         }
         else {
 
-            int pos;
-            for(int y=imgHeight-1; y>=0; y--) {
-                for(int x=0; x<imgWidth; x++) {
+            long pos;
+            for(long y=imgHeight-1; y>=0; y--) {
+                for(long x=0; x<imgWidth; x++) {
                     pos = y*imgWidth+x;
                     fwrite((void*)imgIntersecData[pos].pos,sizeof(double),4,fptr);
 

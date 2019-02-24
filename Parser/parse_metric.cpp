@@ -37,7 +37,8 @@ extern std::map<std::string,GvsTypeID>  gpTypeID;
  */
 pointer gvsP_init_metric (scheme *sc, pointer args)
 {
-    m4d::MetricDatabase* database = m4d::MetricDatabase::getInstance();
+    m4d::MetricDatabase md;
+
 #ifdef GVS_VERBOSE
     std::cerr << "\n..........gvsP_init_metric..........\n";
 #endif
@@ -59,7 +60,7 @@ pointer gvsP_init_metric (scheme *sc, pointer args)
         scheme_error("init-metric: type is missing!");
     }
 
-    m4d::enum_metric i = database->getMetricNr(metricName.c_str());
+    m4d::enum_metric i = md.getMetricNr(metricName.c_str());
     bool metricFound = (i!=m4d::enum_metric_unknown);
     if (!metricFound) {
         fprintf(stderr,"metric not available!\n");
@@ -70,11 +71,11 @@ pointer gvsP_init_metric (scheme *sc, pointer args)
 #ifdef GVS_VERBOSE
     printf("\n-->Initialize metric...\n");
 #endif
-    m4d::Metric* cnMetric;
+    m4d::Metric* cnMetric = nullptr;
     if (metricFound) {
-        cnMetric = database->getMetric(i);
+        cnMetric = md.getMetric(i);
     }
-    Gvsm4dMetricDummy* currMetric = new  Gvsm4dMetricDummy( cnMetric );
+    Gvsm4dMetricDummy* currMetric = new Gvsm4dMetricDummy( cnMetric );
 
     // Determine number of metric parameters
     int numParam = currMetric->m4dMetric->getNumParams();

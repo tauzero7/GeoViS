@@ -183,10 +183,10 @@ bool GvsPngIO::writeChannelImg( GvsChannelImg2D& chanImg, const char *filename )
 
     GvsColor col;
     unsigned char** row_pointers = new unsigned char*[chanImg.height()];
-    for( int i=0; i<chanImg.height(); i++) {
+    for( long i=0; i<chanImg.height(); i++) {
         row_pointers[i] = new unsigned char[chanImg.width()*numChannels];
         unsigned char* rp = row_pointers[i];
-        for( int j=0; j<chanImg.width(); j++) {
+        for( long j=0; j<chanImg.width(); j++) {
             col = chanImg.sampleColor(j,i);
             *(rp++) = static_cast<unsigned char>(col.red*255.0);
             *(rp++) = static_cast<unsigned char>(col.green*255.0);

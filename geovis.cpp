@@ -26,7 +26,7 @@
 #include "Utils/GvsLog.h"
 
 #ifndef _WIN32
-GvsLog& LOG = GvsLog::instance();
+static GvsLog& LOG = GvsLog::instance();
 #else
 m4d::MetricDatabase* m4d::MetricDatabase::m_instance = nullptr;
 #endif
@@ -83,19 +83,19 @@ int main(int argc, char* argv[]) {
     GvsDevice device;
     parser->getDevice(&device,0);
     
-    if (device.camera->isStereoCam() && parser->getNumDevices()>1) {
-        parser->getDevice(&device,2*devNum+0);
+    if (device.camera->isStereoCam() && parser->getNumDevices() > 1) {
+        parser->getDevice(&device, static_cast<unsigned int>(2*devNum+0));
         device.makeChange();
         //device.Print();
         renderDevice(&device,outFileName);
         
-        parser->getDevice(&device,2*devNum+1);
+        parser->getDevice(&device, static_cast<unsigned int>(2*devNum+1));
         device.makeChange();
         //device.Print();
         renderDevice(&device,outFileName);
     }
     else {
-        parser->getDevice(&device,devNum);
+        parser->getDevice(&device, static_cast<unsigned int>(devNum));
         device.makeChange();
         renderDevice(&device,outFileName);
     }

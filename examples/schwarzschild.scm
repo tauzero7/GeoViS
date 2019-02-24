@@ -26,6 +26,7 @@
 
 (define homedir (getenv "HOME"))
 (define background_image_name (string-append homedir "/local/Texturen/MilkyWay/eso0932a2.png"))
+;(define background_image_name (string-append homedir "/local/Texturen/Sonstige/mosaic_135.png"))
 ;(define background_image_name "examples/eso0932a.tif")
 
 (define r_obs 30.0 )
@@ -55,10 +56,12 @@
              `(dir #( 0.0 1.0 0.0) )
              '(vup #( 0.0 0.0 1.0) )
              `(fov ,(vector fov fov ))
-             '(res #(350 350))
-             ;'(res #(50 50))
-             ;'(filter "FilterRGB")
-             '(filter "FilterRGBIntersec")
+             ;'(res #(8192 8192))
+             ;'(res #(2048 2048))
+             ;'(res #(350 350))
+             '(res #(50 50))
+             '(filter "FilterRGB")
+             ;'(filter "FilterRGBIntersec")
              '(id "cam")
 )
 

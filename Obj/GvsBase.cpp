@@ -539,7 +539,7 @@ Gvsm4dMetricDummy::Gvsm4dMetricDummy (m4d::Metric* cMetric) {
 }
 
 int Gvsm4dMetricDummy::SetParam( std::string pName, double val ) {
-    bool isOkay = m4dMetric->setParam(pName, val);
+    bool isOkay = m4dMetric->setParam(pName.c_str(), val);
     if (isOkay) {
         return gvsSetParamAdjustTetrad;
     }
@@ -548,7 +548,7 @@ int Gvsm4dMetricDummy::SetParam( std::string pName, double val ) {
 
 
 bool Gvsm4dMetricDummy::GetParam( std::string pName, double &val ) {
-    return m4dMetric->getParam(pName, val);
+    return m4dMetric->getParam(pName.c_str(), val);
 }
 
 void Gvsm4dMetricDummy::Print( FILE* fptr ) {

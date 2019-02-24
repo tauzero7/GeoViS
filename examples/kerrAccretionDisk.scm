@@ -54,7 +54,7 @@
              `(dir ,(vector (cos (* vdir DEG_TO_RAD)) (sin (* vdir DEG_TO_RAD)) 0.0) )
              '(vup #( 0.0 0.0 1.0) )
              `(fov ,(vector fview fview))
-             '(res #(100 100))
+             '(res #(300 300))
              '(filter "FilterRGB")
              '(id "cam1")
 )

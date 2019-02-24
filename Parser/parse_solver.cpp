@@ -87,11 +87,11 @@ pointer gvsP_init_solver (scheme *sc, pointer args) {
     args = gvsParser->parse(args);
     gvsParser->testParamNames("init-solver");
 
-    GvsGeodSolver* currSolver = NULL;
-    m4d::Metric*   currMetric = NULL;
+    GvsGeodSolver* currSolver = nullptr;
+    m4d::Metric*   currMetric = nullptr;
 
     currMetric = readMetric("init-solver: ",gvsParser);
-    if (currMetric==NULL) {
+    if (currMetric == nullptr) {
         exit(-1);
     }
 
@@ -100,8 +100,10 @@ pointer gvsP_init_solver (scheme *sc, pointer args) {
         scheme_error("init-solver: type is missing!");
     }
 
-    m4d::IntegratorDatabase* IntDB = m4d::IntegratorDatabase::getInstance();
-    m4d::enum_integrator solverID = IntDB->getIntegratorNr(solverName.c_str());
+    //m4d::IntegratorDatabase* IntDB = m4d::IntegratorDatabase::getInstance();
+    m4d::IntegratorDatabase intDB;
+
+    m4d::enum_integrator solverID = intDB.getIntegratorNr(solverName.c_str());
     if (solverID==m4d::gsUnknown) scheme_error("Solver is not in the m4d database!");
     
     // Initialize solver

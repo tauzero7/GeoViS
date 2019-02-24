@@ -92,11 +92,11 @@ bool GvsDevice::makeChange() {
         int setHint = gvsSetParamNone;
         switch (mChangeObj[i]->type) {
             case gvsDT_INT: {
-                setHint = (mChangeObj[i]->objectPtr)->SetParam(mChangeObj[i]->paramName,*(int*)mChangeObj[i]->val);
+                setHint = (mChangeObj[i]->objectPtr)->SetParam(mChangeObj[i]->paramName,*static_cast<int*>(mChangeObj[i]->val));
                 break;
             }
             case gvsDT_DOUBLE: {
-                setHint = (mChangeObj[i]->objectPtr)->SetParam(mChangeObj[i]->paramName,*(double*)mChangeObj[i]->val);
+                setHint = (mChangeObj[i]->objectPtr)->SetParam(mChangeObj[i]->paramName,*static_cast<double*>(mChangeObj[i]->val));
                 break;
             }
             case gvsDT_VEC2: {
@@ -112,11 +112,11 @@ bool GvsDevice::makeChange() {
                 break;
             }
             case gvsDT_MAT2D: {
-                setHint = (mChangeObj[i]->objectPtr)->SetParam(mChangeObj[i]->paramName,*(m4d::Matrix<double,2,3>*)mChangeObj[i]->val);
+                setHint = (mChangeObj[i]->objectPtr)->SetParam(mChangeObj[i]->paramName,*static_cast<m4d::Matrix<double,2,3>*>(mChangeObj[i]->val));
                 break;
             }
             case gvsDT_MAT3D: {
-                setHint = (mChangeObj[i]->objectPtr)->SetParam(mChangeObj[i]->paramName,*(m4d::Matrix<double,3,4>*)mChangeObj[i]->val);
+                setHint = (mChangeObj[i]->objectPtr)->SetParam(mChangeObj[i]->paramName,*static_cast<m4d::Matrix<double,3,4>*>(mChangeObj[i]->val));
                 break;
             }
             case gvsDT_IVEC2: {
@@ -261,15 +261,15 @@ void GvsDevice::Print( FILE* fptr ) {
                 break;
             }
             case gvsDT_INT: {
-                LOG.printf("%d\n",(int)(*(int*)(mChangeObj[i]->val)));
+                LOG.printf("%d\n",(*static_cast<int*>(mChangeObj[i]->val)));
                 break;
             }
             case gvsDT_FLOAT: {
-                LOG.printf("%f\n",(float)(*(float*)(mChangeObj[i]->val)));
+                LOG.printf("%f\n",static_cast<double>((*static_cast<float*>(mChangeObj[i]->val))));
                 break;
             }
             case gvsDT_DOUBLE: {
-                LOG.printf("%f\n",(double)(*(double*)(mChangeObj[i]->val)));
+                LOG.printf("%f\n",(*static_cast<double*>(mChangeObj[i]->val)));
                 break;
             }
             case gvsDT_VEC2: {

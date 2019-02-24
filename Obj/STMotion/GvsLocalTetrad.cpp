@@ -34,8 +34,8 @@ GvsLocalTetrad :: GvsLocalTetrad ( ) {
     pos = m4d::vec4();
     vel = m4d::vec4(1.0,0.0,0.0,0.0);
 
-    locTetradMetric = NULL;
-    stBoundBox = NULL;
+    locTetradMetric = nullptr;
+    stBoundBox = nullptr;
 
     AddParam("pos",gvsDT_VEC4);
     AddParam("e0",gvsDT_VEC4);
@@ -911,7 +911,7 @@ GvsLocalTetrad :: printP( ) const
 
 void GvsLocalTetrad::Print( FILE* fptr  ) {
     fprintf(fptr,"LocalTetrad {\n");
-    fprintf(fptr,"\tmetric:   %s\n",locTetradMetric->getMetricName().c_str());
+    fprintf(fptr,"\tmetric:   %s\n",locTetradMetric->getMetricName());
     fprintf(fptr,"\tpropTime: %f\n",mTau);
     fprintf(fptr,"\tpos:      ");pos.printS(fptr);
     fprintf(fptr,"\tvel:      ");vel.printS(fptr);
@@ -928,6 +928,7 @@ void GvsLocalTetrad::Print( FILE* fptr  ) {
 #endif
     fprintf(fptr,"}\n\n");
 }
+
 
 void GvsLocalTetrad::printS( std::ostream &os ) {
     os << mTau << " \t";
