@@ -13,16 +13,21 @@
 (define incl  90.0 )
 (define fview 45.0 )
 
-;(define imageRes #(100 100))
-(define imageRes #(512 512))
+;(define imageRes #(128 128))
+;(define imageRes #(512 512))
+(define imageRes #(1024 1024))
 
-(define numImages 2)
+(define fps 30)
+(define numImages (* 18 fps))
 
 (define mass_min 0.001)
-(define mass_max 1.01)
+(define mass_max 1.005)
 
 (define radius_min 2.0)
-(define radius_max 5.0)
+(define radius_max 6.0)
+
+(define phi_min -20.0)
+(define phi_max 70.0)
 
 (define xStep (/ 1.0 (- numImages 1)))
 
@@ -83,7 +88,7 @@
 
 ;; ---- Projektor ----
 (init-projector '(localTetrad "locTedObs")
-                '(color #(0.1 0.0 0.0))
+                '(color #(0.0 0.0 0.0))
                 '(id "proj")
 )
 
@@ -166,9 +171,11 @@
     (define x (smoothstep t))
     (define nmass (interpolate x mass_min mass_max))
     (define nrad  (interpolate x radius_max radius_min))            
+    (define nphi  (interpolate x phi_min phi_max))
     (init-device '(type "standard")
                  '(obj "scene")
                  '(camera "domecam")
+                 `(setparam ("locTedObs" "pos" ,(vector 0.0 r_obs (* incl DEG_TO_RAD) (* nphi DEG_TO_RAD))))
                  `(setparam ("bgimage" "transform" ,(rotate-obj "Z" 35.0 (rotate-obj "X" 30.0))))
                  `(setparam ("star" "axlen" ,(vector nrad nrad nrad)))
                  `(setparam ("metric" "mass" ,nmass))
