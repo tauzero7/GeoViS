@@ -107,7 +107,8 @@ public:
     GvsStMotion*      getMotion    ( unsigned int k = 0 );
 
 protected:
-    std::string  getFullPathname();
+    std::string getFilepath(std::string& filename);
+    std::string getFullPathname();
 };
 
 

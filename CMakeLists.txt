@@ -1,5 +1,5 @@
 
-cmake_minimum_required(VERSION 2.8.1)
+cmake_minimum_required(VERSION 3.3)
 project(GeoViSM4D)
 
 set(CMAKE_VERBOSE_MAKEFILE OFF)
@@ -98,22 +98,29 @@ endif(WIN32)
 # Depending on the image formats available
 add_definitions( -DHAVE_PPM )
 if (TIFF_AVAILABLE)
-    include_directories(${TIFF_INC_DIR}/include)
+    include_directories(${TIFF_INC_DIR})
 	add_definitions( -DHAVE_LIBTIFF )
 endif()
 if (PNG_AVAILABLE)
-    include_directories(${PNG_INC_DIR}/include)
+    include_directories(${PNG_INC_DIR})
 	add_definitions( -DHAVE_LIBPNG )
 endif()
 
 
-set(BITS 32)
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  set(BITS 64)
-endif()
+# ---------------------------------------------
+#  architecture
+# ---------------------------------------------
+set(ARCHITECTURE  "64"  CACHE  STRING  "Set architexture (32 or 64)")
+set_property(CACHE ARCHITECTURE  PROPERTY  STRINGS  64  32)
+
+# ---------------------------------------------
+#  Build type
+# ---------------------------------------------
+set(CMAKE_BUILD_TYPE  "Debug"  CACHE STRING "Debug type")
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS  Debug  Release)
 
 set(DAR "")
-if(CMAKE_BUILD_TYPE MATCHES "debug" OR CMAKE_BUILD_TYPE MATCHES "DEBUG")
+if(CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "DEBUG")
     set(DAR "d")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -DDEBUG -D_DEBUG -ggdb -DGVS_VERBOSE")
     add_definitions(-pedantic)

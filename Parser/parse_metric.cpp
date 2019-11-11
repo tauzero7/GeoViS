@@ -60,8 +60,8 @@ pointer gvsP_init_metric (scheme *sc, pointer args)
         scheme_error("init-metric: type is missing!");
     }
 
-    m4d::enum_metric i = md.getMetricNr(metricName.c_str());
-    bool metricFound = (i!=m4d::enum_metric_unknown);
+    m4d::MetricList::enum_metric i = md.getMetricNr(metricName.c_str());
+    bool metricFound = (i!=m4d::MetricList::enum_metric_unknown);
     if (!metricFound) {
         fprintf(stderr,"metric not available!\n");
         exit(0);

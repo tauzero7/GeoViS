@@ -49,7 +49,7 @@ GvsSceneObj* GvsCompoundOctreeObj::getObj( unsigned int nr ) const {
     if (nr<mNumObjects) {
         return objList->getObj(nr);
     }
-    return NULL;
+    return nullptr;
 }
 
 unsigned int GvsCompoundOctreeObj::getNumObjs() const {
@@ -57,12 +57,12 @@ unsigned int GvsCompoundOctreeObj::getNumObjs() const {
 }
 
 bool GvsCompoundOctreeObj::testIntersection(GvsRay &ray) {
-    register int i;
+    int i;
     GvsSceneObj* obj;
     bool intersecFound = false;
     for (i = 0; i < (objList->length()); i++ ) {
         obj = objList->getObj(i);
-        if (obj!=NULL) {
+        if (obj!=nullptr) {
             bool result = obj->testIntersection(ray);
             intersecFound = intersecFound || result;
         }

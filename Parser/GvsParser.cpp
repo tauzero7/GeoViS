@@ -21,6 +21,10 @@
 #include <unistd.h>
 #endif
 
+#ifdef __APPLE__
+#include <mach-o/dyld.h>
+#endif
+
 #include "Dev/GvsDevice.h"
 #include "Parser/GvsParser.h"
 #include "Texture/GvsTexture.h"
@@ -77,7 +81,7 @@ GvsParser :: ~GvsParser()
  * @brief GvsParser::deleteAll
  */
 void GvsParser::deleteAll() {
-    register unsigned int i;
+    unsigned int i;
 
 #ifdef GVS_VERBOSE
     fprintf(stderr,"GvsParser: delete all cameras...\n");
@@ -99,9 +103,9 @@ void GvsParser::deleteAll() {
     fprintf(stderr,"GvsParser: delete all metrics...\n");
 #endif
     for (i=0;i<gpMetric.size();i++) {
-        if (gpMetric[i]!=NULL) {
+        if (gpMetric[i]!=nullptr) {
             delete gpMetric[i];
-            gpMetric[i] = NULL;
+            gpMetric[i] = nullptr;
         }
     }
     gpMetric.clear();
@@ -110,9 +114,9 @@ void GvsParser::deleteAll() {
     fprintf(stderr,"GvsParser: delete all solvers...\n");
 #endif
     for (i=0;i<gpSolver.size();i++) {
-        if (gpSolver[i]!=NULL) {
+        if (gpSolver[i]!=nullptr) {
             delete gpSolver[i];
-            gpSolver[i] = NULL;
+            gpSolver[i] = nullptr;
         }
     }
     gpSolver.clear();
@@ -121,9 +125,9 @@ void GvsParser::deleteAll() {
     fprintf(stderr,"GvsParser: delete all tetrads...\n");
 #endif
     for (i=0;i<gpLocalTetrad.size();i++) {
-        if (gpLocalTetrad[i]!=NULL) {
+        if (gpLocalTetrad[i]!=nullptr) {
             delete gpLocalTetrad[i];
-            gpLocalTetrad[i] = NULL;
+            gpLocalTetrad[i] = nullptr;
         }
     }
     gpLocalTetrad.clear();
@@ -132,9 +136,9 @@ void GvsParser::deleteAll() {
     fprintf(stderr,"GvsParser: delete all local objects...\n");
 #endif
     for (i=0;i<gpLocalCompObj.size();i++) {
-        if (gpLocalCompObj[i]!=NULL) {
+        if (gpLocalCompObj[i]!=nullptr) {
             delete gpLocalCompObj[i];
-            gpLocalCompObj[i] = NULL;
+            gpLocalCompObj[i] = nullptr;
         }
     }
     gpLocalCompObj.clear();
@@ -143,9 +147,9 @@ void GvsParser::deleteAll() {
     fprintf(stderr,"GvsParser: delete all motions...\n");
 #endif
     for (i=0;i<gpMotion.size();i++) {
-        if (gpMotion[i]!= NULL) {
+        if (gpMotion[i]!= nullptr) {
             delete gpMotion[i];
-            gpMotion[i] = NULL;
+            gpMotion[i] = nullptr;
         }
     }
     gpMotion.clear();
@@ -162,9 +166,9 @@ void GvsParser::deleteAll() {
     fprintf(stderr,"GvsParser: delete all scene objects...\n");
 #endif
     for (i=0;i<gpSceneObj.size();i++) {
-        if (gpSceneObj[i]!=NULL) {
+        if (gpSceneObj[i]!=nullptr) {
             delete gpSceneObj[i];
-            gpSceneObj[i] = NULL;
+            gpSceneObj[i] = nullptr;
         }
     }
     gpSceneObj.clear();
@@ -173,9 +177,9 @@ void GvsParser::deleteAll() {
     fprintf(stderr,"GvsParser: delete all shaders...\n");
 #endif
     for (i=0;i<gpShader.size();i++) {
-        if (gpShader[i]!=NULL) {
+        if (gpShader[i]!=nullptr) {
             delete gpShader[i];
-            gpShader[i] = NULL;
+            gpShader[i] = nullptr;
         }
     }
     gpShader.clear();
@@ -184,9 +188,9 @@ void GvsParser::deleteAll() {
     fprintf(stderr,"GvsParser: delete all textures...\n");
 #endif
     for (i=0;i<gpTexture.size();i++) {
-        if (gpTexture[i]!=NULL) {
+        if (gpTexture[i]!=nullptr) {
             delete gpTexture[i];
-            gpTexture[i] = NULL;
+            gpTexture[i] = nullptr;
         }
     }
     gpTexture.clear();
@@ -196,16 +200,16 @@ void GvsParser::deleteAll() {
 #endif
     for (i=0;i<gpLightMgr.size();i++) {
         delete gpLightMgr[i];
-        gpLightMgr[i] = NULL;
+        gpLightMgr[i] = nullptr;
     }
     gpLightMgr.clear();
 
     /*
     fprintf(stderr,"GvsParser: delete all devices...\n");
     for (i=0;i<gpDevice.size();i++) {
-        if (gpDevice[i]!=NULL) {
+        if (gpDevice[i]!=nullptr) {
             delete gpDevice[i];
-            gpDevice[i] = NULL;
+            gpDevice[i] = nullptr;
         }
     }
     gpDevice.clear();
@@ -322,7 +326,7 @@ GvsParser :: getMotion ( unsigned int k )
  * @return
  */
 int GvsParser::getNumDevices() const {
-    return (int)gpDevice.size();
+    return static_cast<int>(gpDevice.size());
 }
 
 /**
@@ -332,10 +336,11 @@ int GvsParser::getNumDevices() const {
  */
 void GvsParser::getDevice( GvsDevice *device, unsigned int k ) {
     if (k >= gpDevice.size()) {
-        fprintf(stderr,"Error: GvsParser::getDevice(): device '%d' exceeds number of available devices '%d'! Exiting now.\n",k,(int)gpDevice.size());
+        fprintf(stderr,"Error: GvsParser::getDevice(): device '%d' exceeds number of available devices '%d'! Exiting now.\n",
+                k, static_cast<int>(gpDevice.size()));
         exit(-1);
     }
-    if (device==NULL) {
+    if (device==nullptr) {
         fprintf(stderr,"Error: GvsParser::getDevice(): No device set! Exiting now.\n");
         exit(-1);
     }
@@ -392,7 +397,7 @@ GvsParser :: initStandard ( GvsDevice *device ) {
     //device->spacetime = getSpacetime();
     //  device->solver = getSolver();
 
-    device->sceneGraph = getSceneObj((int)gpSceneObj.size()-1);
+    device->sceneGraph = getSceneObj(static_cast<int>(gpSceneObj.size())-1);
     device->lightSrcMgr = getLightMgr();
 
     //device->Print();
@@ -406,7 +411,7 @@ void GvsParser::read_scene(const char* name) {
     FILE *fin;
     FILE *fscm;
     std::string file_name = getFullPathname() + "./Parser/init.scm";
-    //std::cerr << file_name << std::endl;
+    std::cerr << file_name << std::endl;
     if (!scheme_init(&sc)) {
         fprintf(stderr,"Could not initialize!\n");
         exit(0);
@@ -421,7 +426,7 @@ void GvsParser::read_scene(const char* name) {
 #else
     fin=fopen(file_name.c_str(),"r");
 #endif
-    if (fin==0) {
+    if (fin == nullptr) {
         fprintf(stderr,"Could not open file %s\n",file_name.c_str());
         exit(-1);
     } else {
@@ -501,7 +506,7 @@ void GvsParser::read_scene(const char* name) {
     fscm = fopen(file_name.c_str(), "r");
 #endif
 
-    if ((fscm==0) || (file_name=="") ) {
+    if ((fscm == nullptr) || (file_name=="") ) {
         fprintf(stderr,"GvsParser :: Could not open file %s\n",file_name.c_str());
         exit(0);
     } else {
@@ -512,52 +517,75 @@ void GvsParser::read_scene(const char* name) {
     fclose(fin);
 }
 
-#ifdef _WIN32
 std::string GvsParser::getFullPathname() {
-    char *exeDirName = nullptr;
+
+#ifdef _WIN32
+    const unsigned int nSize = MAX_PATH;
+#else
     const unsigned int nSize = 0xFFFF;
-    char *cwd = new char[nSize];
-	/*
-    if (::GetModuleFileNameA(NULL, cwd, nSize)
-        == ERROR_INSUFFICIENT_BUFFER) {
+#endif
+
+    char* cwd = new char[nSize];
+#ifdef _WIN32
+    if (::GetModuleFileNameA(nullptr, cwd, nSize)
+            == ERROR_INSUFFICIENT_BUFFER) {
         cwd[0] = 0;
-    }
-    else {
+    } else {
         if (::GetLastError() != ERROR_SUCCESS) {
             cwd[0] = 0;
         }
     }
-    auto pos = strrchr(cwd, '\\');
-    if (*pos != 0) {
-        *(pos+1) = 0;
+#elif defined(__APPLE__)
+    char apath[1024];
+    uint32_t asize = sizeof(apath);
+    if (_NSGetExecutablePath(apath, &asize) == 0) {
+        realpath(apath, cwd);
     }
-    int cwdlen = static_cast<int>(strlen(cwd)) + 1;
-    exeDirName = new char[cwdlen];
-
-    strcpy(exeDirName, cwd);
-    delete [] cwd;
-    return std::string(exeDirName);
-	*/
-	return std::string(".");
-}
+    else {
+        cwd[0] = 0;
+    }
 #else
-std::string GvsParser::getFullPathname() {
-    std::string path;
-    pid_t pid = getpid();
-    char buf[20] = {0};
-    sprintf(buf,"%d",pid);
-    std::string _link = "/proc/";
-    _link.append(buf);
-    _link.append("/exe");
-    char proc[512];
-    int ch = readlink(_link.c_str(),proc,512);
-    if (ch != 1) {
-        proc[ch] = 0;
-        path = proc;
-        std::string::size_type t = path.find_last_of("/");
-        path = path.substr(0,t);
-        return path + std::string("/");
+    char *tmp = new char[nSize];
+    sprintf(tmp, "/proc/%d/exe", getpid());
+    ssize_t size = readlink(tmp, cwd, nSize - 1);
+    if (size >= 0) {
+        cwd[size] = 0;
+    } else {
+        cwd[0] = 0;
     }
-    return std::string();
+    delete [] tmp;
+#endif
+
+
+    std::string fname = std::string(cwd);
+    return getFilepath(fname);
 }
-#endif //_WIN32
+
+
+
+std::string GvsParser::getFilepath(std::string &filename) {
+    std::string mpath = std::string();
+
+#ifdef _WIN32
+    size_t offset = fname.rfind("\\");
+    if (offset != std::string::npos) {
+        mpath = fname.substr(0, offset) + "\\";
+    }
+    else {
+        offset = fname.rfind("/");
+        if (offset != std::string::npos) {
+            mpath = fname.substr(0, offset) + "/";
+        }
+    }
+#else
+    size_t offset = filename.rfind("/");
+    if (offset == std::string::npos) {
+        mpath = std::string("");
+    }
+    else {
+        mpath = filename.substr(0, offset) + "/";
+    }
+#endif
+
+    return mpath;
+}

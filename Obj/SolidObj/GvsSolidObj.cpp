@@ -37,7 +37,7 @@ bool GvsSolidObj::testIntersection( GvsRay &) {
     return false;
 }
 
-bool GvsSolidObj::testLocalIntersection( GvsRay &, const int , const int ,
+bool GvsSolidObj::testLocalIntersection(GvsRay &, const int ,
                                          GvsLocalTetrad* , GvsLocalTetrad* ,
                                          const m4d::vec4 , const m4d::vec4 )
 {

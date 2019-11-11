@@ -26,10 +26,10 @@ GvsCompoundObj :: GvsCompoundObj() : GvsSceneObj() {
 }
 
 GvsCompoundObj::~GvsCompoundObj() {
-    if (objList != NULL) {
+    if (objList != nullptr) {
         objList->clear();
         delete objList;
-        objList = NULL;
+        objList = nullptr;
     }
     mNumObjects = 0;
 }
@@ -46,7 +46,7 @@ GvsSceneObj* GvsCompoundObj::getObj( unsigned int nr ) const {
     if (nr<mNumObjects) {
         return objList->getObj(nr);
     }
-    return NULL;
+    return nullptr;
 }
 
 unsigned int GvsCompoundObj::getNumObjs() const {
@@ -54,12 +54,12 @@ unsigned int GvsCompoundObj::getNumObjs() const {
 }
 
 bool GvsCompoundObj::testIntersection(GvsRay &ray) {
-    register int i;
+    int i;
     GvsSceneObj* obj;
     bool intersecFound = false;
     for (i = 0; i < (objList->length()); i++ ) {
         obj = objList->getObj(i);
-        if (obj!=NULL) {
+        if (obj!=nullptr) {
             bool result = obj->testIntersection(ray);
             intersecFound = intersecFound || result;
         }
@@ -79,7 +79,7 @@ void GvsCompoundObj::Print( FILE* fptr ) {
     fprintf(fptr,"\t# objects: %d\n",mNumObjects);
     for(unsigned int i=0; i<mNumObjects; i++) {
         obj = getObj(i);
-        if (obj!=NULL) {
+        if (obj!=nullptr) {
             obj->Print(fptr);
         }
     }
@@ -93,7 +93,7 @@ void GvsCompoundObj::transform (const m4d::Matrix<double,3,4> &mat ) {
         //std::cerr << i << std::endl;
         //objList->getObj(i)->Print();
         obj = objList->getObj(i);
-        if (obj!=NULL) {
+        if (obj!=nullptr) {
             obj->transform(mat);
         }
     }

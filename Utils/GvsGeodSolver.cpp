@@ -148,13 +148,13 @@ double GvsGeodSolver::getMaxStepsize() const {
 
 
 int GvsGeodSolver::startConditionLocal( const m4d::vec4* , m4d::vec4 &dir ) {
-    register int l;
+    int l;
     double norm,d;
     // zeit- und lichtartige Geodaeten
     if ( (mGeodType != m4d::enum_geodesic_spacelike) ) {
 
         norm = dir[1]*dir[1] + dir[2]*dir[2] + dir[3]*dir[3];
-        if ((mGeodType==m4d::enum_geodesic_lightlike))  // --- lichtartige Geodaeten
+        if (mGeodType==m4d::enum_geodesic_lightlike)  // --- lichtartige Geodaeten
         {
             if (norm <= 0.0) {
                 std::cerr << "Error: no direction!\n";
@@ -181,7 +181,7 @@ int GvsGeodSolver::startConditionLocal( const m4d::vec4* , m4d::vec4 &dir ) {
             }
         }
 
-        if ((mTimeDir==m4d::enum_time_forward))
+        if (mTimeDir==m4d::enum_time_forward)
             dir[0] = d;
         else
             dir[0] = -d;
@@ -226,7 +226,7 @@ int GvsGeodSolver::startCondition(const double pos[], double dir[] ) {
 
     // std::cerr << "GvsGeodSolverBase::startCondition()\n";
 
-    register int i,j,l;
+    int i,j,l;
     double a,b,c,norm;
     double u1,u2,w;
 
@@ -239,7 +239,7 @@ int GvsGeodSolver::startCondition(const double pos[], double dir[] ) {
     {
 
         // Normalizes the spatial coordinates to unit length if null geodesic
-        if ((mGeodType==m4d::enum_geodesic_lightlike))
+        if (mGeodType==m4d::enum_geodesic_lightlike)
         {
             norm = dir[1]*dir[1] + dir[2]*dir[2] + dir[3]*dir[3];
 
@@ -300,7 +300,7 @@ int GvsGeodSolver::startCondition(const double pos[], double dir[] ) {
         //cerr << "u1,u2: " << u1 << " " << u2 << std::endl;
 
 
-        if ((mTimeDir==m4d::enum_time_forward))
+        if (mTimeDir==m4d::enum_time_forward)
             w = GVS_MAX(u1,u2);
         else
             w = GVS_MIN(u1,u2);
@@ -327,7 +327,7 @@ double GvsGeodSolver::calcNormCondition ( const m4d::vec4 pos, const m4d::vec4 d
 
 
 double GvsGeodSolver::calcNormCondition ( const double pos[], const double dir[] ) {
-    register int i,j;
+    int i,j;
     mMetric->calculateMetric(pos);
 
     double sum = 0.0;

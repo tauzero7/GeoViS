@@ -210,11 +210,11 @@ void GvsDevice::clearChangeObj() {
 
 
 void GvsDevice :: clear ( void ) {
-    camera      = NULL;
-    projector   = NULL;
-    metric      = NULL;
-    lightSrcMgr = NULL;
-    sceneGraph  = NULL;
+    camera      = nullptr;
+    projector   = nullptr;
+    metric      = nullptr;
+    lightSrcMgr = nullptr;
+    sceneGraph  = nullptr;
 }
 
 

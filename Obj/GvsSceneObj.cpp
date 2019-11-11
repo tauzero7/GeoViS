@@ -21,25 +21,25 @@
 
 GvsSceneObj::GvsSceneObj() {
     mObjType = local;
-    mMetric  = NULL;
+    mMetric  = nullptr;
     mChart   = 0;
-    stMotion  = NULL;
+    stMotion  = nullptr;
     haveMotion = false;
 }
 
 GvsSceneObj::GvsSceneObj(GvsObjType oTyp) {
     mObjType = oTyp;
-    mMetric  = NULL;
+    mMetric  = nullptr;
     mChart   = 0;
 
-    stMotion  = NULL;
+    stMotion  = nullptr;
     haveMotion = false;
 }
 
 GvsSceneObj::~GvsSceneObj()
 {
-    mMetric = NULL;
-    stMotion = NULL;
+    mMetric = nullptr;
+    stMotion = nullptr;
 }
 
 void GvsSceneObj :: setObjType(GvsObjType oTyp) {
@@ -69,7 +69,7 @@ m4d::Metric* GvsSceneObj::getMetric () const {
 
 
 void GvsSceneObj :: setMotion ( GvsStMotion *motion ) {
-    if (stMotion!=NULL) delete stMotion;
+    if (stMotion!=nullptr) delete stMotion;
     stMotion = motion;
     haveMotion = true;
 }

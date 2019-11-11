@@ -10,24 +10,24 @@
 ;;
 ;;    Observer
 ;;        radial position        r_obs = 15rs
-;;        
+;;
 ;;        pinhole camera ("cam") with field of view      'fov'
 ;;        panorama camera ("pancam") with field of view  360 x 120
 ;;        4pi camera ("skycam") with field of view       360 x 180
 ;;
-;;    The bounding box for the scene is given in the spacetime's 
+;;    The bounding box for the scene is given in the spacetime's
 ;;    intrinsic coordinates: (t,r,theta,phi). Here, only the radial
-;;    range is limited to 0 < r < 70. 
+;;    range is limited to 0 < r < 70.
 ;;
 ;;    You need a 4pi background texture, e.g. the Milky Way panorama
 ;;    by ESO/S.Brunier:
-;;    http://www.eso.org/public/germany/images/eso0932a/    
+;;    http://www.eso.org/public/germany/images/eso0932a/
 ;; ---------------------------------------------------------------------
 
 (define homedir (getenv "HOME"))
-(define background_image_name (string-append homedir "/local/Texturen/MilkyWay/eso0932a2.png"))
+;(define background_image_name (string-append homedir "/local/Texturen/MilkyWay/eso0932a2.png"))
 ;(define background_image_name (string-append homedir "/local/Texturen/Sonstige/mosaic_135.png"))
-;(define background_image_name "examples/eso0932a.tif")
+(define background_image_name "examples/eso0932a.png")
 
 (define r_obs 30.0 )
 (define fov   60.0 )
@@ -59,7 +59,7 @@
              ;'(res #(8192 8192))
              ;'(res #(2048 2048))
              ;'(res #(350 350))
-             '(res #(50 50))
+             '(res #(150 150))
              '(filter "FilterRGB")
              ;'(filter "FilterRGBIntersec")
              '(id "cam")
@@ -108,7 +108,7 @@
               '(e1  #(0.0  0  0  1) )
               '(e2  #(0.0 -1  0  0) )
               '(e3  #(0.0  0 -1  0) )
-              '(incoords #f) 
+              '(incoords #f)
               '(id  "locTedObs")
 )
 
@@ -151,4 +151,3 @@
              '(camera "cam")
              `(setparam ("metric" "mass" 0.5))
 )
-

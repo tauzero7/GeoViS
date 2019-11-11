@@ -238,7 +238,7 @@ GvsSolObjSpanList& GvsSolObjSpanList::operator=( const GvsSolObjSpanList& sl ) {
 GvsSolObjSpanList GvsSolObjSpanList::operator+( const GvsSolObjSpanList& rsl ) const {
     GvsSolObjSpanList slUnion( spanPtr + rsl.spanPtr );
 
-    register int i = 0, j = 0, k = 0;
+    int i = 0, j = 0, k = 0;
     while( i < spanPtr || j < rsl.spanPtr ) {
         if ( i < spanPtr && (j >= rsl.spanPtr || spanLo[i] < rsl.spanLo[j]) ) {
             slUnion.spanLo[k] = spanLo[i];
@@ -283,7 +283,7 @@ GvsSolObjSpanList GvsSolObjSpanList::operator+( const GvsSolObjSpanList& rsl ) c
 GvsSolObjSpanList GvsSolObjSpanList::operator*( const GvsSolObjSpanList& rsl ) const {
     GvsSolObjSpanList isect( spanPtr + rsl.spanPtr );
 
-    register int i = 0, j = 0, k = 0;
+    int i = 0, j = 0, k = 0;
     while( i < spanPtr && j < rsl.spanPtr ) {
         if ( spanLo[i] <= rsl.spanLo[j] ) {
             if ( spanHi[i] < rsl.spanLo[j] ) {

@@ -26,6 +26,7 @@ extern "C" {
 
 #include <iostream>
 #include <cstring>
+#include <stdio.h>
 #include <map>
 
 pointer gvsP_init_metric (scheme *sc, pointer args);

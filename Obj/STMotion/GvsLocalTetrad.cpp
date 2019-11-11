@@ -325,7 +325,7 @@ GvsLocalTetrad :: setAccel(const m4d::vec4 &a)
 void
 GvsLocalTetrad :: calcInvert ( void )
 {
-    register int i;
+    int i;
     m4d::mat4 mat;
     for (i=0;i<4;i++)
         mat.setRow(i,e[i]);
@@ -530,7 +530,7 @@ void GvsLocalTetrad :: adjustTetrad() {
    // e[0].print();
 
     // ganz miieser haeck
-    if (locTetradMetric->getMetricName()=="AlcubierreWarp")
+    if (strcmp(locTetradMetric->getMetricName(), "AlcubierreWarp") == 0)
     {
         m4d::vec4 lp = m4d::vec4(pos[0],pos[1],pos[2],pos[3]);
         m4d::vec4 b[4];

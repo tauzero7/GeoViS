@@ -9,9 +9,9 @@
 
 
 GvsSurfaceShader::GvsSurfaceShader() :
-    intersection(NULL),
-    matTexColor(NULL),
-    matNormalMap(NULL),
+    intersection(nullptr),
+    matTexColor(nullptr),
+    matNormalMap(nullptr),
     matAmbient(1.0),
     matDiffuse(0.0) {
 }
@@ -55,7 +55,7 @@ GvsColor GvsSurfaceShader :: getIncidentLight( GvsDevice* device, GvsRayVisual& 
 GvsColor  GvsSurfaceShader::reflArtifColor( GvsDevice* device, GvsRayVisual &ray ) {    
     // normal and direction are given in standard object system
     m4d::vec3 intersecNormal;
-    if (matNormalMap!=NULL) {
+    if (matNormalMap!=nullptr) {
         GvsColor nc = matNormalMap->sampleColor( ray.surfIntersec() );
         intersecNormal = -m4d::vec3( nc.red, nc.green, nc.blue ).getNormalized();
         //std::cerr << intersecNormal << std::endl;
@@ -75,14 +75,14 @@ GvsColor  GvsSurfaceShader::reflArtifColor( GvsDevice* device, GvsRayVisual &ray
 
 GvsColor GvsSurfaceShader::reflLightColor( GvsDevice* device, GvsRayVisual &ray ) {
     GvsColor outLight = GvsColor(0.0);
-    if (device->metric->getMetricName()!="Minkowski" ||
+    if (strcmp(device->metric->getMetricName(), "Minkowski") != 0 ||
             !device->lightSrcMgr->withShadowRays()) {
         return outLight;
     }
 
-    if (ray.surfIntersec().object()!=NULL) {
+    if (ray.surfIntersec().object()!=nullptr) {
         if (ray.surfIntersec().object()->getObjType()!=inCoords ||
-                ray.surfIntersec().object()->getMotion()!=NULL) {
+                ray.surfIntersec().object()->getMotion()!=nullptr) {
             return outLight;
         }
     }
@@ -91,7 +91,7 @@ GvsColor GvsSurfaceShader::reflLightColor( GvsDevice* device, GvsRayVisual &ray 
     m4d::vec4 isecPoint = ray.surfIntersec().point();
 
 
-    GvsLightSrc* light = NULL;
+    GvsLightSrc* light = nullptr;
     bool lightFound = false;
 
     for(int i=0; i<(device->lightSrcMgr->length()); i++) {
@@ -106,7 +106,7 @@ GvsColor GvsSurfaceShader::reflLightColor( GvsDevice* device, GvsRayVisual &ray 
             GvsRayVisual* eyeRay = new GvsRayVisual(device->projector->getRayGen());
             eyeRay->recalc( isecPoint, rayDir );
 
-            if (device->sceneGraph != NULL) {
+            if (device->sceneGraph != nullptr) {
                 // find closest intersection of the shadow ray with a scene object
                 if (!device->sceneGraph->testIntersection(*eyeRay)) {
                     outLight += light->color();
@@ -121,7 +121,7 @@ GvsColor GvsSurfaceShader::reflLightColor( GvsDevice* device, GvsRayVisual &ray 
 
 
 GvsColor GvsSurfaceShader::primitiveColor( GvsSurfIntersec& intersec ) const {
-    if (matTexColor != NULL) {
+    if (matTexColor != nullptr) {
         return matTexColor->sampleColor( intersec );
     }
     return RgbBlack;
@@ -131,7 +131,7 @@ GvsColor GvsSurfaceShader::primitiveColor( GvsSurfIntersec& intersec ) const {
 void GvsSurfaceShader::Print ( FILE* fptr ) {
     fprintf(fptr,"SurfaceShader {\n");
     fprintf(fptr,"\tobjcolor:  "); matTexColor->Print(fptr);
-    if (matNormalMap!=NULL) {
+    if (matNormalMap!=nullptr) {
         fprintf(fptr,"\tnormalmap: "); matNormalMap->Print(fptr);
     }
     fprintf(fptr,"\tambient:   %f\n",matAmbient);

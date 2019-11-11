@@ -34,7 +34,7 @@ class GvsSolidObj : public GvsSurface
 
     virtual bool testIntersection      ( GvsRay &ray ); 
     
-    virtual bool testLocalIntersection ( GvsRay &ray, const int startSeg, const int endSeg,
+    virtual bool testLocalIntersection ( GvsRay &ray, const int seg,
                                          GvsLocalTetrad* lt0, GvsLocalTetrad* lt1,
                                          const m4d::vec4 p0, const m4d::vec4 p1 );
 
