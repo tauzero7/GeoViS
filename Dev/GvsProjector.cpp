@@ -1,26 +1,13 @@
-// ---------------------------------------------------------------------
-//  Copyright (c) 2013-2014, Universitaet Stuttgart, VISUS, Thomas Mueller
-//
-//  This file is part of GeoViS.
-//
-//  GeoViS is free software: you can redistribute it and/or modify it
-//  under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  GeoViS is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with GeoViS.  If not, see <http://www.gnu.org/licenses/>.
-// ---------------------------------------------------------------------
-
+/**
+ * @file    GvsProjector.cpp
+ * @author  Thomas Mueller
+ *
+ *  This file is part of GeoViS.
+ */
 #include <iostream>
 
-#include "Dev/GvsProjector.h"
 #include "Dev/GvsDevice.h"
+#include "Dev/GvsProjector.h"
 #include "Obj/GvsSceneObj.h"
 #include "Ray/GvsRayGen.h"
 #include "Ray/GvsSurfIntersec.h"
@@ -32,135 +19,149 @@
 #include "Utils/GvsLog.h"
 extern GvsLog& LOG;
 
+GvsProjector ::GvsProjector()
+    : GvsBase()
+    , rayGen(nullptr)
+    , locTetrad(nullptr)
+    , stMotion(nullptr)
+{
 
-GvsProjector :: GvsProjector() : GvsBase(),
-    rayGen(NULL),
-    locTetrad(NULL),
-    stMotion(NULL)  {
-
-    GvsBase::AddParam("position",gvsDT_VEC4);
-    GvsBase::AddParam("actualpos",gvsDT_INT);
+    GvsBase::AddParam("position", gvsDT_VEC4);
+    GvsBase::AddParam("actualpos", gvsDT_INT);
     errorColor = GvsColor(0.0);
     constraintColor = GvsColor(0.0);
     breakDownColor = GvsColor(0.0);
 }
 
-GvsProjector :: GvsProjector( GvsRayGen* gen ) :
-    rayGen(gen),
-    locTetrad(NULL),
-    stMotion(NULL)  {
+GvsProjector ::GvsProjector(GvsRayGen* gen)
+    : rayGen(gen)
+    , locTetrad(nullptr)
+    , stMotion(nullptr)
+{
 
-    GvsBase::AddParam("position",gvsDT_VEC4);
-    GvsBase::AddParam("actualpos",gvsDT_INT);
-    errorColor  = GvsColor(0.0);
+    GvsBase::AddParam("position", gvsDT_VEC4);
+    GvsBase::AddParam("actualpos", gvsDT_INT);
+    errorColor = GvsColor(0.0);
     constraintColor = GvsColor(0.0);
     breakDownColor = GvsColor(0.0);
 }
 
-
-GvsProjector::~GvsProjector() {
-    rayGen    = NULL;
-    stMotion  = NULL;
-    locTetrad = NULL;
+GvsProjector::~GvsProjector()
+{
+    // nothing to delete
 }
 
-void GvsProjector :: setRayGen( GvsRayGen* gen ) {
+void GvsProjector ::setRayGen(GvsRayGen* gen)
+{
     rayGen = gen;
 }
 
-GvsRayGen* GvsProjector :: getRayGen() const {
+GvsRayGen* GvsProjector ::getRayGen() const
+{
     return rayGen;
 }
 
-GvsColor GvsProjector :: getBackgroundColor() const {
+GvsColor GvsProjector ::getBackgroundColor() const
+{
     return backgroundColor;
 }
 
-void GvsProjector :: setBackgroundColor( const GvsColor &backCol ) {
+void GvsProjector ::setBackgroundColor(const GvsColor& backCol)
+{
     backgroundColor = backCol;
 }
 
-GvsColor GvsProjector::getErrorColor() const {
+GvsColor GvsProjector::getErrorColor() const
+{
     return errorColor;
 }
 
-void GvsProjector::setErrorColor( const GvsColor &col ) {
+void GvsProjector::setErrorColor(const GvsColor& col)
+{
     errorColor = col;
 }
 
-GvsColor  GvsProjector::getConstraintColor() const {
+GvsColor GvsProjector::getConstraintColor() const
+{
     return constraintColor;
 }
 
-void GvsProjector::setConstraintColor( const GvsColor &col ) {
+void GvsProjector::setConstraintColor(const GvsColor& col)
+{
     constraintColor = col;
 }
 
-GvsColor GvsProjector::getBreakDownColor() const {
+GvsColor GvsProjector::getBreakDownColor() const
+{
     return breakDownColor;
 }
 
-void GvsProjector::setBreakDownColor( const GvsColor &col ) {
+void GvsProjector::setBreakDownColor(const GvsColor& col)
+{
     breakDownColor = col;
 }
 
-void GvsProjector :: setLocalTetrad( GvsLocalTetrad* lT) {
+void GvsProjector ::setLocalTetrad(GvsLocalTetrad* lT)
+{
     locTetrad = lT;
     locTetrad->transformTetrad(true);
 }
 
-GvsLocalTetrad* GvsProjector::getLocalTetrad() {
+GvsLocalTetrad* GvsProjector::getLocalTetrad()
+{
     return locTetrad;
 }
 
-
-void GvsProjector :: setPosition( const m4d::vec4 &pos ) {
-    assert(locTetrad!=NULL);
+void GvsProjector ::setPosition(const m4d::vec4& pos)
+{
+    assert(locTetrad != NULL);
     locTetrad->setPosition(pos);
     locTetrad->adjustTetrad();
-    GvsBase::SetParam("position",pos);
+    GvsBase::SetParam("position", pos);
 }
 
-m4d::vec4 GvsProjector :: getPosition( ) const {
-    assert(locTetrad!=NULL);
+m4d::vec4 GvsProjector ::getPosition() const
+{
+    assert(locTetrad != NULL);
     return locTetrad->getPosition();
 }
 
-
-void GvsProjector :: setMotion ( GvsStMotion* motion ) {
-    assert (motion != NULL);
-    stMotion  = motion;
+void GvsProjector ::setMotion(GvsStMotion* motion)
+{
+    assert(motion != NULL);
+    stMotion = motion;
     locTetrad = stMotion->getLocalTetrad(0);
 }
 
-
-GvsStMotion* GvsProjector :: getMotion() const {
+GvsStMotion* GvsProjector ::getMotion() const
+{
     return stMotion;
 }
 
-
-void GvsProjector::getSampleColor(GvsDevice* device, double x, double y , GvsColor &col, gvsData &data) const {
-    assert ( (rayGen != NULL) && (locTetrad != NULL) );
+void GvsProjector::getSampleColor(GvsDevice* device, double x, double y, GvsColor& col, gvsData& data) const
+{
+    assert((rayGen != NULL) && (locTetrad != NULL));
 
     m4d::vec4 rayOrigin = locTetrad->getPosition();
     if (device->camEye == gvsCamEyeLeft) {
         m4d::vec3 leftEyePos = device->camera->GetLeftEyePos();
-        m4d::vec4 e0,e1,e2,e3;
-        locTetrad->getTetrad(e0,e1,e2,e3);
-        rayOrigin += leftEyePos.x(0)*e1 + leftEyePos.x(1)*e2 + leftEyePos.x(2)*e3;
-    } else if (device->camEye == gvsCamEyeRight) {
+        m4d::vec4 e0, e1, e2, e3;
+        locTetrad->getTetrad(e0, e1, e2, e3);
+        rayOrigin += leftEyePos.x(0) * e1 + leftEyePos.x(1) * e2 + leftEyePos.x(2) * e3;
+    }
+    else if (device->camEye == gvsCamEyeRight) {
         m4d::vec3 rightEyePos = device->camera->GetRightEyePos();
-        m4d::vec4 e0,e1,e2,e3;
-        locTetrad->getTetrad(e0,e1,e2,e3);
-        rayOrigin += rightEyePos.x(0)*e1 + rightEyePos.x(1)*e2 + rightEyePos.x(2)*e3;
+        m4d::vec4 e0, e1, e2, e3;
+        locTetrad->getTetrad(e0, e1, e2, e3);
+        rayOrigin += rightEyePos.x(0) * e1 + rightEyePos.x(1) * e2 + rightEyePos.x(2) * e3;
     }
 
     // rayOrigin and rayDir in coordinates
     m4d::vec4 rayDir;
     m4d::vec3 localRayDir;
-    getRayDir ( device, x, y, rayDir, localRayDir );
+    getRayDir(device, x, y, rayDir, localRayDir);
 
-//    LOG.printf(5,"Pixel: %4d %4d ************************\n",static_cast<int>(x),static_cast<int>(y));
+    //    LOG.printf(5,"Pixel: %4d %4d ************************\n",static_cast<int>(x),static_cast<int>(y));
 
     GvsRayVisual* eyeRay = new GvsRayVisual(rayGen);
 
@@ -183,56 +184,50 @@ void GvsProjector::getSampleColor(GvsDevice* device, double x, double y , GvsCol
             case gvsCamFilterRGBjac: {
                 validRay = eyeRay->recalcJacobi(rayOrigin, rayDir, localRayDir, locTetrad);
                 break;
-            }            
+            }
         }
 
-        if (camFilter == gvsCamFilterRGB ||
-                camFilter == gvsCamFilterRGBpdz ||
-                camFilter == gvsCamFilterRGBjac ||
-                camFilter == gvsCamFilterRGBpt ||
-                camFilter == gvsCamFilterRGBIntersec) {
+        if (camFilter == gvsCamFilterRGB || camFilter == gvsCamFilterRGBpdz || camFilter == gvsCamFilterRGBjac
+            || camFilter == gvsCamFilterRGBpt || camFilter == gvsCamFilterRGBIntersec) {
             if (validRay) {
-                col = getSampleColor( eyeRay, device );
+                col = getSampleColor(eyeRay, device);
                 if (camFilter == gvsCamFilterRGBIntersec) {
                     data = getSampleIntersection(eyeRay, device);
                 }
-            }            
+            }
         }
-
-    } else {
+    }
+    else {
         col.setValid(false);
-    }    
-    delete eyeRay;    
+    }
+    delete eyeRay;
 }
 
-
-GvsColor GvsProjector::getSampleColor(GvsRayVisual*& eyeRay, GvsDevice* device ) const {
+GvsColor GvsProjector::getSampleColor(GvsRayVisual*& eyeRay, GvsDevice* device) const
+{
 
     m4d::vec4 lightDirStart, locLightDirStart, locLightDirEnd, lightDirEnd;
-    double i,frak, wObs, wSrc;
+    double i, frak, wObs, wSrc;
     m4d::vec5 jacobi;
 
     GvsCamFilter camFilter = device->camera->getCamFilter();
     GvsColor sampleColor = getBackgroundColor();
 
     bool intersecFound = false;
-    if ( (device->sceneGraph != NULL) &&
-         (device->sceneGraph->testIntersection( *eyeRay )) )
-    {
+    if ((device->sceneGraph != NULL) && (device->sceneGraph->testIntersection(*eyeRay))) {
         GvsShader* shader = eyeRay->intersecShader();
-         if (shader != NULL) {
-              sampleColor = shader->getIncidentLight(device,*eyeRay);
-           // sampleColor.Print();
+        if (shader != NULL) {
+            sampleColor = shader->getIncidentLight(device, *eyeRay);
+            // sampleColor.Print();
 
             // Direction of the light ray at the intersection points.
             GvsSurfIntersec* surfIntersec = eyeRay->getSurfIntersec();
-            if (LOG.level()==5) {
+            if (LOG.level() == 5) {
                 surfIntersec->print(LOG.ptr());
                 surfIntersec->surface()->Print(LOG.ptr());
             }
 
-            if ((camFilter == gvsCamFilterRGBpdz) ||
-                    (camFilter == gvsCamFilterRGBjac)) {
+            if ((camFilter == gvsCamFilterRGBpdz) || (camFilter == gvsCamFilterRGBjac)) {
 
                 // initial ray direction
                 lightDirStart = eyeRay->getTangente(0);
@@ -244,19 +239,19 @@ GvsColor GvsProjector::getSampleColor(GvsRayVisual*& eyeRay, GvsDevice* device )
                 wObs = locLightDirStart.x(0);
 
                 // Calculate the mean of the directions:
-                frak = modf(surfIntersec->dist(),&i) ;
-                lightDirEnd = (1.0-frak)*eyeRay->getTangente(surfIntersec->getRaySegNumber())
-                        + frak*eyeRay->getTangente(surfIntersec->getRaySegNumber()+1);
+                frak = modf(surfIntersec->dist(), &i);
+                lightDirEnd = (1.0 - frak) * eyeRay->getTangente(surfIntersec->getRaySegNumber())
+                    + frak * eyeRay->getTangente(surfIntersec->getRaySegNumber() + 1);
 
                 // reverse light dir that it represents an outgoint light ray
                 lightDirEnd = -lightDirEnd;
 
                 GvsObjType objType = surfIntersec->object()->getObjType();
                 GvsLocalTetrad* lt;
-                if (objType==inCoords) {
-                    lt = new GvsLocalTetrad(device->metric,surfIntersec->point(),m4d::vec4(1,0,0,0));
+                if (objType == inCoords) {
+                    lt = new GvsLocalTetrad(device->metric, surfIntersec->point(), m4d::vec4(1, 0, 0, 0));
                     // surfIntersec->point().printS();
-                    lt->transformTetrad(true,m4d::enum_nat_tetrad_default);
+                    lt->transformTetrad(true, m4d::enum_nat_tetrad_default);
                     locLightDirEnd = lt->coordToLocal(lightDirEnd);
                     delete lt;
                 }
@@ -265,26 +260,26 @@ GvsColor GvsProjector::getSampleColor(GvsRayVisual*& eyeRay, GvsDevice* device )
                     locLightDirEnd = lt->coordToLocal(lightDirEnd);
                 }
                 wSrc = locLightDirEnd.x(0);
-                //std::cerr << wObs << " " << wSrc << " " << wSrc/wObs << std::endl;
+                // std::cerr << wObs << " " << wSrc << " " << wSrc/wObs << std::endl;
 
-                sampleColor.data.freqshift = wSrc/wObs;
-                memcpy(sampleColor.data.pos,eyeRay->surfIntersec().point().data(),sizeof(double)*4);
-                memcpy(sampleColor.data.dir,lightDirEnd.data(),sizeof(double)*4);
+                sampleColor.data.freqshift = wSrc / wObs;
+                memcpy(sampleColor.data.pos, eyeRay->surfIntersec().point().data(), sizeof(double) * 4);
+                memcpy(sampleColor.data.dir, lightDirEnd.data(), sizeof(double) * 4);
                 if (camFilter == gvsCamFilterRGBjac) {
-                    jacobi = (1.0-frak)*eyeRay->getJacobi(surfIntersec->getRaySegNumber())
-                            + frak*eyeRay->getJacobi(surfIntersec->getRaySegNumber()+1);
+                    jacobi = (1.0 - frak) * eyeRay->getJacobi(surfIntersec->getRaySegNumber())
+                        + frak * eyeRay->getJacobi(surfIntersec->getRaySegNumber() + 1);
 
-                    memcpy(sampleColor.data.jacobi,jacobi.data(),sizeof(double)*5);
+                    memcpy(sampleColor.data.jacobi, jacobi.data(), sizeof(double) * 5);
                 }
 
-                if (surfIntersec->surface()!=NULL) {
+                if (surfIntersec->surface() != NULL) {
                     sampleColor.data.objID = static_cast<double>(surfIntersec->surface()->GetID());
                 }
             }
             else if (camFilter == gvsCamFilterRGBpt) {
-                memcpy(sampleColor.data.pos, eyeRay->surfIntersec().point().data(), sizeof(double)*4);
-                memcpy(sampleColor.data.uv, eyeRay->surfIntersec().texUVParam().data(), sizeof(double)*2);
-                if (surfIntersec->surface()!=NULL) {
+                memcpy(sampleColor.data.pos, eyeRay->surfIntersec().point().data(), sizeof(double) * 4);
+                memcpy(sampleColor.data.uv, eyeRay->surfIntersec().texUVParam().data(), sizeof(double) * 2);
+                if (surfIntersec->surface() != NULL) {
                     sampleColor.data.objID = static_cast<double>(surfIntersec->surface()->GetID());
                 }
             }
@@ -293,15 +288,15 @@ GvsColor GvsProjector::getSampleColor(GvsRayVisual*& eyeRay, GvsDevice* device )
         }
     }
 
-    if (!intersecFound && (eyeRay->getBreakCond()==m4d::enum_break_constraint ||
-            eyeRay->getBreakCond()==m4d::enum_break_cond)) {
+    if (!intersecFound
+        && (eyeRay->getBreakCond() == m4d::enum_break_constraint || eyeRay->getBreakCond() == m4d::enum_break_cond)) {
         sampleColor = constraintColor;
     }
     return sampleColor;
 }
 
-
-void GvsProjector::getSampleIntersection(GvsDevice* device, double x, double y) {
+void GvsProjector::getSampleIntersection(GvsDevice* device, double x, double y)
+{
 #if 0
     assert ( (rayGen != NULL) && (locTetrad != NULL) );
 
@@ -339,7 +334,6 @@ void GvsProjector::getSampleIntersection(GvsDevice* device, double x, double y) 
 #endif
 }
 
-
 /*
 void GvsProjector::getSampleIntersection(GvsRayAllIS*& eyeRay, GvsDevice* device) {
 
@@ -351,7 +345,7 @@ return;
 
     if ( (device->sceneGraph != NULL) &&
          (device->sceneGraph->testIntersection( *eyeRay )) )
-    {        
+    {
         GvsSurfIntersec* surfIntersec = eyeRay->getFirstSurfIntersec();
         while((surfIntersec = eyeRay->getNextSurfIntersec()) != NULL) {
 
@@ -363,12 +357,13 @@ return;
 }
 */
 
-gvsData GvsProjector::getSampleIntersection(GvsRayVisual*& eyeRay, GvsDevice* device) const {
+gvsData GvsProjector::getSampleIntersection(GvsRayVisual*& eyeRay, GvsDevice* device) const
+{
     GvsSurfIntersec* surfIntersec = eyeRay->getSurfIntersec();
     gvsData data;
     if (surfIntersec != NULL) {
         m4d::vec4 ip = surfIntersec->point();
-        //ip.printF();
+        // ip.printF();
         data.pos[0] = ip[0];
         data.pos[1] = ip[1];
         data.pos[2] = ip[2];
@@ -381,82 +376,86 @@ gvsData GvsProjector::getSampleIntersection(GvsRayVisual*& eyeRay, GvsDevice* de
     return data;
 }
 
-
-void GvsProjector :: setActualPos ( int nr ) {
-    if (stMotion==NULL) {
-        fprintf(stderr,"GvsProjector::setActualPos... No motion available!\n");
+void GvsProjector ::setActualPos(int nr)
+{
+    if (stMotion == NULL) {
+        fprintf(stderr, "GvsProjector::setActualPos... No motion available!\n");
         return;
     }
-    if (nr>=0 && nr<stMotion->getNumPositions()) {
+    if (nr >= 0 && nr < stMotion->getNumPositions()) {
         locTetrad = stMotion->getLocalTetrad(nr);
-        //locTetrad->Print();
+        // locTetrad->Print();
     }
 }
 
-
-int GvsProjector::SetParam( const std::string pName, m4d::vec4 pt ) {
-    int isOkay = GvsBase::SetParam(pName,pt);
-    if (isOkay >= gvsSetParamNone && pName=="position") {
+int GvsProjector::SetParam(const std::string pName, m4d::vec4 pt)
+{
+    int isOkay = GvsBase::SetParam(pName, pt);
+    if (isOkay >= gvsSetParamNone && pName == "position") {
         setPosition(pt);
     }
     return isOkay;
 }
 
-int GvsProjector::SetParam( const std::string pName, int nr ) {
-    int isOkay = GvsBase::SetParam(pName,nr);
-    if (isOkay >= gvsSetParamNone && pName=="actualpos") {
+int GvsProjector::SetParam(const std::string pName, int nr)
+{
+    int isOkay = GvsBase::SetParam(pName, nr);
+    if (isOkay >= gvsSetParamNone && pName == "actualpos") {
         setActualPos(nr);
     }
     return isOkay;
 }
 
-
-void GvsProjector::setTetrad( const m4d::vec4 &e0, const m4d::vec4 &e1, 
-                              const m4d::vec4 &e2, const m4d::vec4 &e3, bool inCoord ) {
-    locTetrad->setTetrad(e0,e1,e2,e3,false);
+void GvsProjector::setTetrad(
+    const m4d::vec4& e0, const m4d::vec4& e1, const m4d::vec4& e2, const m4d::vec4& e3, bool inCoord)
+{
+    locTetrad->setTetrad(e0, e1, e2, e3, false);
     locTetrad->setInCoords(inCoord);
 }
 
-
-void GvsProjector::getRayDir( GvsDevice* device,
-                              const double x, const double y,
-                              m4d::vec4&   rayDirection,
-                              m4d::vec3&   localRayDir ) const {
+void GvsProjector::getRayDir(
+    GvsDevice* device, const double x, const double y, m4d::vec4& rayDirection, m4d::vec3& localRayDir) const
+{
 
     rayDirection = m4d::vec4();
-    localRayDir = device->camera->GetRayDir(x,y);
+    localRayDir = device->camera->GetRayDir(x, y);
 
     m4d::vec4 base0 = locTetrad->getE(0);
     m4d::vec4 base1 = locTetrad->getE(1);
     m4d::vec4 base2 = locTetrad->getE(2);
     m4d::vec4 base3 = locTetrad->getE(3);
-    //locTetrad->printP();
+    // locTetrad->printP();
 
-    m4d::vec4 rayDir = -base0 + localRayDir.x(0)*base1 + localRayDir.x(1)*base2 + localRayDir.x(2)*base3;
-    //rayDir.print();
+    m4d::vec4 rayDir = -base0 + localRayDir.x(0) * base1 + localRayDir.x(1) * base2 + localRayDir.x(2) * base3;
+    // rayDir.print();
 
     // if local tetrad is given with respect to a natural local frame, then
     // one has to transforma  from local tetrad to coordinates
     if (locTetrad->getInCoords()) {
         rayDirection = rayDir;
-    } else {
-        device->metric->localToCoord(locTetrad->getPosition(),rayDir,rayDirection);
+    }
+    else {
+        device->metric->localToCoord(locTetrad->getPosition(), rayDir, rayDirection);
     }
 }
 
-
-void GvsProjector::Print( FILE* fptr ) {
-    fprintf(fptr,"ProjectorStd {\n");
-    if (locTetrad==NULL) {
-        fprintf(fptr,"\tlocal tetrad is missing!\n");
-    } else {
-        fprintf(fptr,"\tPosition: "); (locTetrad->getPosition()).printS(fptr);
-        fprintf(fptr,"\tVelocity: "); (locTetrad->getVelocity()).printS(fptr);
-        fprintf(fptr,"\ttetrad in coords: %s\n",(locTetrad->getInCoords())?"yes":"no");
-        fprintf(fptr,"\tright-handed: %s\n",(locTetrad->isRightHanded())?"yes":"no");
-        fprintf(fptr,"\tbgColor:  "); backgroundColor.Print(fptr);
+void GvsProjector::Print(FILE* fptr)
+{
+    fprintf(fptr, "ProjectorStd {\n");
+    if (locTetrad == NULL) {
+        fprintf(fptr, "\tlocal tetrad is missing!\n");
+    }
+    else {
+        fprintf(fptr, "\tPosition: ");
+        (locTetrad->getPosition()).printS(fptr);
+        fprintf(fptr, "\tVelocity: ");
+        (locTetrad->getVelocity()).printS(fptr);
+        fprintf(fptr, "\ttetrad in coords: %s\n", (locTetrad->getInCoords()) ? "yes" : "no");
+        fprintf(fptr, "\tright-handed: %s\n", (locTetrad->isRightHanded()) ? "yes" : "no");
+        fprintf(fptr, "\tbgColor:  ");
+        backgroundColor.Print(fptr);
         rayGen->Print(fptr);
         locTetrad->Print(fptr);
     }
-    fprintf(fptr,"}\n\n");
+    fprintf(fptr, "}\n\n");
 }

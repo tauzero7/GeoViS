@@ -1,21 +1,27 @@
-// ---------------------------------------------------------------------
-//  Copyright (c) 2013-2014, Universitaet Stuttgart, VISUS, Thomas Mueller
-//
-//  This file is part of GeoViS.
-//
-//  GeoViS is free software: you can redistribute it and/or modify it
-//  under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  GeoViS is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with GeoViS.  If not, see <http://www.gnu.org/licenses/>.
-// ---------------------------------------------------------------------
+/**
+ * @file    parse_locTed.h
+ * @author  Thomas Mueller
+
+    @verbatim
+    (local-tetrad '(pos  #(double double double double))
+                  '(vel  #(double double double double))
+                  '(localvel #(double double double))
+                  '(e0  #(double double double double))
+                  '(e1  #(double double double double))
+                  '(e2  #(double double double double))
+                  '(e3  #(double double double double))
+                  '(incoords bool)
+                  '(localFrame  lftype)
+                  '(id "string")
+    )@endverbatim
+    The current position of the local tetrad is compulsive. 'e0'...'e3' are the four
+    basis vectors of the tetrad. 'incoords' determines whether these four basis
+    vector are given in coordinates or wrt. natural local tetrad. The 'lftype' defines
+    the type of the natural local tetrad. This is important for metrics like "Kerr"
+    that have two natural tetrad.
+
+ *  This file is part of GeoViS.
+ */
 #ifndef PARSE_LOCTED_H
 #define PARSE_LOCTED_H
 
@@ -24,6 +30,6 @@ extern "C" {
 #include "scheme.h"
 }
 
-pointer gvsP_local_tetrad (scheme *sc, pointer args);
+pointer gvsP_local_tetrad(scheme* sc, pointer args);
 
 #endif

@@ -32,7 +32,11 @@ gvsViewer*
 .project
 .cproject
 
+.clang-format
+
 *.dat
 *.png
 *.user
 *.tif
+
+*pre1
