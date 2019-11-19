@@ -36,6 +36,7 @@ gvsViewer*
 
 *.dat
 *.png
+*.ppm
 *.user
 *.tif
 
