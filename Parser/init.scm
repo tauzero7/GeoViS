@@ -26,11 +26,21 @@
 
 (define radians
     (lambda (val)
-	(* val DEG_TO_RAD)))
+        (* val DEG_TO_RAD))
+)
       
 (define degrees
     (lambda (val)
-        (* val RAD_TO_DEG)))
+        (* val RAD_TO_DEG))
+)
+
+; Calculate horizontal field-of-view out of camera resolution (resX, resY)
+; and vertical field-of-view.
+(define calcHFoV
+     (lambda (resX resY vfov)
+         (let ((aspect (/ resX resY))))
+         (degrees (* 2.0 (atan (* aspect (tan (* 0.5 (radians vfov))))))))
+)
 
 ;    Initialization file for TinySCHEME 1.31 onwards
 
