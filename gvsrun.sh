@@ -1,10 +1,10 @@
 #!/bin/bash
 
-MPIRUN=/usr/local/openmpi/1.8.3/bin/mpirun
-GVS=$HOME/Projekte/GeoViS_M4D/gvsRenderPar64
+MPIRUN=/usr/local/openmpi/4.0.2/bin/mpirun
+GVS=$HOME/Projekte/GeoViS_M4D/gvsRenderPar
 
 NUM_PROCS=6
-NUM_TASKS=72
+NUM_TASKS=24
 
 SCM_FILE=""
 IMG_FILE=""
@@ -60,5 +60,5 @@ if [ ! -z $STARTDEV ]; then
 fi
 
 echo "Run: " $SCM_FILE $IMG_FILE " with " $NUM_TASKS " tasks"
-time $MPIRUN -np $NUM_PROCS $GVS -tasks $NUM_TASKS $RENDER_CMD $START_CMD $SCM_FILE $IMG_FILE
+time $MPIRUN -np $NUM_PROCS --use-hwthread-cpus $GVS -tasks $NUM_TASKS $RENDER_CMD $START_CMD $SCM_FILE $IMG_FILE
 

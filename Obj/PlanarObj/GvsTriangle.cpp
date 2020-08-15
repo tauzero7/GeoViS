@@ -19,38 +19,40 @@
 
 #include "Obj/PlanarObj/GvsTriangle.h"
 
+#include <Obj/STMotion/GvsStMotion.h>
 #include <Ray/GvsRay.h>
 #include <Ray/GvsRayAllIS.h>
-#include <Obj/STMotion/GvsStMotion.h>
 
 #include <cassert>
 
 #include "math/TransfMat.h"
 
-double area( const m4d::vec2 &v1, const m4d::vec2 &v2 ) {
+double area(const m4d::vec2& v1, const m4d::vec2& v2)
+{
     return v1.x(0) * v2.x(1) - v1.x(1) * v2.x(0);
 }
 
-double area( const m4d::vec3& v1, const m4d::vec3& v2 ) {
-    return (v1^v2).getNorm();
+double area(const m4d::vec3& v1, const m4d::vec3& v2)
+{
+    return (v1 ^ v2).getNorm();
 }
 
 //------------------------------------------------------------------------
 //    constructor  	G v s T r i a n g l e
 //------------------------------------------------------------------------
-GvsTriangle :: GvsTriangle 	( void )
-    :  GvsPlanarSurf( NULL )
+GvsTriangle::GvsTriangle(void)
+    : GvsPlanarSurf(NULL)
 {
     // STMotion ??
-    trianVertex[0] = m4d::vec3( 0.0, 0.0, 0.0 );
-    trianVertex[1] = m4d::vec3( 1.0, 0.0, 0.0 );
-    trianVertex[2] = m4d::vec3( 0.0, 1.0, 0.0 );
+    trianVertex[0] = m4d::vec3(0.0, 0.0, 0.0);
+    trianVertex[1] = m4d::vec3(1.0, 0.0, 0.0);
+    trianVertex[2] = m4d::vec3(0.0, 1.0, 0.0);
 
-    trianUV[0] = m4d::vec2(0.0,0.0);
-    trianUV[1] = m4d::vec2(1.0,0.0);
-    trianUV[2] = m4d::vec2(0.0,1.0);
+    trianUV[0] = m4d::vec2(0.0, 0.0);
+    trianUV[1] = m4d::vec2(1.0, 0.0);
+    trianUV[2] = m4d::vec2(0.0, 1.0);
 
-    planeNormal = m4d::vec3(0.0,0.0,1.0);
+    planeNormal = m4d::vec3(0.0, 0.0, 1.0);
 
     mMetric = NULL;
     stMotion = NULL;
@@ -58,14 +60,12 @@ GvsTriangle :: GvsTriangle 	( void )
     calcBoundBox();
 }
 
-
 //------------------------------------------------------------------------
 //    constructor  	G v s T r i a n g l e
 //------------------------------------------------------------------------
-GvsTriangle :: GvsTriangle 	( const m4d::vec3& p0, const m4d::vec3& p1,
-                              const m4d::vec3& p2, GvsSurfaceShader* shader,
-                              m4d::Metric* metric, GvsObjType objType)
-    :  GvsPlanarSurf ( shader )
+GvsTriangle::GvsTriangle(const m4d::vec3& p0, const m4d::vec3& p1, const m4d::vec3& p2, GvsSurfaceShader* shader,
+    m4d::Metric* metric, GvsObjType objType)
+    : GvsPlanarSurf(shader)
 {
     trianVertex[0] = p0;
     trianVertex[1] = p1;
@@ -73,9 +73,9 @@ GvsTriangle :: GvsTriangle 	( const m4d::vec3& p0, const m4d::vec3& p1,
 
     planeNormal = calcTriNormal();
 
-    trianUV[0] = m4d::vec2(0.0,0.0);
-    trianUV[1] = m4d::vec2(1.0,0.0);
-    trianUV[2] = m4d::vec2(0.0,1.0);
+    trianUV[0] = m4d::vec2(0.0, 0.0);
+    trianUV[1] = m4d::vec2(1.0, 0.0);
+    trianUV[2] = m4d::vec2(0.0, 1.0);
 
     mMetric = metric;
     stMotion = NULL;
@@ -83,15 +83,12 @@ GvsTriangle :: GvsTriangle 	( const m4d::vec3& p0, const m4d::vec3& p1,
     calcBoundBox();
 }
 
-
 //------------------------------------------------------------------------
 //    constructor  	G v s T r i a n g l e
 //------------------------------------------------------------------------
-GvsTriangle :: GvsTriangle 	( const m4d::vec3& p0, const m4d::vec3& p1,
-                              const m4d::vec3& p2, GvsSurfaceShader* shader,
-                              m4d::Metric* metric, GvsStMotion* motion,
-                              GvsObjType objType )
-    :  GvsPlanarSurf ( shader )
+GvsTriangle::GvsTriangle(const m4d::vec3& p0, const m4d::vec3& p1, const m4d::vec3& p2, GvsSurfaceShader* shader,
+    m4d::Metric* metric, GvsStMotion* motion, GvsObjType objType)
+    : GvsPlanarSurf(shader)
 {
     trianVertex[0] = p0;
     trianVertex[1] = p1;
@@ -99,9 +96,9 @@ GvsTriangle :: GvsTriangle 	( const m4d::vec3& p0, const m4d::vec3& p1,
 
     planeNormal = calcTriNormal();
 
-    trianUV[0] = m4d::vec2(0.0,0.0);
-    trianUV[1] = m4d::vec2(1.0,0.0);
-    trianUV[2] = m4d::vec2(0.0,1.0);
+    trianUV[0] = m4d::vec2(0.0, 0.0);
+    trianUV[1] = m4d::vec2(1.0, 0.0);
+    trianUV[2] = m4d::vec2(0.0, 1.0);
 
     mMetric = metric;
     stMotion = motion;
@@ -112,12 +109,9 @@ GvsTriangle :: GvsTriangle 	( const m4d::vec3& p0, const m4d::vec3& p1,
 //------------------------------------------------------------------------
 //    constructor  	G v s T r i a n g l e
 //------------------------------------------------------------------------
-GvsTriangle :: GvsTriangle 	( const m4d::vec3& p0,  const m4d::vec3& p1,
-                              const m4d::vec3& p2,  const m4d::vec2& uv0,
-                              const m4d::vec2& uv1, const m4d::vec2& uv2,
-                              GvsSurfaceShader* shader,
-                              m4d::Metric* metric, GvsObjType objType)
-    :  GvsPlanarSurf ( shader )
+GvsTriangle::GvsTriangle(const m4d::vec3& p0, const m4d::vec3& p1, const m4d::vec3& p2, const m4d::vec2& uv0,
+    const m4d::vec2& uv1, const m4d::vec2& uv2, GvsSurfaceShader* shader, m4d::Metric* metric, GvsObjType objType)
+    : GvsPlanarSurf(shader)
 {
     trianVertex[0] = p0;
     trianVertex[1] = p1;
@@ -135,17 +129,13 @@ GvsTriangle :: GvsTriangle 	( const m4d::vec3& p0,  const m4d::vec3& p1,
     calcBoundBox();
 }
 
-
 //------------------------------------------------------------------------
 //    constructor  	G v s T r i a n g l e
 //------------------------------------------------------------------------
-GvsTriangle :: GvsTriangle 	( const m4d::vec3& p0,  const m4d::vec3& p1,
-                              const m4d::vec3& p2,  const m4d::vec2& uv0,
-                              const m4d::vec2& uv1, const m4d::vec2& uv2,
-                              GvsSurfaceShader* shader,
-                              m4d::Metric* metric, GvsStMotion* motion,
-                              GvsObjType objType )
-    :  GvsPlanarSurf ( shader )
+GvsTriangle::GvsTriangle(const m4d::vec3& p0, const m4d::vec3& p1, const m4d::vec3& p2, const m4d::vec2& uv0,
+    const m4d::vec2& uv1, const m4d::vec2& uv2, GvsSurfaceShader* shader, m4d::Metric* metric, GvsStMotion* motion,
+    GvsObjType objType)
+    : GvsPlanarSurf(shader)
 {
     trianVertex[0] = p0;
     trianVertex[1] = p1;
@@ -161,14 +151,12 @@ GvsTriangle :: GvsTriangle 	( const m4d::vec3& p0,  const m4d::vec3& p1,
     stMotion = motion;
     mObjType = objType;
 }
-
-
 
 //------------------------------------------------------------------------
 //    copyconstructor  	G v s T r i a n g l e
 //------------------------------------------------------------------------
-GvsTriangle :: GvsTriangle 	( const GvsTriangle& triangle )
-    :  GvsPlanarSurf ( triangle )
+GvsTriangle::GvsTriangle(const GvsTriangle& triangle)
+    : GvsPlanarSurf(triangle)
 {
     trianVertex[0] = triangle.trianVertex[0];
     trianVertex[1] = triangle.trianVertex[1];
@@ -180,96 +168,101 @@ GvsTriangle :: GvsTriangle 	( const GvsTriangle& triangle )
     trianUV[1] = triangle.trianUV[1];
     trianUV[2] = triangle.trianUV[2];
 
-    mMetric  = triangle.mMetric;
+    mMetric = triangle.mMetric;
     stMotion = triangle.stMotion;
     mObjType = triangle.mObjType;
     calcBoundBox();
 }
 
-
 //------------------------------------------------------------------------
 //    destructor   	~ G v s T r i a n g l e
 //------------------------------------------------------------------------
-GvsTriangle :: ~GvsTriangle 	( void )
-{
-
-}
-
+GvsTriangle::~GvsTriangle(void) {}
 
 //------------------------------------------------------------------------
 //     method		g e t C l o n e
 //------------------------------------------------------------------------
-GvsPlanarSurf*
-GvsTriangle :: getClone		( void ) const
+GvsPlanarSurf* GvsTriangle::getClone(void) const
 {
-    GvsTriangle* clone = new GvsTriangle( *this );
-    assert( clone != NULL );
+    GvsTriangle* clone = new GvsTriangle(*this);
+    assert(clone != NULL);
     return clone;
 }
 
-bool GvsTriangle::isValidHit ( m4d::vec3 rp ) {
-    m4d::vec3 vq1 = trianVertex[0]-rp;
-    m4d::vec3 vq2 = trianVertex[1]-rp;
-    m4d::vec3 vq3 = trianVertex[2]-rp;
+bool GvsTriangle::isValidHit(m4d::vec3 rp)
+{
+    m4d::vec3 vq1 = trianVertex[0] - rp;
+    m4d::vec3 vq2 = trianVertex[1] - rp;
+    m4d::vec3 vq3 = trianVertex[2] - rp;
 
-    double Area12 = area(vq1,vq2);
-    double Area13 = area(vq1,vq3);
-    double Area23 = area(vq2,vq3);
-    //fprintf(stderr," is: %f %f\n",Area12+Area13+Area23,trianArea);
-    if (Area12+Area13+Area23 <= 2.0*trianArea+GVS_EPS) {
+    double Area12 = area(vq1, vq2);
+    double Area13 = area(vq1, vq3);
+    double Area23 = area(vq2, vq3);
+    // fprintf(stderr," is: %f %f\n",Area12+Area13+Area23,trianArea);
+    if (Area12 + Area13 + Area23 <= 2.0 * trianArea + GVS_EPS) {
         return true;
     }
     return false;
 }
 
-
-m4d::vec3 GvsTriangle::calcTriNormal() {
+m4d::vec3 GvsTriangle::calcTriNormal()
+{
     m4d::vec3 p1 = trianVertex[0];
     m4d::vec3 p2 = trianVertex[1];
     m4d::vec3 p3 = trianVertex[2];
-    m4d::vec3 n = (p2-p1)^(p3-p1);
-    trianArea = 0.5*n.getNorm();
+    m4d::vec3 n = (p2 - p1) ^ (p3 - p1);
+    trianArea = 0.5 * n.getNorm();
     n = n.getNormalized();
-    planeDist = p1|n;
+    planeDist = p1 | n;
     return n;
 }
 
 //------------------------------------------------------------------------
 //     method		c a l c N o r m a l
 //------------------------------------------------------------------------
-void GvsTriangle :: calcNormal( GvsSurfIntersec & intersec ) const {
-    intersec.setNormal( planeNormal );
+void GvsTriangle::calcNormal(GvsSurfIntersec& intersec) const
+{
+    intersec.setNormal(planeNormal);
 }
-
 
 //------------------------------------------------------------------------
 //     method		c a l c T e x U V P a r a m
 //------------------------------------------------------------------------
-void
-GvsTriangle :: calcTexUVParam	( GvsSurfIntersec & intersec ) const
+void GvsTriangle::calcTexUVParam(GvsSurfIntersec& intersec) const
 {
     /* F?r die Default-Werte von trianUV ergibt sich:
      intersec.setTexUVParam( v, w )
   */
 
-    double u = intersec.surfSTParam().x(0);
-    double v = intersec.surfSTParam().x(1);
+    m4d::vec3 ip = intersec.point().getAsV3D();
+    m4d::vec3 e0 = trianVertex[1] - trianVertex[0];
+    m4d::vec3 e1 = trianVertex[2] - trianVertex[0];
+    m4d::vec3 e2 = ip - trianVertex[0];
+
+    double d00 = e0 | e0;
+    double d01 = e0 | e1;
+    double d11 = e1 | e1;
+    double d20 = e2 | e0;
+    double d21 = e2 | e1;
+
+    double denom = 1.0 / (d00 * d11 - d01 * d01);
+    double u = (d11 * d20 - d01 * d21) * denom;
+    double v = (d00 * d21 - d01 * d20) * denom;
+
+    //    double u = intersec.surfSTParam().x(0);
+    //    double v = intersec.surfSTParam().x(1);
     double w = 1.0 - u - v;
-
-    intersec.setTexUVParam(
-                u * trianUV[0].x(0) + v * trianUV[1].x(0) + w * trianUV[2].x(0),
-            u * trianUV[0].x(1) + v * trianUV[1].x(1) + w * trianUV[2].x(1)  );
+    // std::cerr << u << " " << v << std::endl;
+    intersec.setTexUVParam(u * trianUV[0].x(0) + v * trianUV[1].x(0) + w * trianUV[2].x(0),
+        u * trianUV[0].x(1) + v * trianUV[1].x(1) + w * trianUV[2].x(1));
 }
-
 
 //------------------------------------------------------------------------
 //     method		s c a l e
 //------------------------------------------------------------------------
-void
-GvsTriangle :: scale ( const m4d::vec3&   scaleVec )
+void GvsTriangle::scale(const m4d::vec3& scaleVec)
 {
-    for ( int i = 0; i < 3; i++ )
-    {
+    for (int i = 0; i < 3; i++) {
         trianVertex[i] *= scaleVec;
     }
 
@@ -277,69 +270,61 @@ GvsTriangle :: scale ( const m4d::vec3&   scaleVec )
     calcBoundBox();
 }
 
-
 //------------------------------------------------------------------------
 //     method		t r a n s l a t e
 //------------------------------------------------------------------------
-void
-GvsTriangle :: translate( const m4d::vec3&   transVec )
+void GvsTriangle::translate(const m4d::vec3& transVec)
 {
-    for ( int i = 0; i < 3; i++ ) {
+    for (int i = 0; i < 3; i++) {
         trianVertex[i] += transVec;
     }
     calcBoundBox();
 }
 
-
 //------------------------------------------------------------------------
 //     method		r o t a t e
 //------------------------------------------------------------------------
-void
-GvsTriangle :: rotate ( const m4d::vec3&   rotAxis,
-                        const double rotAngle )
+void GvsTriangle::rotate(const m4d::vec3& rotAxis, const double rotAngle)
 {
-    m4d::RotateMat3D rotMat = m4d::RotateMat3D( rotAxis, rotAngle );
-    for ( int i = 0; i < 3; i++ ) {
+    m4d::RotateMat3D rotMat = m4d::RotateMat3D(rotAxis, rotAngle);
+    for (int i = 0; i < 3; i++) {
         trianVertex[i] = rotMat * trianVertex[i];
     }
     planeNormal = rotMat * planeNormal;
 }
 
-
-void GvsTriangle :: transform( const m4d::Matrix<double,3,4>& mat ) {
-    for ( int i = 0; i < 3; i++ ) {
-        //trianVertex[i] = mat * trianVertex[i];
+void GvsTriangle::transform(const m4d::Matrix<double, 3, 4>& mat)
+{
+    for (int i = 0; i < 3; i++) {
+        trianVertex[i] = mat * trianVertex[i];
     }
 
-    //planeNormal = rotMat * planeNormal;
+    // planeNormal = rotMat * planeNormal;
     calcBoundBox();
 }
-
 
 //------------------------------------------------------------------------
 //     method  p r i n t
 //------------------------------------------------------------------------
-void GvsTriangle::Print ( FILE* fptr ) {
-    fprintf(stderr,"Triangle {\n");
-    fprintf(stderr,"\tv1: ");trianVertex[0].printS(fptr);
-    fprintf(stderr,"\tv2: ");trianVertex[1].printS(fptr);
-    fprintf(stderr,"\tv3: ");trianVertex[2].printS(fptr);
-    fprintf(stderr,"}\n");
+void GvsTriangle::Print(FILE* fptr)
+{
+    fprintf(stderr, "Triangle {\n");
+    fprintf(stderr, "\tv1: ");
+    trianVertex[0].printS(fptr);
+    fprintf(stderr, "\tv2: ");
+    trianVertex[1].printS(fptr);
+    fprintf(stderr, "\tv3: ");
+    trianVertex[2].printS(fptr);
+    fprintf(stderr, "}\n");
 }
-
 
 //------------------------------------------------------------------------
 //     method 		c a l c P r o j E d g e s
 //------------------------------------------------------------------------
-void
-GvsTriangle :: calcProjEdges	( int          projPlane,
-                                  const m4d::vec3&   intersecPt,
-                                  m4d::vec2&         projEdge20,
-                                  m4d::vec2&         projEdge21,
-                                  m4d::vec2&         projEdge2p ) const
+void GvsTriangle::calcProjEdges(int projPlane, const m4d::vec3& intersecPt, m4d::vec2& projEdge20,
+    m4d::vec2& projEdge21, m4d::vec2& projEdge2p) const
 {
-    switch ( projPlane )
-    {
+    switch (projPlane) {
         case 0:
             projEdge20[0] = trianVertex[0].x(1) - trianVertex[2].x(1);
             projEdge20[1] = trianVertex[0].x(2) - trianVertex[2].x(2);
@@ -367,15 +352,11 @@ GvsTriangle :: calcProjEdges	( int          projPlane,
     }
 }
 
-
 //------------------------------------------------------------------------
 //     method		c a l c B o u n d B o x
 //------------------------------------------------------------------------
-void
-GvsTriangle :: calcBoundBox	( void )
+void GvsTriangle::calcBoundBox(void)
 {
-    planarSurfBoundBox = GvsBoundBox ( trianVertex[0], trianVertex[1] );
-    planarSurfBoundBox.extendBoxToContain ( trianVertex[2] );
+    planarSurfBoundBox = GvsBoundBox(trianVertex[0], trianVertex[1]);
+    planarSurfBoundBox.extendBoxToContain(trianVertex[2]);
 }
-
-

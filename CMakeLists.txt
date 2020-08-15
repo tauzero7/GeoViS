@@ -91,6 +91,8 @@ list( REMOVE_ITEM gvs_source_files ${CMAKE_SOURCE_DIR}/${GVS_OBJ_DIR}/STMotion/G
 # These definitions are inevitable for tinyscheme!
 add_definitions(-DUSE_INTERFACE -DSTANDALONE=0 -DUSE_MATH -DHAVE_LIBPPM)
 
+add_definitions(-DALL_METRICS_AVAILABLE)
+
 if (WIN32)
 add_definitions(-DNOMINMAX -Dgvs_EXPORTS -DM4D_LIB -Dm4d_EXPORTS)
 endif(WIN32)
@@ -99,11 +101,11 @@ endif(WIN32)
 add_definitions( -DHAVE_PPM )
 if (TIFF_AVAILABLE)
     include_directories(${TIFF_INC_DIR})
-	add_definitions( -DHAVE_LIBTIFF )
+    add_definitions( -DHAVE_LIBTIFF )
 endif()
 if (PNG_AVAILABLE)
     include_directories(${PNG_INC_DIR})
-	add_definitions( -DHAVE_LIBPNG )
+    add_definitions( -DHAVE_LIBPNG )
 endif()
 
 

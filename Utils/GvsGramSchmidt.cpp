@@ -41,7 +41,7 @@ void GvsGramSchmidt :: setMetric ( m4d::Metric* metric) {
 
 
 void GvsGramSchmidt :: setPosition ( const m4d::vec4 pos ) {
-    for (int i = 0; i < 5; i++)     {
+    for (int i = 0; i < 4; i++)     {
         mPos[i] = pos.x(i);
     }
     assert( mMetric != NULL);

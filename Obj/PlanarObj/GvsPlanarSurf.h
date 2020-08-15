@@ -27,58 +27,49 @@ class GvsRayAllIS;
 class GvsPlanarSurf : public GvsSurface
 {
 public:
-    GvsPlanarSurf( GvsSurfaceShader* shader );
-    GvsPlanarSurf( const GvsPlanarSurf& surf );
-    ~GvsPlanarSurf ( void );
+    GvsPlanarSurf(GvsSurfaceShader* shader);
+    GvsPlanarSurf(const GvsPlanarSurf& surf);
+    ~GvsPlanarSurf(void);
 
-    virtual GvsPlanarSurf* getClone         ( void ) const = 0;
+    virtual GvsPlanarSurf* getClone(void) const = 0;
 
-    virtual m4d::vec3      normal() const;
+    virtual m4d::vec3 normal() const;
 
-    virtual bool           testIntersection ( GvsRay&     ray         );
+    virtual bool testIntersection(GvsRay& ray);
 
-    virtual bool           allIntersections ( GvsRayAllIS& ray        );
+    virtual bool allIntersections(GvsRayAllIS& ray);
 
-    virtual bool           testLocalIntersection ( GvsRay&     ray,
-                                                   const int rayPartIndex,
-                                                   const int seg,
-                                                   const m4d::vec4 p0,
-                                                   const m4d::vec4 p1 );
-    virtual bool           testLocalIntersection ( GvsRay&     ray,
-                                                   const int rayPartIndex,
-                                                   const int seg,
-                                                   const m4d::vec4 p0,
-                                                   const m4d::vec4 p1,
-                                                   GvsSurface* parentSurf  );
-    virtual bool           allLocalIntersections ( GvsRayAllIS& ray,
-                                                   const int rayPartIndex,
-                                                   const int seg,
-                                                   const m4d::vec4 p0,
-                                                   const m4d::vec4 p1 );
-    virtual GvsBoundBox    boundingBox           ( void ) const;
+    virtual bool testLocalIntersection(
+        GvsRay& ray, const int rayPartIndex, const int seg, const m4d::vec4 p0, const m4d::vec4 p1);
 
-    virtual bool  isValidHit ( m4d::vec3 rp );
+    virtual bool testLocalIntersection(GvsRay& ray, const int rayPartIndex, const int seg, const m4d::vec4 p0,
+        const m4d::vec4 p1, GvsSurface* parentSurf);
 
-    virtual void  scale     ( const m4d::vec3 &scaleVec);
-    virtual void  translate ( const m4d::vec3 &transVec);
-    virtual void  rotate    ( const m4d::vec3 &rotAxis, double rotAngle);
-    virtual void  transform ( const m4d::Matrix<double,3,4> &mat);
+    virtual bool allLocalIntersections(
+        GvsRayAllIS& ray, const int rayPartIndex, const int seg, const m4d::vec4 p0, const m4d::vec4 p1);
+
+    virtual GvsBoundBox boundingBox(void) const;
+
+    virtual bool isValidHit(m4d::vec3 rp);
+
+    virtual void scale(const m4d::vec3& scaleVec);
+    virtual void translate(const m4d::vec3& transVec);
+    virtual void rotate(const m4d::vec3& rotAxis, double rotAngle);
+    virtual void transform(const m4d::Matrix<double, 3, 4>& mat);
 
 protected:
-    virtual void           calcBoundBox          ( void ) = 0;
+    virtual void calcBoundBox(void) = 0;
 
-    bool rayIntersect ( const m4d::vec3& p0, const m4d::vec3& p1,
-                        double tp0, double tp1,
-                        double &alpha, double &thit,
-                        m4d::vec3& rayIntersecPnt ) const;
+    bool rayIntersect(const m4d::vec3& p0, const m4d::vec3& p1, double tp0, double tp1, double& alpha, double& thit,
+        m4d::vec3& rayIntersecPnt) const;
 
 protected:
-    GvsBoundBox  planarSurfBoundBox;
-    m4d::vec3    planeNormal;
-    double       planeDist;
+    GvsBoundBox planarSurfBoundBox;
+    m4d::vec3 planeNormal;
+    double planeDist;
 
-    m4d::Matrix<double,3,4>   volTransfMat;
-    m4d::Matrix<double,3,4>   volInvTransfMat;
+    m4d::Matrix<double, 3, 4> volTransfMat;
+    m4d::Matrix<double, 3, 4> volInvTransfMat;
 };
 
 #endif
