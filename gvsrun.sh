@@ -3,7 +3,7 @@
 MPIRUN=/usr/local/openmpi/4.0.2/bin/mpirun
 GVS=$HOME/Projekte/GeoViS_M4D/gvsRenderPar
 
-NUM_PROCS=6
+NUM_PROCS=7
 NUM_TASKS=24
 
 SCM_FILE=""

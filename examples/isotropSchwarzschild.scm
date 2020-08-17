@@ -3,14 +3,31 @@
 ;; ---------------------------------------------------------------------
 
 (define homedir (getenv "HOME"))
-(define background_image_name (string-append homedir "/local/Texturen/MilkyWay/eso0932a2.png"))
+;(define background_image_name (string-append homedir "/local/Texturen/MilkyWay/eso0932a2.png"))
+(define background_image_name (string-append homedir "/local/Texturen/MilkyWay/ESA_Gaia_DR2_AllSky_Brightness_Colour_Cartesian_4000x2000.png"))
 
-(define r_obs 20.0 )
-(define fov   50.0 )
+(define r_obs 50.0)
+(define r_bg  100.0)
+
+;(define res #(180 90))
+;(define res #(360 180))
+(define res #(1024 512))
+(define fovY  20.0 )
+
+(define aspect (/ (vector-ref res 0) (vector-ref res 1)))
+(define fovX  (calcHFoV (vector-ref res 0) (vector-ref res 1) fovY))
+
+(define y_start -20.0)
+(define y_end    10.0)
+(define t_count  300)
+(define y_step  (/ (- y_end y_start) (- t_count 1)))
+;(display t_step)
+;(display "\n")
+
 
 ;; --- Initialize spacetime metric
 (init-metric '(type "SchwarzschildIsotropic")
-             '(mass 1.0)
+             '(mass 0.2)
              '(id "metric")
 )
 
@@ -29,8 +46,8 @@
 (init-camera '(type "PinHoleCam")
              '(dir #(0.0 1.0 0.0))
              '(vup #(0.0 0.0 1.0))
-             `(fov ,(vector fov fov))
-             '(res #( 200 200 ))
+             `(fov ,(vector fovX fovY))
+             `(res ,res)
              '(filter "FilterRGB")
              '(id "skycam")
 )
@@ -80,19 +97,19 @@
 ;; --- Set sphere as representative for the background
 (solid-ellipsoid `(objtype ,gpObjTypeInCoords)
                  '(center #(0.0 0.0 0.0))
-                 '(axlen  #(30.0 30.0 30.0))
-                 `(transform ,(rotate-obj "z" 0.0))
+                 `(axlen  ,(vector r_bg r_bg r_bg))
+                 `(transform ,(rotate-obj "z" -30.0 (rotate-obj "x" -30.0)))
                  '(shader "bgShader")
                  '(id "bgimage")
 )
 
 (init-texture '(type "UniTex")
-              '(color #(0.13 0.56 0.8))
+              '(color #(0.8 0.16 0.16))
               '(id "utex1")
 )
 
 (init-texture '(type "UniTex")
-              '(color #(0.8 0.1 0.1))
+              '(color #(0.9 0.63 0.63))
               '(id "utex2")
 )
 
@@ -109,11 +126,11 @@
 )
 
 (plane-triangle `(objtype ,gpObjTypeInCoords)
-                '(p1 #(-10.0 -7.0 -5.0))
-                '(p2 #(-10.0  7.0 -5.0))
+                '(p1 #(-10.0  0.0 -5.0))
+                '(p2 #(-10.0 10.0 -5.0))
                 '(p3 #(-10.0  0.0  5.0))
                 '(shader "triShader")
-                `(transform ,(translate-obj #(0.0 3.0 0.0)))
+                `(transform ,(translate-obj #(0.0 0.0 0.0)))
                 '(id "triangle")
 )                
 
@@ -125,9 +142,17 @@
             '(obj "triangle")
 )
 
-(init-device '(type "standard")
-             '(obj "scene")
-             '(camera "skycam")
-             `(setparam ("metric" "mass" 0.1))
-)
+;(init-device '(type "standard")
+;             '(obj "scene")
+;             '(camera "skycam")
+;             `(setparam ("triangle" "transform" ,(translate-obj (vector 0.0 14.0 0.0))))
+;)
 
+(do ((count 0 (+ count 1))) ((= count t_count))
+    (define ypos (+ y_start (* y_step count)))
+    (init-device '(type "standard")
+                '(obj "scene")
+                '(camera "skycam")
+                `(setparam ("triangle" "transform" ,(translate-obj (vector 0.0 ypos 0.0))))
+    )
+)

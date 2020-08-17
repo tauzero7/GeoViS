@@ -57,6 +57,8 @@ public:
     virtual void rotate(const m4d::vec3& rotAxis, double rotAngle);
     virtual void transform(const m4d::Matrix<double, 3, 4>& mat);
 
+    virtual int SetParam(std::string pName, m4d::Matrix<double, 3, 4> mat);
+
 protected:
     virtual void calcBoundBox(void) = 0;
 
@@ -70,6 +72,10 @@ protected:
 
     m4d::Matrix<double, 3, 4> volTransfMat;
     m4d::Matrix<double, 3, 4> volInvTransfMat;
+
+    m4d::Matrix<double, 3, 4> volParamTransfMat;
+    m4d::Matrix<double, 3, 4> volParamInvTransfMat;
+    bool mHaveSetParamTransfMat;
 };
 
 #endif

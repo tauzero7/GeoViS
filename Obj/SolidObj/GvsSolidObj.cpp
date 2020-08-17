@@ -19,43 +19,39 @@
 
 #include "GvsSolidObj.h"
 
-
 //----------------------------------------------------------------------------
 //         constructor, destructor
 //----------------------------------------------------------------------------
-GvsSolidObj::GvsSolidObj(GvsSurfaceShader* shader) : GvsSurface(shader)
+GvsSolidObj::GvsSolidObj(GvsSurfaceShader* shader)
+    : GvsSurface(shader)
 {
 }
 
-GvsSolidObj::~GvsSolidObj() {
+GvsSolidObj::~GvsSolidObj() {}
 
-}
-
-
-bool GvsSolidObj::testIntersection( GvsRay &) {
+bool GvsSolidObj::testIntersection(GvsRay&)
+{
     std::cerr << "Error in GvsSolidObj::testIntersection(GvsRay&): not implemented." << std::endl;
     return false;
 }
 
-bool GvsSolidObj::testLocalIntersection(GvsRay &, const int ,
-                                         GvsLocalTetrad* , GvsLocalTetrad* ,
-                                         const m4d::vec4 , const m4d::vec4 )
+bool GvsSolidObj::testLocalIntersection(
+    GvsRay&, const int, GvsLocalTetrad*, GvsLocalTetrad*, const m4d::vec4, const m4d::vec4)
 {
     std::cerr << "Error in GvsSolidObj::testLocalIntersection(GvsRay&): not implemented." << std::endl;
     return false;
 }
 
-
-bool GvsSolidObj::getRaySpanList(GvsRay &, GvsSolObjSpanList& ) {
+bool GvsSolidObj::getRaySpanList(GvsRay&, GvsSolObjSpanList&)
+{
     std::cerr << "Error in GvsSceneObj::getRaySpanList(GvsRay& ray): not implemented." << std::endl;
     return false;
 }
 
-
-
-int GvsSolidObj::SetParam( std::string pName, m4d::Matrix<double,3,4> mat ) {
-    int isOkay = GvsBase::SetParam(pName,mat);
-    if (isOkay >= gvsSetParamNone && getLowCase(pName)=="transform")   {
+int GvsSolidObj::SetParam(std::string pName, m4d::Matrix<double, 3, 4> mat)
+{
+    int isOkay = GvsBase::SetParam(pName, mat);
+    if (isOkay >= gvsSetParamNone && getLowCase(pName) == "transform") {
         volParamTransfMat = mat * volTransfMat;
         volParamInvTransfMat = volParamTransfMat;
         volParamInvTransfMat.invert();
@@ -64,7 +60,7 @@ int GvsSolidObj::SetParam( std::string pName, m4d::Matrix<double,3,4> mat ) {
     return isOkay;
 }
 
-
-bool GvsSolidObj :: haveSetParamTransfMat () const {
+bool GvsSolidObj ::haveSetParamTransfMat() const
+{
     return mHaveSetParamTransfMat;
 }

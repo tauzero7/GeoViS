@@ -28,30 +28,28 @@ class GvsSolObjSpanList;
 
 class GvsSolidObj : public GvsSurface
 {
-  public:
+public:
     GvsSolidObj(GvsSurfaceShader* shader);
     virtual ~GvsSolidObj();
 
-    virtual bool testIntersection      ( GvsRay &ray ); 
-    
-    virtual bool testLocalIntersection ( GvsRay &ray, const int seg,
-                                         GvsLocalTetrad* lt0, GvsLocalTetrad* lt1,
-                                         const m4d::vec4 p0, const m4d::vec4 p1 );
+    virtual bool testIntersection(GvsRay& ray);
 
-    virtual bool getRaySpanList        ( GvsRay &ray, GvsSolObjSpanList& isl );
+    virtual bool testLocalIntersection(
+        GvsRay& ray, const int seg, GvsLocalTetrad* lt0, GvsLocalTetrad* lt1, const m4d::vec4 p0, const m4d::vec4 p1);
 
-    virtual int  SetParam ( std::string pName, m4d::Matrix<double,3,4> mat );
+    virtual bool getRaySpanList(GvsRay& ray, GvsSolObjSpanList& isl);
 
-    virtual bool haveSetParamTransfMat () const;
+    virtual int SetParam(std::string pName, m4d::Matrix<double, 3, 4> mat);
+
+    virtual bool haveSetParamTransfMat() const;
 
 protected:
-    m4d::Matrix<double,3,4>   volTransfMat;
-    m4d::Matrix<double,3,4>   volInvTransfMat;
+    m4d::Matrix<double, 3, 4> volTransfMat;
+    m4d::Matrix<double, 3, 4> volInvTransfMat;
 
-    m4d::Matrix<double,3,4>   volParamTransfMat;
-    m4d::Matrix<double,3,4>   volParamInvTransfMat;
-    bool         mHaveSetParamTransfMat;
+    m4d::Matrix<double, 3, 4> volParamTransfMat;
+    m4d::Matrix<double, 3, 4> volParamInvTransfMat;
+    bool mHaveSetParamTransfMat;
 };
-
 
 #endif
