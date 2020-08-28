@@ -60,9 +60,9 @@ protected:
     virtual void calcBoundBox(void);
 
 protected:
-    m4d::vec3 trianVertex[3];
-    m4d::vec2 trianUV[3];
-    double trianArea;
+    m4d::vec3 triangleVertex[3];
+    m4d::vec2 triangleUV[3];
+    double triangleArea;
 };
 
 #endif

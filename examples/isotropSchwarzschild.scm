@@ -9,9 +9,9 @@
 (define r_obs 50.0)
 (define r_bg  100.0)
 
-;(define res #(180 90))
+(define res #(180 90))
 ;(define res #(360 180))
-(define res #(1024 512))
+;(define res #(1024 512))
 (define fovY  20.0 )
 
 (define aspect (/ (vector-ref res 0) (vector-ref res 1)))
